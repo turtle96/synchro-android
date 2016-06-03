@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_new_group"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="New Group" />
+        <item
+            android:id="@+id/nav_recommendations"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Recommendations" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Search" />
+    </group>
+
+    <item android:title="Personal">
+        <menu>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Login (dev test)" />
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Profile" />
+            <item
+                android:id="@+id/nav_groups_joined"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="Groups Joined" />
+        </menu>
+    </item>
+
+</menu>
