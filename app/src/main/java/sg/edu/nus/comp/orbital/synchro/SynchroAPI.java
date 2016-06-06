@@ -1,13 +1,12 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.builder.Builders;
-import com.koushikdutta.ion.builder.LoadBuilder;
 
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -15,7 +14,6 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
@@ -34,7 +32,7 @@ public class SynchroAPI {
     // IVLE Specific endpoints
     public static String ivleLogin = "https://ivle.nus.edu.sg/api/login/?apikey=" + ivleApiKey;
     public static String ivleLoginSuccess = "https://ivle.nus.edu.sg/api/login/login_result.ashx?apikey=" + ivleApiKey + "&r=0";
-    private static String ivleValidate = "https://ivle.nus.edu.sg/api/Lapi.svc/Validate?APIKey=" + ivleApiKey + "&Token=" + ivleAuthToken;
+    public static String ivleValidate = "https://ivle.nus.edu.sg/api/Lapi.svc/Validate?APIKey=" + ivleApiKey + "&Token=" + ivleAuthToken;
 
     // Synchro API endpoints
     private static final String API_BASE_URL = "https://ec2-52-77-240-7.ap-southeast-1.compute.amazonaws.com/api/v1/";
@@ -49,20 +47,19 @@ public class SynchroAPI {
     public static SynchroAPI getInstance() {
         if (self == null) {
             // not init
-            // perform login, forward intent to LoginActicity
-            Log.d("Synchro", "SynchroApi is not configure properly. Have you logged in?");
+            // perform login, forward intent to LoginActivity
+            Log.d("Synchro", "SynchroApi is not configured properly. Have you logged in?");
         }
         return self;
     }
 
+    //configures app given authentication token
+    //one-time call upon login
+    //need to call agn when token changes
     public static void authenticate(String ivleAuthToken) {
         self = new SynchroAPI(ivleAuthToken);
         configureSelfSignedSSL();
         configureIon();
-    }
-
-    public static boolean isAuthenticated(){
-        return ivleAuthToken != null;
     }
 
     private static void configureSelfSignedSSL() {
@@ -90,6 +87,50 @@ public class SynchroAPI {
         Ion ion = Ion.getDefault(App.getContext());
         ion.getHttpClient().getSSLSocketMiddleware().setSSLContext(sslContext);
         ion.getHttpClient().getSSLSocketMiddleware().setTrustManagers(trustManagerFactory.getTrustManagers());
+    }
+
+    //ensures variables using authToken are updated from SharedPrefs after receiving token
+    //this takes care of the null pointer issue when app is relaunched after successful login
+    public static void updateToken(String token) {
+        ivleAuthToken = token;
+        ivleValidate = "https://ivle.nus.edu.sg/api/Lapi.svc/Validate?APIKey=" + ivleApiKey + "&Token=" + ivleAuthToken;
+    }
+
+    //for validation of current token
+    //updates token if new token received
+    public static boolean validate(Context context) {
+        AuthToken token = new AuthToken(context);
+        updateToken(token.getToken());  //ensures token variable in SynchroApi is updated from SharedPrefs
+
+        JsonObject result = null;
+        try {
+            result = Ion.with(context)
+                    .load(ivleValidate)
+                    .asJsonObject()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        if (result == null) {   //no object returned
+            return false;
+        }
+        else if (result.get("Success").toString().equals("true")) {
+
+            /*  checks if returned token is a newly generated one for replacement
+                =_= apparently the returned token is within "" so compare properly!
+            */
+            if (!result.get("Token").toString().replaceAll("\"", "").equals(token.getToken())) {
+                //takes out the "" marks
+                token.setToken(result.get("Token").toString().replaceAll("\"", ""));
+                SynchroAPI.authenticate(token.getToken());
+                updateToken(token.getToken());
+            }
+            return true;
+        }
+        else {  //validate unsuccessful
+            return false;
+        }
     }
 
     public JsonObject getMe(Context context) {

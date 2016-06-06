@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -14,6 +13,10 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,6 +28,16 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loginUser();
+    }
+
+    //launch the main, if the activity exist in backstack, bring it to front instead of
+    // creating new instance
+    private void redirectUser() {
+
+        Intent launchMainActivity = new Intent(LoginActivity.this, DrawerActivity.class);
+        launchMainActivity.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        LoginActivity.this.startActivity(launchMainActivity);
+        finish();
     }
 
     //method for login
@@ -52,20 +65,17 @@ public class LoginActivity extends AppCompatActivity {
                     if (url.equals(SynchroAPI.ivleLoginSuccess)) {
                         view.loadUrl("javascript:window.HtmlViewer.showHTML" +
                                 "('&lt;html&gt;'+document.getElementsByTagName('html')[0].innerHTML+'&lt;/html&gt;');");
-                        //resyncUserDetails();
+                        AuthToken token = new AuthToken(LoginActivity.this);
+                        SynchroAPI.authenticate(token.getToken());
+                        SynchroAPI.updateToken(token.getToken());
+                        redirectUser();
 
-                        //launch the main, if the activity exist in backstack, bring it to front instead of creating new instance
-                        Intent launchMainActivity = new Intent(LoginActivity.this, MainActivity.class);
-                        launchMainActivity.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        LoginActivity.this.startActivity(launchMainActivity);
-                        finish();
                     } else {  //in case anything else happens
                         Log.d("Synchro", "Something is wrong!");
                     }
 
                 }
-                //for debug
-                //Toast.makeText(LoginPage.this, view.getUrl(), Toast.LENGTH_LONG).show();
+
             }
 
             //if there's connection issue or some other error
@@ -101,12 +111,11 @@ public class LoginActivity extends AppCompatActivity {
                     splitTokens = token.split("</body>");
                     String ivleToken = splitTokens[0];
 
-                    // TODO: save the ivleToken to sharedPreference
-                    SynchroAPI.authenticate(ivleToken);
+                    AuthToken authToken = new AuthToken(LoginActivity.this);
+                    authToken.setToken(ivleToken);
 
                     //for debug
                     Log.d("Synchro", ivleToken);
-                    //Toast.makeText(LoginPage.this, data.getAuthToken(), Toast.LENGTH_LONG).show();
                 }});
         }
     }

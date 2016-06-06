@@ -13,13 +13,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity
+public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // initialize fragment manager
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_login:
                 // do not add loginactivity into backstack
-                Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
+                Intent loginActivity = new Intent(DrawerActivity.this, LoginActivity.class);
                 loginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 loginActivity.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
                 startActivity(loginActivity);
