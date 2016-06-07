@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.koushikdutta.ion.Ion;
 
@@ -38,6 +39,7 @@ public class SynchroAPI {
     private static final String API_BASE_URL = "https://ec2-52-77-240-7.ap-southeast-1.compute.amazonaws.com/api/v1/";
     private static final String apiMeResync = API_BASE_URL + "me/resync";
     private static final String apiMe = API_BASE_URL + "me";
+    private static final String apiMeModules = API_BASE_URL + "me/modulesTaken";
 
     private SynchroAPI(String ivleAuthToken) {
         // default private singleton
@@ -54,8 +56,7 @@ public class SynchroAPI {
     }
 
     //configures app given authentication token
-    //one-time call upon login
-    //need to call agn when token changes
+    //need to call every time app launches, so that getInstance() works
     public static void authenticate(String ivleAuthToken) {
         self = new SynchroAPI(ivleAuthToken);
         configureSelfSignedSSL();
@@ -101,6 +102,7 @@ public class SynchroAPI {
     public static boolean validate(Context context) {
         AuthToken token = new AuthToken(context);
         updateToken(token.getToken());  //ensures token variable in SynchroApi is updated from SharedPrefs
+        //authenticate(token.getToken());
 
         JsonObject result = null;
         try {
@@ -123,9 +125,11 @@ public class SynchroAPI {
             if (!result.get("Token").toString().replaceAll("\"", "").equals(token.getToken())) {
                 //takes out the "" marks
                 token.setToken(result.get("Token").toString().replaceAll("\"", ""));
-                SynchroAPI.authenticate(token.getToken());
                 updateToken(token.getToken());
             }
+            authenticate(token.getToken());
+            JsonObject obj = getInstance().getMeResync(context);
+            Toast.makeText(context, obj.get("message").toString(), Toast.LENGTH_LONG).show();
             return true;
         }
         else {  //validate unsuccessful
@@ -133,6 +137,7 @@ public class SynchroAPI {
         }
     }
 
+    //Retrieve current authenticated User's info
     public JsonObject getMe(Context context) {
         JsonObject result = null;
         try {
@@ -145,6 +150,37 @@ public class SynchroAPI {
             ex.printStackTrace();
         }
 
+        return result;
+    }
+
+    //Resynchronize & cache current user info from IVLE
+    public JsonObject getMeResync(Context context) {
+        JsonObject result = null;
+        try {
+            result = Ion.with(context)
+                    .load(apiMeResync)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonObject()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    //Retrieve list of Modules that current authenticated User has taken
+    //JsonArray
+    public JsonArray getMeModules(Context context) {
+        JsonArray result = null;
+        try {
+            result = Ion.with(context)
+                    .load(apiMeModules)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
         return result;
     }
 }

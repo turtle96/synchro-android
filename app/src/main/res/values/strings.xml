@@ -8,4 +8,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="faculty">Faculty</string>
+    <string name="first_major">First Major</string>
+    <string name="matriculation_year">Matriculation Year</string>
+    <string name="modules_taken">Modules Taken</string>
+    <string name="enter_search">Enter Search Query Here</string>
+    <string name="search">Search</string>
+    <string name="login_dev_test">Login (dev test)</string>
+    <string name="profile">Profile</string>
+    <string name="groups_joined">Groups Joined</string>
+    <string name="create_new_group">Create New Group</string>
+    <string name="recommendations">Recommendations</string>
 </resources>

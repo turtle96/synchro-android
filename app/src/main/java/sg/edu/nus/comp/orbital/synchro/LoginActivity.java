@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                         AuthToken token = new AuthToken(LoginActivity.this);
                         SynchroAPI.authenticate(token.getToken());
                         SynchroAPI.updateToken(token.getToken());
+                        SynchroAPI.getInstance().getMeResync(LoginActivity.this);
                         redirectUser();
 
                     } else {  //in case anything else happens

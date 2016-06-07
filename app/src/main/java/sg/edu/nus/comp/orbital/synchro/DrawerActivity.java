@@ -43,6 +43,7 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -64,7 +65,7 @@ public class DrawerActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
+*/
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // initialize fragment manager
