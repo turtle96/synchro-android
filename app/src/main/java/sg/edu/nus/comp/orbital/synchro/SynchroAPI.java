@@ -128,8 +128,6 @@ public class SynchroAPI {
                 updateToken(token.getToken());
             }
             authenticate(token.getToken());
-            JsonObject obj = getInstance().getMeResync(context);
-            Toast.makeText(context, obj.get("message").toString(), Toast.LENGTH_LONG).show();
             return true;
         }
         else {  //validate unsuccessful

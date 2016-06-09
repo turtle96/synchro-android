@@ -1,13 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="sg.edu.nus.comp.orbital.synchro.GroupsJoinedFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GroupsJoinedFragment">
+    android:orientation="vertical"
+    android:background="@color/background_light_grey">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/header_groups_joined"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Groups Joined" />
+        android:layout_height="100sp"
+        android:background="@color/background_material_dark"
+        android:paddingTop="50sp"
+        android:paddingLeft="10sp"
+        android:elevation="3sp"
+        android:text="Groups Joined"
+        android:textColor="#fff"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
 
-</FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </ScrollView>
+
+</LinearLayout>

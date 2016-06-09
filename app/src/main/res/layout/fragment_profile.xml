@@ -77,17 +77,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layout"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            android:elevation="0dp"
-            android:padding="8dp">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:elevation="4dp"
-                android:padding="15dp"
+                android:padding="10sp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true">
 

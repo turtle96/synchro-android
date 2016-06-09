@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class ProfileFragment extends Fragment {
@@ -54,21 +55,23 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        JsonObject profile = SynchroAPI.getInstance().getMe(getContext());
-
-        TextView faculty = (TextView) rootView.findViewById(R.id.valueFaculty);
-        TextView firstMajor = (TextView) rootView.findViewById(R.id.valueFirstMajor);
-        TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
-
-        faculty.append(profile.get("faculty").toString().replaceAll("\"", ""));
-        firstMajor.append(profile.get("first_major").toString().replaceAll("\"", ""));
-        year.append(profile.get("matriculation_year").toString().replaceAll("\"", ""));
-
+        displayProfileInfo(rootView);
 
         //modules display
         //need to consider year and sem categorization
+        displayModulesTaken(rootView);
+
+        return rootView;
+    }
+
+    //calls from server & displays a list of modules taken by user
+    //need categorisation
+    private void displayModulesTaken(View rootView) {
         JsonArray modules = SynchroAPI.getInstance().getMeModules(getContext());
         String modulesString = "";
+
+        //System.out.println("HERE " + modules.toString());
+        JsonElement yearTracker = modules.get(0).getAsJsonObject().get("year_taken");
 
         for (int i=0; i<modules.size(); i++) {
             JsonObject object = modules.get(i).getAsJsonObject();
@@ -81,8 +84,19 @@ public class ProfileFragment extends Fragment {
         //Toast.makeText(getContext(), modulesString, Toast.LENGTH_LONG).show();
         TextView modulesTaken = (TextView) rootView.findViewById(R.id.valueModulesTaken);
         modulesTaken.append(modulesString);
+    }
 
-        return rootView;
+    //calls from server & displays faculty, major, matriculation of user
+    private void displayProfileInfo(View rootView) {
+        JsonObject profile = SynchroAPI.getInstance().getMe(getContext());
+
+        TextView faculty = (TextView) rootView.findViewById(R.id.valueFaculty);
+        TextView firstMajor = (TextView) rootView.findViewById(R.id.valueFirstMajor);
+        TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
+
+        faculty.append(profile.get("faculty").toString().replaceAll("\"", ""));
+        firstMajor.append(profile.get("first_major").toString().replaceAll("\"", ""));
+        year.append(profile.get("matriculation_year").toString().replaceAll("\"", ""));
     }
 
     @Override
