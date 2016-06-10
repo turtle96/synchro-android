@@ -39,6 +39,7 @@ public class DrawerActivity extends AppCompatActivity
         //JsonObject obj = SynchroAPI.getInstance().getMeResync(DrawerActivity.this);
         //Toast.makeText(DrawerActivity.this, obj.get("message").toString(), Toast.LENGTH_LONG).show();
 
+        SynchroAPI.getInstance().getMeResync(DrawerActivity.this);
     }
 
     @Override

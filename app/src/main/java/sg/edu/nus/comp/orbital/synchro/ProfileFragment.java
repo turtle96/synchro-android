@@ -3,6 +3,9 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,12 +13,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
 
 public class ProfileFragment extends Fragment {
 
@@ -56,34 +64,60 @@ public class ProfileFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         displayProfileInfo(rootView);
-
-        //modules display
-        //need to consider year and sem categorization
         displayModulesTaken(rootView);
 
         return rootView;
     }
 
-    //calls from server & displays a list of modules taken by user
-    //need categorisation
+    /*  calls from server & displays a list of modules taken by user
+        processes JsonArray returned from server
+        modules' code + name strings sorted by semester, then sorted by year into ModuleList objects
+        displayed using cardview (this can help with option for user to hide some module info)
+    */
     private void displayModulesTaken(View rootView) {
-        JsonArray modules = SynchroAPI.getInstance().getMeModules(getContext());
-        String modulesString = "";
+        JsonArray modulesJsonArray = SynchroAPI.getInstance().getMeModules(getContext());
 
-        //System.out.println("HERE " + modules.toString());
-        JsonElement yearTracker = modules.get(0).getAsJsonObject().get("year_taken");
+        ArrayList<ModuleList> moduleLists = new ArrayList<>();
+        int yearCounter = 0;    //index counter for modulesByYear
+        String yearTracker = modulesJsonArray.get(0).getAsJsonObject().get("year_taken").toString();
+        String semTracker = modulesJsonArray.get(0).getAsJsonObject().get("semester_taken").toString();
+        moduleLists.add(new ModuleList(yearTracker));   //initialize
 
-        for (int i=0; i<modules.size(); i++) {
-            JsonObject object = modules.get(i).getAsJsonObject();
-            object = object.get("module").getAsJsonObject();
-            //System.out.println("HERE " + i + " " + object.toString());
-            modulesString = modulesString + object.get("module_code").toString().replaceAll("\"", "")
-                    + ": " + object.get("module_title").toString().replaceAll("\"", "") + "\n";
+        for (int i=0; i<modulesJsonArray.size(); i++) {
+            JsonObject object = modulesJsonArray.get(i).getAsJsonObject();
+
+            if (!object.get("year_taken").toString().equals(yearTracker)) {
+                yearTracker = object.get("year_taken").toString();
+                yearCounter++;
+                moduleLists.add(new ModuleList(yearTracker));   //initialize
+            }
+            if (!object.get("semester_taken").toString().equals(semTracker)) {
+                semTracker = object.get("semester_taken").toString();
+            }
+
+            JsonObject moduleObj = object.getAsJsonObject("module");
+
+            //sort info into correct sem
+            //each sem string contains the entire module list
+            if (semTracker.replaceAll("\"", "").equals("1")) {
+                moduleLists.get(yearCounter).addToListSem1(moduleObj.get("module_code").toString()
+                        + ": " + moduleObj.get("module_title").toString() + "\n");
+            }
+            else {
+                moduleLists.get(yearCounter).addToListSem2(moduleObj.get("module_code").toString()
+                        + ": " + moduleObj.get("module_title").toString() + "\n");
+            }
+
         }
 
-        //Toast.makeText(getContext(), modulesString, Toast.LENGTH_LONG).show();
-        TextView modulesTaken = (TextView) rootView.findViewById(R.id.valueModulesTaken);
-        modulesTaken.append(modulesString);
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_profile);
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        recyclerView.setAdapter(new CardViewModulesAdaptor(moduleLists, getContext()));
     }
 
     //calls from server & displays faculty, major, matriculation of user

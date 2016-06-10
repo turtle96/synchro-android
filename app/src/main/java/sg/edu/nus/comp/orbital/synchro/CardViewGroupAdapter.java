@@ -14,19 +14,19 @@ import java.util.ArrayList;
 /**
  * Created by angja_000 on 9/6/2016.
  */
-public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardViewHolder>{
+public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdapter.CardViewHolder>{
 
     private ArrayList<String> list;
     private Context context;
 
-    public CardViewAdapter(ArrayList<String> list, Context context) {
+    public CardViewGroupAdapter(ArrayList<String> list, Context context) {
         this.list  = list;
         this.context = context;
     }
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_groups_layout, parent, false);
         CardViewHolder cardViewHolder = new CardViewHolder(view, context);
         return cardViewHolder;
     }
@@ -34,7 +34,8 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
         holder.image.setImageResource(R.drawable.balloons);
-        holder.text.setText(list.get(position).toString());
+        holder.text.setText(list.get(position));
+        holder.groupName = list.get(position);
     }
 
     @Override
@@ -42,12 +43,13 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
         return list.size();
     }
 
-    public class CardViewHolder extends RecyclerView.ViewHolder {
+    protected class CardViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView image;
         private TextView text;
         private View view;
         private final Context finalContext;
+        private String groupName;
 
         public CardViewHolder(View itemView, Context context) {
             super(itemView);
@@ -59,7 +61,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.CardVi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(finalContext, "clicked", Toast.LENGTH_LONG).show();
+                    Toast.makeText(finalContext, "clicked " + groupName, Toast.LENGTH_LONG).show();
                 }
             });
         }

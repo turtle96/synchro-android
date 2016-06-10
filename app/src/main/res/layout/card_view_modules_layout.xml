@@ -1,0 +1,63 @@
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1sp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5sp">
+
+        <TextView
+            android:id="@+id/valueModuleYear"
+            android:text="year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textSize="23dp"/>
+
+        <TextView
+            android:id="@+id/valueModuleSem1"
+            android:text="sem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/valueModuleYear"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textSize="23dp"/>
+
+        <TextView
+            android:id="@+id/valueModulesTakenSem1"
+            android:text="modules"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/valueModuleSem1"
+            android:padding="5dp"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/valueModuleSem2"
+            android:text="sem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/valueModulesTakenSem1"
+            android:textStyle="bold"
+            android:padding="5dp"
+            android:textSize="23dp"/>
+
+        <TextView
+            android:id="@+id/valueModulesTakenSem2"
+            android:text="modules"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/valueModuleSem2"
+            android:padding="5dp"
+            android:paddingBottom="0dp"
+            android:textSize="20dp"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
