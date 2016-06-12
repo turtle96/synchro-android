@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro;
+package sg.edu.nus.comp.orbital.synchro.Profile;
 
 /**
  * Created by angja_000 on 10/6/2016.

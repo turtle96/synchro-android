@@ -14,6 +14,8 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import sg.edu.nus.comp.orbital.synchro.GroupsJoined.CardViewGroupAdapter;
+
 public class GroupsJoinedFragment extends Fragment {
     public GroupsJoinedFragment() {
         // Required empty public constructor

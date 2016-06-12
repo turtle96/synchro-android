@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et lacus sit amet lectus suscipit eleifend. Nam gravida turpis in turpis feugiat dignissim. Nulla facilisi. Donec ultrices turpis arcu, id feugiat sem sagittis non. Mauris eu tristique risus. Fusce eleifend ex id lacus tempus laoreet."
+                    android:text="@string/small_text"
                     android:id="@+id/valueDescription"
                     android:textSize="20dp"
                     android:paddingLeft="5dp"

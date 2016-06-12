@@ -10,11 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.google.gson.JsonObject;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -108,6 +104,10 @@ public class DrawerActivity extends AppCompatActivity
                 loginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 loginActivity.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
                 startActivity(loginActivity);
+            case R.id.nav_view_group:
+                transaction.replace(R.id.content_fragment, ViewGroupFragment.newInstance());
+                break;
+
         }
 
         transaction.commit();

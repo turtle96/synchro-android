@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro;
+package sg.edu.nus.comp.orbital.synchro.GroupsJoined;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import sg.edu.nus.comp.orbital.synchro.R;
 
 /**
  * Created by angja_000 on 9/6/2016.

@@ -13,17 +13,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+
+import sg.edu.nus.comp.orbital.synchro.Profile.CardViewModulesAdaptor;
+import sg.edu.nus.comp.orbital.synchro.Profile.ModuleList;
 
 public class ProfileFragment extends Fragment {
 

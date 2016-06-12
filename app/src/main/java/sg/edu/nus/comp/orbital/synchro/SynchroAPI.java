@@ -41,9 +41,6 @@ public class SynchroAPI {
     private static final String apiMe = API_BASE_URL + "me";
     private static final String apiMeModules = API_BASE_URL + "me/modulesTaken";
 
-    private static int userId;
-    private static String apiUserGroups = null;
-
     private SynchroAPI(String ivleAuthToken) {
         // default private singleton
         this.ivleAuthToken = ivleAuthToken;
@@ -189,11 +186,27 @@ public class SynchroAPI {
     //JsonArray
     public JsonArray getUserGroupsById(Context context, int userId) {
         JsonArray result = null;
-        this.userId = userId;
-        apiUserGroups = API_BASE_URL + "users/" + userId +"/groups";
+        String apiUserGroups = API_BASE_URL + "users/" + userId +"/groups";
         try {
             result = Ion.with(context)
                     .load(apiUserGroups)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    //Retrieve list of Users belonging to a particular Group, given Group id
+    //JsonArray
+    public JsonArray getGroupUsersById(Context context, int groupId) {
+        JsonArray result = null;
+        String apiGroupUsers = API_BASE_URL + "groups/" + groupId +"/users";
+        try {
+            result = Ion.with(context)
+                    .load(apiGroupUsers)
                     .addHeader("Authorization", ivleAuthToken)
                     .asJsonArray()
                     .get();

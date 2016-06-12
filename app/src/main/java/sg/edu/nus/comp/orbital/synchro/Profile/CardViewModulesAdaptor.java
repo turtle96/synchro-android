@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro;
+package sg.edu.nus.comp.orbital.synchro.Profile;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import sg.edu.nus.comp.orbital.synchro.R;
 
 /**
  * Created by angja_000 on 10/6/2016.
