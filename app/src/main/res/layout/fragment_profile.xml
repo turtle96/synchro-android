@@ -35,9 +35,9 @@
                 <ImageView
                     android:id="@+id/header_cover_image"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="180dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/profile_cover"/>
+                    android:src="@drawable/colour_stacks"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -76,15 +76,13 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout"
-            android:orientation="vertical">
+            android:layout_below="@+id/layout">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:elevation="4dp"
-                android:padding="10sp"
+                android:padding="5sp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true">
 

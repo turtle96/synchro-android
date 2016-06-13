@@ -12,7 +12,7 @@
     <string name="modules_taken">Modules Taken</string>
     <string name="enter_search">Enter Search Query Here</string>
     <string name="search">Search</string>
-    <string name="login_dev_test">Login (dev test)</string>
+    <string name="login_dev_test">Login</string>
     <string name="profile">Profile</string>
     <string name="groups_joined">Groups Joined</string>
     <string name="create_new_group">Create New Group</string>
