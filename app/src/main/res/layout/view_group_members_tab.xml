@@ -17,11 +17,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:padding="10sp"
+            android:height="56dp"
             android:text="Group Members"
-            android:textColor="#fafafa"
-            android:textStyle="bold"
-            android:textSize="25dp"/>
+            android:textColor="@color/text_white"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:textSize="20sp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_group_view"

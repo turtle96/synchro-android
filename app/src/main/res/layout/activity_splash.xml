@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/colorPrimaryDark">
 
-    <TextView
-        android:id="@+id/title_synchro"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Synchro"
-        android:layout_above="@+id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:textColor="#FFFFFF"
-        android:textSize="48dp"
-        android:textStyle="bold"
-        android:typeface="normal" />
+        android:layout_centerInParent="true">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/title_synchro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Synchro"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_below="@+id/title_synchro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/progressBar" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -61,6 +61,8 @@ public class ViewGroupFragment extends Fragment {
 
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), R.color.background_light_grey));
         tabLayout.setSelectedTabIndicatorHeight(10);
+        tabLayout.getTabAt(0).getIcon().setColorFilter(ContextCompat.getColor(getContext(),
+                R.color.background_light_grey), PorterDuff.Mode.SRC_IN);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

@@ -4,15 +4,13 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-
     <string name="faculty">Faculty</string>
     <string name="first_major">First Major</string>
     <string name="matriculation_year">Matriculation Year</string>
     <string name="modules_taken">Modules Taken</string>
     <string name="enter_search">Enter Search Query Here</string>
     <string name="search">Search</string>
-    <string name="login_dev_test">Login</string>
+    <string name="login">Login</string>
     <string name="profile">Profile</string>
     <string name="groups_joined">Groups Joined</string>
     <string name="create_new_group">Create New Group</string>
@@ -28,4 +26,5 @@ Morbi in maximus mi. Integer nec magna ac quam luctus pulvinar vitae eget mauris
 
 Vivamus libero urna, vulputate vitae nulla vitae, rhoncus consequat turpis. Suspendisse a tellus ut diam placerat viverra. Mauris commodo, massa sed auctor mattis, nisi quam auctor neque, at accumsan turpis sapien quis urna. Maecenas ligula metus, aliquam vitae vehicula congue, congue in elit. Nulla lobortis aliquam mi ac lacinia. Sed eros tellus, interdum sit amet feugiat vitae, dictum nec eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam erat volutpat. Vivamus eget magna eget ipsum commodo fermentum. Sed vulputate varius interdum. Nullam ultricies ex eu lacus egestas, vitae sagittis magna facilisis. Etiam semper augue vel rutrum condimentum. Vivamus risus odio, fringilla sit amet velit ac, varius ullamcorper nulla. Nullam sodales est sit amet tincidunt malesuada.</string>
     <string name="small_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et lacus sit amet lectus suscipit eleifend. Nam gravida turpis in turpis feugiat dignissim. Nulla facilisi. Donec ultrices turpis arcu, id feugiat sem sagittis non. Mauris eu tristique risus. Fusce eleifend ex id lacus tempus laoreet.</string>
+    <string name="about_me">About Me</string>
 </resources>

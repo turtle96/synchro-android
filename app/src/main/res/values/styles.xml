@@ -14,4 +14,48 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- custom styles here-->
+
+    <!-- header boards at the top of each page -->
+    <style name="MainHeaderBoard">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_white</item>
+
+        <item name="android:background">@color/background_dark_grey</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">120dp</item>
+
+        <item name="android:gravity">bottom</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <!-- text style of MainHeaderBoard for boards that need customization (i.e. profile, view group)-->
+    <style name="MainHeader">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Header1">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- for sub-titles, additional headers etc-->
+    <style name="SubHeader1" parent="Header1">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextBody1">
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
 </resources>

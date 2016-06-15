@@ -7,26 +7,27 @@
     android:layout_height="match_parent"
     android:id="@+id/profile_layout">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <FrameLayout
-            android:id="@+id/layout"
+            android:id="@+id/layout_header"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/user_profile_photo"
-                android:layout_width="140dp"
-                android:layout_height="140dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:scaleType="centerCrop"
                 android:src="@drawable/profile"
                 android:cropToPadding="true"
-                android:elevation="1dp"
+                android:elevation="3dp"
                 app:civ_border_width="3dp"
-                app:civ_border_color="#FFFFFF"/>
+                app:civ_border_color="@color/background_dark_grey" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -39,159 +40,80 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/colour_stacks"/>
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/user_profile_name"
+                    android:text="Hermione Granger"
+                    style="@style/MainHeader"
+                    android:layout_below="@id/header_cover_image"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/header_cover_image"
-                    android:background="@color/background_material_dark"
-                    android:elevation="4dp"
-                    android:paddingBottom="24dp">
+                    android:layout_height="150dp"
+                    android:background="@color/background_dark_grey"
+                    android:gravity="center_horizontal|bottom"
+                    android:paddingBottom="32dp"/>
 
-                    <TextView
-                        android:id="@+id/user_profile_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="76dp"
-                        android:text="Hermione Granger"
-                        android:textColor="#fff"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/user_profile_short_bio"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/user_profile_name"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="12dp"
-                        android:text="insert text here about self"
-                        android:textColor="#fff"
-                        android:textSize="14sp" />
-                </RelativeLayout>
             </RelativeLayout>
         </FrameLayout>
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layout">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5sp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true">
+            <TextView
+                android:id="@+id/labelDescription"
+                android:text="@string/about_me"
+                style="@style/Header1" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="About Me"
-                    android:id="@+id/labelDescription"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:textSize="25dp" />
+            <TextView
+                android:text="@string/small_text"
+                android:id="@+id/valueDescription"
+                style="@style/TextBody1"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/small_text"
-                    android:id="@+id/valueDescription"
-                    android:textSize="20dp"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="0dp"
-                    android:paddingRight="5dp"
-                    android:paddingBottom="15dp" />
+            <TextView
+                android:text="@string/faculty"
+                android:id="@+id/labelFaculty"
+                style="@style/Header1" />
 
-                <TextView
-                    android:text="@string/faculty"
-                    android:id="@+id/labelFaculty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:textSize="25dp" />
+            <TextView
+                android:id="@+id/valueFaculty"
+                style="@style/TextBody1" />
 
-                <TextView
-                    android:id="@+id/valueFaculty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="20dp"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="0dp"
-                    android:paddingRight="5dp"
-                    android:paddingBottom="15dp" />
+            <TextView
+                android:text="@string/first_major"
+                android:id="@+id/labelFirstMajor"
+                style="@style/Header1" />
 
-                <TextView
-                    android:text="@string/first_major"
-                    android:id="@+id/labelFirstMajor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:textSize="25dp" />
+            <TextView
+                android:id="@+id/valueFirstMajor"
+                style="@style/TextBody1" />
 
-                <TextView
-                    android:id="@+id/valueFirstMajor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="20dp"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="0dp"
-                    android:paddingRight="5dp" />
+            <TextView
+                android:text="@string/matriculation_year"
+                android:id="@+id/labelMatriculationYear"
+                style="@style/Header1"/>
 
-                <TextView
-                    android:text="@string/matriculation_year"
-                    android:id="@+id/labelMatriculationYear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:textSize="25dp" />
+            <TextView
+                android:id="@+id/valueMatriculationYear"
+                style="@style/TextBody1" />
 
-                <TextView
-                    android:id="@+id/valueMatriculationYear"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textSize="20dp"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="0dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp" />
+        </LinearLayout>
 
-                <TextView
-                    android:text="@string/modules_taken"
-                    android:id="@+id/labelModulesTaken"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:textSize="25dp" />
+        <TextView
+            android:text="@string/modules_taken"
+            android:id="@+id/labelModulesTaken"
+            style="@style/Header1"
+            android:paddingLeft="15dp"/>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="vertical">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:layout_margin="5dp">
 
-                </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
 
-            </LinearLayout>
-        </RelativeLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>

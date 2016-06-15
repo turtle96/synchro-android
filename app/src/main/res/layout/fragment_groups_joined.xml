@@ -9,16 +9,9 @@
 
     <TextView
         android:id="@+id/header_groups_joined"
-        android:layout_width="match_parent"
-        android:layout_height="90sp"
-        android:background="@color/background_material_dark"
-        android:paddingTop="45sp"
-        android:paddingLeft="10sp"
-        android:elevation="3sp"
-        android:text="Groups Joined"
-        android:textColor="#fff"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:text="@string/groups_joined"
+        style="@style/MainHeaderBoard"
+        android:elevation="3dp" />
 
     <ScrollView
         android:layout_width="match_parent"

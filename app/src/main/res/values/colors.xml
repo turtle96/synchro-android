@@ -5,4 +5,6 @@
     <color name="colorAccent">#ff9e80</color>
 
     <color name="background_light_grey">#EEEEEE</color>
+    <color name="background_dark_grey">#212121</color>
+    <color name="text_white">#fafafa</color>
 </resources>

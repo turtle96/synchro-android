@@ -7,7 +7,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_login"
-                    android:title="@string/login_dev_test" />
+                    android:title="@string/login" />
                 <item
                     android:id="@+id/nav_view_group"
                     android:title="View Group Page"/>
