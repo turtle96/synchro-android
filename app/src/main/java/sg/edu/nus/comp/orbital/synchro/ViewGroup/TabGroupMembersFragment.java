@@ -24,7 +24,7 @@ import sg.edu.nus.comp.orbital.synchro.SynchroDataLoader;
  */
 public class TabGroupMembersFragment extends Fragment {
 
-    private JsonArray membersJsonArray = SynchroDataLoader.getMembersJsonArray();
+    private static JsonArray membersJsonArray = SynchroDataLoader.getMembersJsonArray();
 
     public TabGroupMembersFragment() {}
 

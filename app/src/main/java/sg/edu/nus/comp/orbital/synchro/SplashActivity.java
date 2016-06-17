@@ -48,9 +48,7 @@ public class SplashActivity extends AppCompatActivity {
                 SynchroDataLoader.loadProfileData();
                 SynchroDataLoader.loadGroupsJoinedData();
                 SynchroDataLoader.loadViewGroupData();
-                //resync call
-                JsonObject obj = SynchroAPI.getInstance().getMeResync();
-                Toast.makeText(SplashActivity.this, obj.get("message").toString(), Toast.LENGTH_LONG).show();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

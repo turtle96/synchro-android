@@ -46,6 +46,10 @@ public class DrawerActivity extends AppCompatActivity
             runner.execute();
         }
 
+        //resync call
+        JsonObject obj = SynchroAPI.getInstance().getMeResync();
+        Toast.makeText(DrawerActivity.this, obj.get("message").toString(), Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -147,9 +151,7 @@ public class DrawerActivity extends AppCompatActivity
                 SynchroDataLoader.loadProfileData();
                 SynchroDataLoader.loadGroupsJoinedData();
                 SynchroDataLoader.loadViewGroupData();
-                //resync call
-                JsonObject obj = SynchroAPI.getInstance().getMeResync();
-                Toast.makeText(DrawerActivity.this, obj.get("message").toString(), Toast.LENGTH_LONG).show();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
