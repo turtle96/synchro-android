@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.Future;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.security.KeyStore;
@@ -33,7 +35,7 @@ public class SynchroAPI {
     // IVLE Specific endpoints
     public static String ivleLogin = "https://ivle.nus.edu.sg/api/login/?apikey=" + ivleApiKey;
     public static String ivleLoginSuccess = "https://ivle.nus.edu.sg/api/login/login_result.ashx?apikey=" + ivleApiKey + "&r=0";
-    public static String ivleValidate = "https://ivle.nus.edu.sg/api/Lapi.svc/Validate?APIKey=" + ivleApiKey + "&Token=" + ivleAuthToken;
+    private static String ivleValidate = "https://ivle.nus.edu.sg/api/Lapi.svc/Validate?APIKey=" + ivleApiKey + "&Token=" + ivleAuthToken;
 
     // Synchro API endpoints
     private static final String API_BASE_URL = "https://ec2-52-77-240-7.ap-southeast-1.compute.amazonaws.com/api/v1/";
@@ -99,14 +101,12 @@ public class SynchroAPI {
 
     //for validation of current token
     //updates token if new token received
-    public static boolean validate(Context context) {
-        AuthToken token = new AuthToken(context);
-        updateToken(token.getToken());  //ensures token variable in SynchroApi is updated from SharedPrefs
-        //authenticate(token.getToken());
+    public static boolean validate() {
+        updateToken(AuthToken.getToken());  //ensures token variable in SynchroApi is updated from SharedPrefs
 
         JsonObject result = null;
         try {
-            result = Ion.with(context)
+            result = Ion.with(App.getContext())
                     .load(ivleValidate)
                     .asJsonObject()
                     .get();
@@ -122,12 +122,12 @@ public class SynchroAPI {
             /*  checks if returned token is a newly generated one for replacement
                 =_= apparently the returned token is within "" so compare properly!
             */
-            if (!result.get("Token").toString().replaceAll("\"", "").equals(token.getToken())) {
+            if (!result.get("Token").toString().replaceAll("\"", "").equals(AuthToken.getToken())) {
                 //takes out the "" marks
-                token.setToken(result.get("Token").toString().replaceAll("\"", ""));
-                updateToken(token.getToken());
+                AuthToken.setToken(result.get("Token").toString().replaceAll("\"", ""));
+                updateToken(AuthToken.getToken());
             }
-            authenticate(token.getToken());
+            authenticate(AuthToken.getToken());
             return true;
         }
         else {  //validate unsuccessful
@@ -136,10 +136,10 @@ public class SynchroAPI {
     }
 
     //Retrieve current authenticated User's info
-    public JsonObject getMe(Context context) {
+    public JsonObject getMe() {
         JsonObject result = null;
         try {
-            result = Ion.with(context)
+            result = Ion.with(App.getContext())
                     .load(apiMe)
                     .addHeader("Authorization", ivleAuthToken)
                     .asJsonObject()
@@ -147,15 +147,14 @@ public class SynchroAPI {
         }catch (Exception ex){
             ex.printStackTrace();
         }
-
         return result;
     }
 
     //Resynchronize & cache current user info from IVLE
-    public JsonObject getMeResync(Context context) {
+    public JsonObject getMeResync() {
         JsonObject result = null;
         try {
-            result = Ion.with(context)
+            result = Ion.with(App.getContext())
                     .load(apiMeResync)
                     .addHeader("Authorization", ivleAuthToken)
                     .asJsonObject()
@@ -168,10 +167,10 @@ public class SynchroAPI {
 
     //Retrieve list of Modules that current authenticated User has taken
     //JsonArray
-    public JsonArray getMeModules(Context context) {
+    public JsonArray getMeModules() {
         JsonArray result = null;
         try {
-            result = Ion.with(context)
+            result = Ion.with(App.getContext())
                     .load(apiMeModules)
                     .addHeader("Authorization", ivleAuthToken)
                     .asJsonArray()
@@ -184,11 +183,11 @@ public class SynchroAPI {
 
     //Retrieve list of Groups a particular User belongs to, given user id
     //JsonArray
-    public JsonArray getUserGroupsById(Context context, int userId) {
+    public JsonArray getUserGroupsById(int userId) {
         JsonArray result = null;
         String apiUserGroups = API_BASE_URL + "users/" + userId +"/groups";
         try {
-            result = Ion.with(context)
+            result = Ion.with(App.getContext())
                     .load(apiUserGroups)
                     .addHeader("Authorization", ivleAuthToken)
                     .asJsonArray()
@@ -201,11 +200,11 @@ public class SynchroAPI {
 
     //Retrieve list of Users belonging to a particular Group, given Group id
     //JsonArray
-    public JsonArray getGroupUsersById(Context context, int groupId) {
+    public JsonArray getGroupUsersById(int groupId) {
         JsonArray result = null;
         String apiGroupUsers = API_BASE_URL + "groups/" + groupId +"/users";
         try {
-            result = Ion.with(context)
+            result = Ion.with(App.getContext())
                     .load(apiGroupUsers)
                     .addHeader("Authorization", ivleAuthToken)
                     .asJsonArray()

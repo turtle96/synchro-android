@@ -2,6 +2,13 @@ package sg.edu.nus.comp.orbital.synchro;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.AsyncTask;
+
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.Future;
+import com.koushikdutta.async.http.AsyncHttpGet;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by kfwong on 6/2/16.

@@ -34,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     //launch the main, if the activity exist in backstack, bring it to front instead of
     // creating new instance
     private void redirectUser() {
-
         Intent launchMainActivity = new Intent(LoginActivity.this, DrawerActivity.class);
+        launchMainActivity.putExtra("caller", "LoginActivity");
         launchMainActivity.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         LoginActivity.this.startActivity(launchMainActivity);
         finish();
@@ -66,9 +66,6 @@ public class LoginActivity extends AppCompatActivity {
                     if (url.equals(SynchroAPI.ivleLoginSuccess)) {
                         view.loadUrl("javascript:window.HtmlViewer.showHTML" +
                                 "('&lt;html&gt;'+document.getElementsByTagName('html')[0].innerHTML+'&lt;/html&gt;');");
-                        AuthToken token = new AuthToken(LoginActivity.this);
-                        SynchroAPI.authenticate(token.getToken());
-                        SynchroAPI.updateToken(token.getToken());
                         redirectUser();
 
                     } else {  //in case anything else happens
@@ -112,8 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     splitTokens = token.split("</body>");
                     String ivleToken = splitTokens[0];
 
-                    AuthToken authToken = new AuthToken(LoginActivity.this);
-                    authToken.setToken(ivleToken);
+                    AuthToken.setToken(ivleToken);
 
                     //for debug
                     Log.d("Synchro", ivleToken);

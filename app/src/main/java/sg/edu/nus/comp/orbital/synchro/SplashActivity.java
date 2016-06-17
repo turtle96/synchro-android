@@ -1,13 +1,13 @@
 package sg.edu.nus.comp.orbital.synchro;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.gson.JsonObject;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -20,8 +20,12 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (SynchroAPI.validate(SplashActivity.this)) {
+                if (SynchroAPI.validate()) {
+                    AsyncTaskRunner runner = new AsyncTaskRunner();
+                    runner.execute();
+
                     Intent launchMainActivity = new Intent(SplashActivity.this, DrawerActivity.class);
+                    launchMainActivity.putExtra("caller", "SplashActivity");
                     SplashActivity.this.startActivity(launchMainActivity);
                     SplashActivity.this.finish();
                 }
@@ -35,4 +39,28 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, 3000);
     }
+
+    private class AsyncTaskRunner extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            try {
+                SynchroDataLoader.loadProfileData();
+                SynchroDataLoader.loadGroupsJoinedData();
+                SynchroDataLoader.loadViewGroupData();
+                //resync call
+                JsonObject obj = SynchroAPI.getInstance().getMeResync();
+                Toast.makeText(SplashActivity.this, obj.get("message").toString(), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            Toast.makeText(App.getContext(), "data loaded", Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

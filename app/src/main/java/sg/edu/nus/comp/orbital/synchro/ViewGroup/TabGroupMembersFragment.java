@@ -17,11 +17,14 @@ import java.util.ArrayList;
 import sg.edu.nus.comp.orbital.synchro.Profile.CardViewModulesAdaptor;
 import sg.edu.nus.comp.orbital.synchro.R;
 import sg.edu.nus.comp.orbital.synchro.SynchroAPI;
+import sg.edu.nus.comp.orbital.synchro.SynchroDataLoader;
 
 /**
  * Created by angja_000 on 12/6/2016.
  */
 public class TabGroupMembersFragment extends Fragment {
+
+    private JsonArray membersJsonArray = SynchroDataLoader.getMembersJsonArray();
 
     public TabGroupMembersFragment() {}
 
@@ -29,8 +32,6 @@ public class TabGroupMembersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.view_group_members_tab, container, false);
-
-        JsonArray membersJsonArray = SynchroAPI.getInstance().getGroupUsersById(getContext(), 5);
 
         ArrayList<String> members = new ArrayList<>();
 

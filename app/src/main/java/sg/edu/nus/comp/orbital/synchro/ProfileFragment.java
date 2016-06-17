@@ -16,9 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 
@@ -26,6 +24,9 @@ import sg.edu.nus.comp.orbital.synchro.Profile.CardViewModulesAdaptor;
 import sg.edu.nus.comp.orbital.synchro.Profile.ModuleList;
 
 public class ProfileFragment extends Fragment {
+
+    private static JsonObject profile = SynchroDataLoader.getProfile();
+    private static ArrayList<ModuleList> moduleLists = SynchroDataLoader.getModuleLists();
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -50,7 +51,7 @@ public class ProfileFragment extends Fragment {
             // prepare self signed ssl crt
             SynchroAPI api = SynchroAPI.getInstance();
 
-            Log.d("Synchro", api.getMe(getContext()).toString());
+            Log.d("Synchro", api.getMe().toString());
 
         } catch (Exception ex) {
             Log.d("Synchro", "Something horrible went wrong.");
@@ -75,40 +76,6 @@ public class ProfileFragment extends Fragment {
         displayed using cardview (this can help with option for user to hide some module info)
     */
     private void displayModulesTaken(View rootView) {
-        JsonArray modulesJsonArray = SynchroAPI.getInstance().getMeModules(getContext());
-
-        ArrayList<ModuleList> moduleLists = new ArrayList<>();
-        int yearCounter = 0;    //index counter for modulesByYear
-        String yearTracker = modulesJsonArray.get(0).getAsJsonObject().get("year_taken").toString();
-        String semTracker = modulesJsonArray.get(0).getAsJsonObject().get("semester_taken").toString();
-        moduleLists.add(new ModuleList(yearTracker));   //initialize
-
-        for (int i=0; i<modulesJsonArray.size(); i++) {
-            JsonObject object = modulesJsonArray.get(i).getAsJsonObject();
-
-            if (!object.get("year_taken").toString().equals(yearTracker)) {
-                yearTracker = object.get("year_taken").toString();
-                yearCounter++;
-                moduleLists.add(new ModuleList(yearTracker));   //initialize
-            }
-            if (!object.get("semester_taken").toString().equals(semTracker)) {
-                semTracker = object.get("semester_taken").toString();
-            }
-
-            JsonObject moduleObj = object.getAsJsonObject("module");
-
-            //sort info into correct sem
-            //each sem string contains the entire module list
-            if (semTracker.replaceAll("\"", "").equals("1")) {
-                moduleLists.get(yearCounter).addToListSem1(moduleObj.get("module_code").toString()
-                        + ": " + moduleObj.get("module_title").toString() + "\n");
-            }
-            else {
-                moduleLists.get(yearCounter).addToListSem2(moduleObj.get("module_code").toString()
-                        + ": " + moduleObj.get("module_title").toString() + "\n");
-            }
-
-        }
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_profile);
         recyclerView.setHasFixedSize(true);
@@ -122,7 +89,6 @@ public class ProfileFragment extends Fragment {
 
     //calls from server & displays faculty, major, matriculation of user
     private void displayProfileInfo(View rootView) {
-        JsonObject profile = SynchroAPI.getInstance().getMe(getContext());
 
         TextView faculty = (TextView) rootView.findViewById(R.id.valueFaculty);
         TextView firstMajor = (TextView) rootView.findViewById(R.id.valueFirstMajor);
@@ -131,6 +97,7 @@ public class ProfileFragment extends Fragment {
         faculty.append(profile.get("faculty").toString().replaceAll("\"", ""));
         firstMajor.append(profile.get("first_major").toString().replaceAll("\"", ""));
         year.append(profile.get("matriculation_year").toString().replaceAll("\"", ""));
+
     }
 
     @Override

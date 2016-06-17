@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import sg.edu.nus.comp.orbital.synchro.GroupsJoined.CardViewGroupAdapter;
 
 public class GroupsJoinedFragment extends Fragment {
+
+    //dummy user called
+    private static JsonArray groupsJsonArray = SynchroDataLoader.getGroupsJsonArray();
+
     public GroupsJoinedFragment() {
         // Required empty public constructor
     }
@@ -47,10 +51,6 @@ public class GroupsJoinedFragment extends Fragment {
         NOTE: user called is not current user, endpoint not configured yet
     */
     private void displayGroupsJoined(View rootView) {
-        //dummy user called
-        JsonArray groupsJsonArray = SynchroAPI.getInstance().getUserGroupsById(getContext(), 1);
-
-        //System.out.println("HERE "+groupsJsonArray.toString());
 
         ArrayList<String> groupDetails = new ArrayList<String>();
 
