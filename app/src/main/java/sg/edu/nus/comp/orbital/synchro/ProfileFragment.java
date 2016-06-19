@@ -90,9 +90,15 @@ public class ProfileFragment extends Fragment {
     //calls from server & displays faculty, major, matriculation of user
     private void displayProfileInfo(View rootView) {
 
+        TextView name = (TextView) rootView.findViewById(R.id.user_profile_name);
         TextView faculty = (TextView) rootView.findViewById(R.id.valueFaculty);
         TextView firstMajor = (TextView) rootView.findViewById(R.id.valueFirstMajor);
         TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
+
+        //use this code if you want to display your real name instead of placeholder
+        //name.append(profile.get("name").toString().replaceAll("\"", ""));
+
+        name.append("Hermione Granger");
 
         faculty.append(profile.get("faculty").toString().replaceAll("\"", ""));
         firstMajor.append(profile.get("first_major").toString().replaceAll("\"", ""));

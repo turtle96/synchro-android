@@ -1,10 +1,9 @@
 package sg.edu.nus.comp.orbital.synchro;
 
-import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -14,12 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import sg.edu.nus.comp.orbital.synchro.ViewGroup.GroupTabAdaptor;
+import com.google.gson.JsonArray;
+
+import sg.edu.nus.comp.orbital.synchro.ViewGroup.GroupViewTabAdaptor;
 
 /**
  * Created by angja_000 on 12/6/2016.
  */
 public class ViewGroupFragment extends Fragment {
+
+    private static JsonArray membersJsonArray = SynchroDataLoader.loadViewGroupData(5);
 
     public ViewGroupFragment() {}
 
@@ -47,6 +50,8 @@ public class ViewGroupFragment extends Fragment {
         return rootView;
     }
 
+    public static JsonArray getMembersJsonArray() {return membersJsonArray;}
+
     //setup tab layouts and child fragments: GroupDetails and GroupMembers
     private void setupTabs(View rootView) {
         final TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout);
@@ -55,7 +60,7 @@ public class ViewGroupFragment extends Fragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewGroupPager);
-        GroupTabAdaptor adaptor = new GroupTabAdaptor(getChildFragmentManager());
+        GroupViewTabAdaptor adaptor = new GroupViewTabAdaptor(getChildFragmentManager());
         viewPager.setAdapter(adaptor);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
@@ -84,4 +89,5 @@ public class ViewGroupFragment extends Fragment {
         });
 
     }
+
 }

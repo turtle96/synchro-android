@@ -7,11 +7,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 /**
  * Created by angja_000 on 12/6/2016.
  */
-public class GroupTabAdaptor extends FragmentStatePagerAdapter {
+public class GroupViewTabAdaptor extends FragmentStatePagerAdapter {
 
     private int numTabs = 2;
 
-    public GroupTabAdaptor(FragmentManager fm) {
+    public GroupViewTabAdaptor(FragmentManager fm) {
         super(fm);
     }
 
