@@ -40,6 +40,7 @@ public class ModuleList {
         listSem2 = listSem2 + str.replaceAll("\"", "");
     }
 
+    //static method
     //parses JsonArray of module info into ArrayList of ModuleList objects for display
     public static ArrayList<ModuleList> parseModules(JsonArray modules) {
         ArrayList<ModuleList> lists = new ArrayList<>();

@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
+
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.R;
@@ -36,9 +39,19 @@ public class CardViewMemberAdaptor extends RecyclerView.Adapter<CardViewMemberAd
 
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        holder.image.setImageResource(R.drawable.balloons);
-        holder.text.setText(list.get(position));
-        holder.memberName = list.get(position);
+        //holder.image.setImageResource(R.drawable.balloons);
+
+        String memberName = list.get(position);
+
+        ColorGenerator generator = ColorGenerator.MATERIAL;
+        int color = generator.getRandomColor();
+        TextDrawable drawable = TextDrawable.builder()
+                .buildRound(memberName.substring(0, 1), color);
+
+        holder.image.setImageDrawable(drawable);
+
+        holder.text.setText(memberName);
+        holder.memberName = memberName;
     }
 
     @Override

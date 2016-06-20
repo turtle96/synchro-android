@@ -1,7 +1,11 @@
 package sg.edu.nus.comp.orbital.synchro;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +19,12 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.GroupsJoined.CardViewGroupAdapter;
+import sg.edu.nus.comp.orbital.synchro.GroupsJoined.GroupInfo;
 
 public class GroupsJoinedFragment extends Fragment {
 
     //dummy user called
-    private static JsonArray groupsJsonArray = SynchroDataLoader.getGroupsJsonArray();
+    private static ArrayList<GroupInfo> groupInfos = SynchroDataLoader.getGroupInfos();
 
     public GroupsJoinedFragment() {
         // Required empty public constructor
@@ -45,19 +50,13 @@ public class GroupsJoinedFragment extends Fragment {
         return rootView;
     }
 
-    /*
-        calls from server
-        sorts names from JsonArray for display via cardview
+    /*  setups cardviews for display of group details
         NOTE: user called is not current user, endpoint not configured yet
     */
     private void displayGroupsJoined(View rootView) {
 
-        ArrayList<String> groupDetails = new ArrayList<String>();
-
-        for (int i=0; i<groupsJsonArray.size(); i++) {
-            JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
-            groupDetails.add(object.get("name").toString().replaceAll("\"", ""));
-        }
+        // initialize fragment manager
+        FragmentManager manager = getFragmentManager();
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_groups_joined);
         recyclerView.setHasFixedSize(true);
@@ -66,7 +65,7 @@ public class GroupsJoinedFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new CardViewGroupAdapter(groupDetails, getContext()));
+        recyclerView.setAdapter(new CardViewGroupAdapter(groupInfos, getContext(), manager));
     }
 
 }

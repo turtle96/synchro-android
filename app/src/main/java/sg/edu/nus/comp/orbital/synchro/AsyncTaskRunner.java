@@ -47,7 +47,7 @@ public class AsyncTaskRunner {
             try {
                 SynchroAPI.getInstance().getMeResync();
                 SynchroDataLoader.loadProfileData();
-                SynchroDataLoader.loadGroupsJoinedData();
+                SynchroDataLoader.loadGroupsJoinedData(1);
 
             } catch (Exception e) {
                 e.printStackTrace();

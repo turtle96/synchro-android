@@ -1,5 +1,6 @@
 package sg.edu.nus.comp.orbital.synchro;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -29,4 +30,5 @@ public class App extends Application {
     public static Context getContext(){
         return appContext;
     }
+
 }

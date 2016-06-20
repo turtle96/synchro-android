@@ -13,12 +13,12 @@
         android:layout_height="match_parent"
         android:padding="10dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/profilePic"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_centerVertical="true"
-            android:scaleType="centerCrop" />
+            android:adjustViewBounds="true"/>
 
         <TextView
             android:id="@+id/valueMemberName"
