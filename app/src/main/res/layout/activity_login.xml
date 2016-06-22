@@ -8,7 +8,7 @@
     tools:context="sg.edu.nus.comp.orbital.synchro.LoginActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbar_login"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -17,7 +17,7 @@
         app:titleTextColor="#fafafa"/>
 
     <WebView
-        android:id="@+id/webview"
+        android:id="@+id/webview_login"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </WebView>

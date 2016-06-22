@@ -8,8 +8,10 @@ import java.util.ArrayList;
 /**
  * Created by angja_000 on 10/6/2016.
  *
- * to contain a list of modules for each year, categorized by sem 1 & 2
  * organizes modules by year and sem
+ * each ModuleList object contains a list of modules for each year
+ * split into 2 strings, under sem 1 & 2 respectively
+ * automatically removes quote marks from JsonObjects parsed
  */
 public class ModuleList {
 
@@ -23,10 +25,12 @@ public class ModuleList {
         listSem2 = "";
     }
 
+    ///// Getters ////////////////////
     public String getListSem1() {return listSem1;}
     public String getListSem2() {return listSem2;}
     public String getYear() {return year;}
 
+    /****** Methods to Add to Lists *******/
 
     //send in additional module names to concat to existing list of SEM 1
     //will replace "" marks
@@ -40,23 +44,25 @@ public class ModuleList {
         listSem2 = listSem2 + str.replaceAll("\"", "");
     }
 
+    //////////////////////////////////////
+
     //static method
     //parses JsonArray of module info into ArrayList of ModuleList objects for display
-    public static ArrayList<ModuleList> parseModules(JsonArray modules) {
-        ArrayList<ModuleList> lists = new ArrayList<>();
+    public static ArrayList<ModuleList> parseModules(JsonArray modulesJsonArray) {
+        ArrayList<ModuleList> moduleLists = new ArrayList<>();
 
         int yearCounter = 0;    //index counter for modulesByYear
-        String yearTracker = modules.get(0).getAsJsonObject().get("year_taken").toString();
-        String semTracker = modules.get(0).getAsJsonObject().get("semester_taken").toString();
-        lists.add(new ModuleList(yearTracker));   //initialize
+        String yearTracker = modulesJsonArray.get(0).getAsJsonObject().get("year_taken").toString();
+        String semTracker = modulesJsonArray.get(0).getAsJsonObject().get("semester_taken").toString();
+        moduleLists.add(new ModuleList(yearTracker));   //initialize
 
-        for (int i=0; i<modules.size(); i++) {
-            JsonObject object = modules.get(i).getAsJsonObject();
+        for (int i = 0; i< modulesJsonArray.size(); i++) {
+            JsonObject object = modulesJsonArray.get(i).getAsJsonObject();
 
             if (!object.get("year_taken").toString().equals(yearTracker)) {
                 yearTracker = object.get("year_taken").toString();
                 yearCounter++;
-                lists.add(new ModuleList(yearTracker));   //initialize
+                moduleLists.add(new ModuleList(yearTracker));   //initialize
             }
             if (!object.get("semester_taken").toString().equals(semTracker)) {
                 semTracker = object.get("semester_taken").toString();
@@ -67,17 +73,17 @@ public class ModuleList {
             //sort info into correct sem
             //each sem string contains the entire module list
             if (semTracker.replaceAll("\"", "").equals("1")) {
-                lists.get(yearCounter).addToListSem1(moduleObj.get("module_code").toString()
+                moduleLists.get(yearCounter).addToListSem1(moduleObj.get("module_code").toString()
                         + ": " + moduleObj.get("module_title").toString() + "\n");
             }
             else {
-                lists.get(yearCounter).addToListSem2(moduleObj.get("module_code").toString()
+                moduleLists.get(yearCounter).addToListSem2(moduleObj.get("module_code").toString()
                         + ": " + moduleObj.get("module_title").toString() + "\n");
             }
 
         }
 
-        return lists;
+        return moduleLists;
     }
 
 }

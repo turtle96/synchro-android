@@ -13,21 +13,22 @@ import sg.edu.nus.comp.orbital.synchro.R;
 
 /**
  * Created by angja_000 on 10/6/2016.
+ *
+ * adapter for card views of modules
+ * data set in the form of ModuleList objects
  */
-public class CardViewModulesAdaptor extends RecyclerView.Adapter<CardViewModulesAdaptor.CardViewHolder> {
+public class CardViewModulesAdapter extends RecyclerView.Adapter<CardViewModulesAdapter.CardViewHolder> {
 
     private ArrayList<ModuleList> list;
-    private Context context;
 
-    public CardViewModulesAdaptor(ArrayList<ModuleList> list, Context context) {
+    public CardViewModulesAdapter(ArrayList<ModuleList> list, Context context) {
         this.list  = list;
-        this.context = context;
     }
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_modules_layout, parent, false);
-        CardViewHolder cardViewHolder = new CardViewHolder(view, context);
+        CardViewHolder cardViewHolder = new CardViewHolder(view);
         return cardViewHolder;
     }
 
@@ -50,7 +51,7 @@ public class CardViewModulesAdaptor extends RecyclerView.Adapter<CardViewModules
 
         private TextView moduleYearView, moduleListSem1, moduleListSem2, moduleSem1View, moduleSem2View;
 
-        public CardViewHolder(View itemView, Context context) {
+        public CardViewHolder(View itemView) {
             super(itemView);
             moduleYearView = (TextView) itemView.findViewById(R.id.valueModuleYear);
             moduleSem1View = (TextView) itemView.findViewById(R.id.valueModuleSem1);

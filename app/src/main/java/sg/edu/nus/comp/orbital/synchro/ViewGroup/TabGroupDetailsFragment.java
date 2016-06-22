@@ -12,6 +12,7 @@ import sg.edu.nus.comp.orbital.synchro.R;
  * Created by angja_000 on 12/6/2016.
  *
  * Tab fragment for view group display
+ * Displays all group details
  */
 public class TabGroupDetailsFragment extends Fragment{
 

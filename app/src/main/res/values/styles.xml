@@ -20,7 +20,7 @@
     <style name="MainHeaderBoard">
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textColor">@color/plain_white</item>
 
         <item name="android:background">@color/background_dark_grey</item>
         <item name="android:layout_width">match_parent</item>
@@ -34,7 +34,7 @@
     <!-- text style of MainHeaderBoard for boards that need customization (i.e. profile, view group)-->
     <style name="MainHeader">
         <item name="android:textSize">25sp</item>
-        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textColor">@color/plain_white</item>
         <item name="android:textStyle">bold</item>
     </style>
 

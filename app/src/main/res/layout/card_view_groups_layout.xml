@@ -14,7 +14,7 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/groupPic"
+            android:id="@+id/groupImage"
             android:src="@drawable/balloons"
             android:layout_width="56dp"
             android:layout_height="56dp"
@@ -31,17 +31,13 @@
             <TextView
                 android:id="@+id/valueGroupName"
                 android:text="group name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="18sp"/>
+                style="@style/SubHeader1"/>
 
             <TextView
                 android:id="@+id/valueGroupDescription"
                 android:text="blah blah blah"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"/>
+                style="@style/TextBody1"
+                android:padding="0dp"/>
 
         </LinearLayout>
 

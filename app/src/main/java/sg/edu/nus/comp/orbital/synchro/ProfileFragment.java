@@ -15,12 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import sg.edu.nus.comp.orbital.synchro.Profile.CardViewModulesAdaptor;
+import sg.edu.nus.comp.orbital.synchro.Profile.CardViewModulesAdapter;
 import sg.edu.nus.comp.orbital.synchro.Profile.ModuleList;
 
 public class ProfileFragment extends Fragment {
@@ -70,8 +69,7 @@ public class ProfileFragment extends Fragment {
         return rootView;
     }
 
-    /*  calls from server & displays a list of modules taken by user
-        processes JsonArray returned from server
+    /*
         modules' code + name strings sorted by semester, then sorted by year into ModuleList objects
         displayed using cardview (this can help with option for user to hide some module info)
     */
@@ -84,10 +82,10 @@ public class ProfileFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new CardViewModulesAdaptor(moduleLists, getContext()));
+        recyclerView.setAdapter(new CardViewModulesAdapter(moduleLists, getContext()));
     }
 
-    //calls from server & displays faculty, major, matriculation of user
+    //displays naem, faculty, major, matriculation year of user
     private void displayProfileInfo(View rootView) {
 
         TextView name = (TextView) rootView.findViewById(R.id.user_profile_name);
@@ -97,7 +95,6 @@ public class ProfileFragment extends Fragment {
 
         //use this code if you want to display your real name instead of placeholder
         //name.append(profile.get("name").toString().replaceAll("\"", ""));
-
         name.append("Hermione Granger");
 
         faculty.append(profile.get("faculty").toString().replaceAll("\"", ""));

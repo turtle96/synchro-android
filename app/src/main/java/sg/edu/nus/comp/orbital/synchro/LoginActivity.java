@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -14,10 +13,6 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
-
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,8 +26,8 @@ public class LoginActivity extends AppCompatActivity {
         loginUser();
     }
 
-    //launch the main, if the activity exist in backstack, bring it to front instead of
-    // creating new instance
+    //launch the main activity, if the activity exist in backstack, bring it to front instead of
+    //creating new instance
     private void redirectUser() {
         Intent launchMainActivity = new Intent(LoginActivity.this, DrawerActivity.class);
         launchMainActivity.putExtra("caller", "LoginActivity");
@@ -44,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     //method for login
     //redirects user after authentication
     private void loginUser() {
-        WebView webview = (WebView) findViewById(R.id.webview);
+        WebView webview = (WebView) findViewById(R.id.webview_login);
 
         webview.getSettings().setJavaScriptEnabled(true);
         webview.addJavascriptInterface(new MyJavaScriptInterface(this), "HtmlViewer");
@@ -59,9 +54,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (!url.equals(SynchroAPI.ivleLogin)) {
                     view.setVisibility(View.GONE);
 
-                    /* user validated
+                    /*  user validated
                         extract token from html
-                        redirects to landing page (searchpage for now)
+                        redirects to landing page
                     */
                     if (url.equals(SynchroAPI.ivleLoginSuccess)) {
                         view.loadUrl("javascript:window.HtmlViewer.showHTML" +

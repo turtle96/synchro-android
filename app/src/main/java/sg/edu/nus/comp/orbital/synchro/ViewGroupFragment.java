@@ -1,7 +1,6 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 
-import sg.edu.nus.comp.orbital.synchro.ViewGroup.GroupViewTabAdaptor;
+import sg.edu.nus.comp.orbital.synchro.ViewGroup.ViewGroupTabAdapter;
 
 /**
  * Created by angja_000 on 12/6/2016.
@@ -31,6 +30,10 @@ public class ViewGroupFragment extends Fragment {
         return fragment;
     }
 
+    //getter method so that TabGroupMembersFragment can access
+    //data is loaded upon ViewGroupFragment instantiation so cannot be immediately stored in child fragment
+    public static JsonArray getMembersJsonArray() {return membersJsonArray;}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class ViewGroupFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "joined group", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "joined group (theoretically)", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -49,8 +52,6 @@ public class ViewGroupFragment extends Fragment {
 
         return rootView;
     }
-
-    public static JsonArray getMembersJsonArray() {return membersJsonArray;}
 
     //setup tab layouts and child fragments: GroupDetails and GroupMembers
     private void setupTabs(View rootView) {
@@ -60,7 +61,7 @@ public class ViewGroupFragment extends Fragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewGroupPager);
-        GroupViewTabAdaptor adaptor = new GroupViewTabAdaptor(getChildFragmentManager());
+        ViewGroupTabAdapter adaptor = new ViewGroupTabAdapter(getChildFragmentManager());
         viewPager.setAdapter(adaptor);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

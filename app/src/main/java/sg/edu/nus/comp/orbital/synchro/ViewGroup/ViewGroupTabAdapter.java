@@ -6,12 +6,14 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
  * Created by angja_000 on 12/6/2016.
+ *
+ * PagerAdapter to manage tabs for ViewGroupPage
  */
-public class GroupViewTabAdaptor extends FragmentStatePagerAdapter {
+public class ViewGroupTabAdapter extends FragmentStatePagerAdapter {
 
     private int numTabs = 2;
 
-    public GroupViewTabAdaptor(FragmentManager fm) {
+    public ViewGroupTabAdapter(FragmentManager fm) {
         super(fm);
     }
 

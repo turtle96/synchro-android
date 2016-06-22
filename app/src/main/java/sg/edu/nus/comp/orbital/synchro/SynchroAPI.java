@@ -42,6 +42,8 @@ public class SynchroAPI {
     private static final String apiMeResync = API_BASE_URL + "me/resync";
     private static final String apiMe = API_BASE_URL + "me";
     private static final String apiMeModules = API_BASE_URL + "me/modulesTaken";
+    private static final String apiUsers = API_BASE_URL + "users";
+    private static final String apiGroups = API_BASE_URL + "groups";
 
     private SynchroAPI(String ivleAuthToken) {
         // default private singleton
@@ -183,7 +185,7 @@ public class SynchroAPI {
 
     //Retrieve list of Groups a particular User belongs to, given user id
     //JsonArray
-    public JsonArray getUserGroupsById(int userId) {
+    public JsonArray getGroupsByUserId(int userId) {
         JsonArray result = null;
         String apiUserGroups = API_BASE_URL + "users/" + userId +"/groups";
         try {
@@ -200,12 +202,46 @@ public class SynchroAPI {
 
     //Retrieve list of Users belonging to a particular Group, given Group id
     //JsonArray
-    public JsonArray getGroupUsersById(int groupId) {
+    public JsonArray getUsersByGroupId(int groupId) {
         JsonArray result = null;
         String apiGroupUsers = API_BASE_URL + "groups/" + groupId +"/users";
         try {
             result = Ion.with(App.getContext())
                     .load(apiGroupUsers)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    //retrieve list of all users on server
+    //JsonArray
+    public JsonArray getAllUsers() {
+        JsonArray result = null;
+
+        try {
+            result = Ion.with(App.getContext())
+                    .load(apiUsers)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    //retrieve list of all groups on server
+    //JsonArray
+    public JsonArray getAllGroups() {
+        JsonArray result = null;
+
+        try {
+            result = Ion.with(App.getContext())
+                    .load(apiGroups)
                     .addHeader("Authorization", ivleAuthToken)
                     .asJsonArray()
                     .get();

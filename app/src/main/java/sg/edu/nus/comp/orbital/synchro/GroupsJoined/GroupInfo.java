@@ -14,8 +14,8 @@ import sg.edu.nus.comp.orbital.synchro.R;
  * Created by angja_000 on 20/6/2016.
  *
  * contains details of group to be displayed on card views
- * also creates a image with the first letter of each group's name + random colour
- * first 30 characters of description string is taken
+ * also creates a image with the first letter of each group's name + random colour using TextDrawable
+ * first 50 characters of description string is taken
  */
 public class GroupInfo {
     private String name, description;
@@ -23,7 +23,7 @@ public class GroupInfo {
 
     public GroupInfo(String name, String description) {
         this.name = name.replaceAll("\"", "");
-        this.description = description.substring(0, 31) + "...";
+        this.description = description.substring(0, 51) + "...";
 
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getRandomColor();
@@ -35,9 +35,12 @@ public class GroupInfo {
     public String getDescription() {return description;}
     public TextDrawable getImage() {return image;}
 
-    //static
-    //takes in JsonArray of group details called from server and parses to GroupInfo objects
-    //returns ArrayList
+    /*
+        static
+        takes in JsonArray of group details called from server and parses to GroupInfo objects
+        automatically adds in default placeholder string for descriptions
+        returns ArrayList
+    */
     public static ArrayList<GroupInfo> parseGroupInfo(JsonArray groupsJsonArray) {
         ArrayList<GroupInfo> groups = new ArrayList<>();
 

@@ -18,7 +18,7 @@
                 android:background="@color/colorPrimary"
                 android:height="56dp"
                 android:text="Group Details"
-                android:textColor="@color/text_white"
+                android:textColor="@color/plain_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:textSize="20sp"/>

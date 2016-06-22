@@ -23,7 +23,7 @@ import sg.edu.nus.comp.orbital.synchro.GroupsJoined.GroupInfo;
 
 public class GroupsJoinedFragment extends Fragment {
 
-    //dummy user called
+    //dummy user called, check AsyncTaskRunner
     private static ArrayList<GroupInfo> groupInfos = SynchroDataLoader.getGroupInfos();
 
     public GroupsJoinedFragment() {
@@ -65,7 +65,7 @@ public class GroupsJoinedFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new CardViewGroupAdapter(groupInfos, getContext(), manager));
+        recyclerView.setAdapter(new CardViewGroupAdapter(groupInfos, manager));
     }
 
 }

@@ -1,6 +1,8 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,11 +13,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.google.gson.JsonObject;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,24 +27,70 @@ public class DrawerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_drawer);
         setSupportActionBar(toolbar);
 
         setupDrawer(toolbar);
 
         String caller = getIntent().getStringExtra("caller");
-        if (caller.equals("LoginActivity")) {
+        if (caller!=null && caller.equals("LoginActivity")) {
             SynchroAPI.authenticate(AuthToken.getToken());
             SynchroAPI.updateToken(AuthToken.getToken());
         }
 
-        ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
-        AsyncTaskRunner.setProgressDialog(progressDialog);
-        AsyncTaskRunner.runLoadInitialData();
+        //means redirected from either Login or Splash and not internally
+        //need to run loading of initial data
+        if (caller != null) {
+            ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
+            AsyncTaskRunner.setProgressDialog(progressDialog);
+            AsyncTaskRunner.runLoadInitialData();
+        }
 
-
+        handleIntent(getIntent());  //for search queries in search bar
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_bar, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search_bar).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+        searchView.setFocusable(true);
+        searchView.requestFocusFromTouch();
+        //cant get keyboard to show automatically, need to fix
+
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    //handle search query, redirects to SearchResultsFragment
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("searchQuery", query);
+            SearchResultsFragment searchResultsFragment = SearchResultsFragment.newInstance();
+            searchResultsFragment.setArguments(bundle);
+
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+            transaction.setCustomAnimations(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left,
+                    R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_right);
+            transaction.replace(R.id.content_fragment, searchResultsFragment);
+            transaction.commit();
+        }
+    }
+
+    //drawer setup stuff
     public void setupDrawer(Toolbar toolbar) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -86,21 +135,6 @@ public class DrawerActivity extends AppCompatActivity
 
                 // replace the content_fragment with appropriate view
                 switch(id){
-                    case R.id.nav_new_group:
-                        transaction.replace(R.id.content_fragment, NewGroupFragment.newInstance());
-                        break;
-                    case R.id.nav_recommendations:
-                        transaction.replace(R.id.content_fragment, RecommendationsFragment.newInstance());
-                        break;
-                    case R.id.nav_search:
-                        transaction.replace(R.id.content_fragment, SearchFragment.newInstance());
-                        break;
-                    case R.id.nav_profile:
-                        transaction.replace(R.id.content_fragment, ProfileFragment.newInstance());
-                        break;
-                    case R.id.nav_groups_joined:
-                        transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
-                        break;
                     case R.id.nav_login:
                         // do not add loginactivity into backstack
                         Intent loginActivity = new Intent(DrawerActivity.this, LoginActivity.class);
@@ -110,7 +144,21 @@ public class DrawerActivity extends AppCompatActivity
                     case R.id.nav_view_group:
                         transaction.replace(R.id.content_fragment, ViewGroupFragment.newInstance());
                         break;
-
+                    case R.id.nav_search:
+                        transaction.replace(R.id.content_fragment, SearchResultsFragment.newInstance());
+                        break;
+                    case R.id.nav_profile:
+                        transaction.replace(R.id.content_fragment, ProfileFragment.newInstance());
+                        break;
+                    case R.id.nav_groups_joined:
+                        transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
+                        break;
+                    case R.id.nav_new_group:
+                        transaction.replace(R.id.content_fragment, NewGroupFragment.newInstance());
+                        break;
+                    case R.id.nav_recommendations:
+                        transaction.replace(R.id.content_fragment, RecommendationsFragment.newInstance());
+                        break;
                 }
 
                 transaction.commit();

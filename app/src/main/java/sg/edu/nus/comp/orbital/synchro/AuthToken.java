@@ -14,6 +14,7 @@ public class AuthToken {
     private static SharedPreferences prefs = App.getContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
     private static SharedPreferences.Editor editor = prefs.edit();
 
+    //given String token, saves in SharedPref
     public static boolean setToken(String token) {
         editor.putString("ivleAuthToken", token);
         editor.commit();
