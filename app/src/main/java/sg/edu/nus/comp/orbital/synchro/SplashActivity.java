@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ProgressBar;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -17,10 +18,9 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (SynchroAPI.validate()) {
-                    Intent launchMainActivity = new Intent(SplashActivity.this, DrawerActivity.class);
-                    launchMainActivity.putExtra("caller", "SplashActivity");
-                    SplashActivity.this.startActivity(launchMainActivity);
-                    SplashActivity.this.finish();
+                    ProgressBar progressBar = (ProgressBar) findViewById(R.id.splashProgressBar);
+                    AsyncTaskRunner.setProgressBar(progressBar);
+                    AsyncTaskRunner.loadInitialData(SplashActivity.this);
                 }
                 else{
                     Intent launchLoginActivity = new Intent(SplashActivity.this, LoginActivity.class);
@@ -31,6 +31,14 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, 1000);
 
+    }
+
+    //allows AsyncTaskRunner to call redirect once processing is finished
+    public void redirectFromSplash() {
+        Intent launchMainActivity = new Intent(SplashActivity.this, DrawerActivity.class);
+        launchMainActivity.putExtra("caller", "SplashActivity");
+        SplashActivity.this.startActivity(launchMainActivity);
+        SplashActivity.this.finish();
     }
 
 }

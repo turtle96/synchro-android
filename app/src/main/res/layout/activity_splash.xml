@@ -9,6 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="80dp"
         android:layout_centerInParent="true">
 
         <TextView
@@ -16,12 +17,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Synchro"
-            android:paddingBottom="50dp"
+            android:paddingBottom="10dp"
             android:gravity="center"
             android:textColor="@color/plain_white"
             android:textSize="40sp"
             android:textStyle="bold"
             android:typeface="normal" />
+
+        <ProgressBar
+            android:id="@+id/splashProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title_synchro"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyleLarge"/>
 
     </RelativeLayout>
 

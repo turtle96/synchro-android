@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro.ViewGroup;
+package sg.edu.nus.comp.orbital.synchro.CardViewAdapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,7 +29,6 @@ public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapte
     public CardViewUserAdapter(ArrayList<String> list) {
         this.list  = list;
     }
-
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

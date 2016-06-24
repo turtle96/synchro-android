@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NewGroupFragment#newInstance} factory method to
+ * Use the {@link CreateGroupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewGroupFragment extends Fragment {
+public class CreateGroupFragment extends Fragment {
 
-    public NewGroupFragment() {
+    public CreateGroupFragment() {
         // Required empty public constructor
     }
 
@@ -25,8 +25,8 @@ public class NewGroupFragment extends Fragment {
      *
      */
     // TODO: Rename and change types and number of parameters
-    public static NewGroupFragment newInstance() {
-        NewGroupFragment fragment = new NewGroupFragment();
+    public static CreateGroupFragment newInstance() {
+        CreateGroupFragment fragment = new CreateGroupFragment();
         return fragment;
     }
 
@@ -34,7 +34,7 @@ public class NewGroupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_group, container, false);
+        return inflater.inflate(R.layout.fragment_create_group, container, false);
     }
 
 }

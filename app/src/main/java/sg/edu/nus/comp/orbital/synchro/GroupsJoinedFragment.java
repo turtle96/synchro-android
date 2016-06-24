@@ -1,11 +1,8 @@
 package sg.edu.nus.comp.orbital.synchro;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import java.util.ArrayList;
 
-import sg.edu.nus.comp.orbital.synchro.GroupsJoined.CardViewGroupAdapter;
-import sg.edu.nus.comp.orbital.synchro.GroupsJoined.GroupInfo;
+import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewGroupAdapter;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupInfo;
 
 public class GroupsJoinedFragment extends Fragment {
 

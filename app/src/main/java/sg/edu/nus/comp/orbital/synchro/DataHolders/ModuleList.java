@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro.Profile;
+package sg.edu.nus.comp.orbital.synchro.DataHolders;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

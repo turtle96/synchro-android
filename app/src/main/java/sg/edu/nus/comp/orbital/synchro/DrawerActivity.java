@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,21 +31,28 @@ public class DrawerActivity extends AppCompatActivity
 
         setupDrawer(toolbar);
 
+        //means redirected from Login
         String caller = getIntent().getStringExtra("caller");
         if (caller!=null && caller.equals("LoginActivity")) {
             SynchroAPI.authenticate(AuthToken.getToken());
             SynchroAPI.updateToken(AuthToken.getToken());
-        }
 
-        //means redirected from either Login or Splash and not internally
-        //need to run loading of initial data
-        if (caller != null) {
             ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
             AsyncTaskRunner.setProgressDialog(progressDialog);
-            AsyncTaskRunner.runLoadInitialData();
+            AsyncTaskRunner.loadInitialData(null);
+        }
+        //sets landing page to Groups Joined if redirected from SplashActivity
+        if (caller!=null && caller.equals("SplashActivity") && SynchroDataLoader.getGroupsJsonArray()!=null) {
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+            transaction.setCustomAnimations(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left,
+                    R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_right);
+            transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
+            transaction.commit();
         }
 
         handleIntent(getIntent());  //for search queries in search bar
+
     }
 
     @Override
@@ -154,7 +160,7 @@ public class DrawerActivity extends AppCompatActivity
                         transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
                         break;
                     case R.id.nav_new_group:
-                        transaction.replace(R.id.content_fragment, NewGroupFragment.newInstance());
+                        transaction.replace(R.id.content_fragment, CreateGroupFragment.newInstance());
                         break;
                     case R.id.nav_recommendations:
                         transaction.replace(R.id.content_fragment, RecommendationsFragment.newInstance());

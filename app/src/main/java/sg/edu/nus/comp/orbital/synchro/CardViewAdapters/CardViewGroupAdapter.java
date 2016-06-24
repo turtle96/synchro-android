@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro.GroupsJoined;
+package sg.edu.nus.comp.orbital.synchro.CardViewAdapters;
 
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.App;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupInfo;
 import sg.edu.nus.comp.orbital.synchro.R;
 import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
 

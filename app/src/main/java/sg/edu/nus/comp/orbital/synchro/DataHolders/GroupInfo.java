@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro.GroupsJoined;
+package sg.edu.nus.comp.orbital.synchro.DataHolders;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -48,6 +48,26 @@ public class GroupInfo {
             JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
             groups.add(new GroupInfo(object.get("name").toString(),
                     App.getContext().getResources().getString(R.string.small_text)));
+        }
+
+        return groups;
+    }
+
+    /*  filter version: only returns list of all group names containing given string
+        static
+        takes in JsonArray of group details called from server and parses to GroupInfo objects
+        automatically adds in default placeholder string for descriptions
+        returns ArrayList
+    */
+    public static ArrayList<GroupInfo> parseAndFilterGroupInfo(JsonArray groupsJsonArray, String filterStr) {
+        ArrayList<GroupInfo> groups = new ArrayList<>();
+
+        for (int i=0; i<groupsJsonArray.size(); i++) {
+            JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
+            if (object.get("name").toString().contains(filterStr)) {
+                groups.add(new GroupInfo(object.get("name").toString(),
+                        App.getContext().getResources().getString(R.string.small_text)));
+            }
         }
 
         return groups;

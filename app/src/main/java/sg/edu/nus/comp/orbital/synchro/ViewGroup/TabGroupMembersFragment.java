@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewUserAdapter;
 import sg.edu.nus.comp.orbital.synchro.R;
 import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
 

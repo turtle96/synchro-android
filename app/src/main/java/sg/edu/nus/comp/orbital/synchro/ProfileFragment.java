@@ -19,8 +19,8 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import sg.edu.nus.comp.orbital.synchro.Profile.CardViewModulesAdapter;
-import sg.edu.nus.comp.orbital.synchro.Profile.ModuleList;
+import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewModulesAdapter;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.ModuleList;
 
 public class ProfileFragment extends Fragment {
 

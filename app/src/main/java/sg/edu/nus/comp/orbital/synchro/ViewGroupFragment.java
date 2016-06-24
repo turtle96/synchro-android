@@ -55,7 +55,7 @@ public class ViewGroupFragment extends Fragment {
 
     //setup tab layouts and child fragments: GroupDetails and GroupMembers
     private void setupTabs(View rootView) {
-        final TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout);
+        final TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout_view_group);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_info_outline_black_48dp));
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_group_black_48dp));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

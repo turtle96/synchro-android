@@ -18,9 +18,9 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import sg.edu.nus.comp.orbital.synchro.GroupsJoined.CardViewGroupAdapter;
-import sg.edu.nus.comp.orbital.synchro.GroupsJoined.GroupInfo;
-import sg.edu.nus.comp.orbital.synchro.ViewGroup.CardViewUserAdapter;
+import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewGroupAdapter;
+import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewUserAdapter;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupInfo;
 
 public class SearchResultsFragment extends Fragment {
 
@@ -55,7 +55,6 @@ public class SearchResultsFragment extends Fragment {
         //display results according to filters
         final ToggleButton buttonUsers = (ToggleButton) rootView.findViewById(R.id.buttonUsers);
         final ToggleButton buttonGroups = (ToggleButton) rootView.findViewById(R.id.buttonGroups);
-        final ToggleButton buttonBoth = (ToggleButton) rootView.findViewById(R.id.buttonBoth);
 
         final JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
         final JsonArray groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
@@ -66,8 +65,19 @@ public class SearchResultsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        final CardViewUserAdapter[] memberAdapters = new CardViewUserAdapter[1];
+        final CardViewUserAdapter[] userAdapter = new CardViewUserAdapter[1];
         final CardViewGroupAdapter[] groupAdapter = new CardViewGroupAdapter[1];
+
+        buttonUsers.setChecked(true);
+        ArrayList<String> users = new ArrayList<>();
+
+        //last 2 items are the programmers' names lol (excluded)
+        for (int i=0; i<15; i++) {
+            JsonObject object = usersJsonArray.get(i).getAsJsonObject();
+            users.add(object.get("name").toString().replaceAll("\"", ""));
+        }
+        userAdapter[0] = new CardViewUserAdapter(users);
+        recyclerView.setAdapter(userAdapter[0]);
 
         //toggle search users only
         buttonUsers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -76,7 +86,6 @@ public class SearchResultsFragment extends Fragment {
                 if (isChecked) {
                     // The toggle is enabled
                     buttonGroups.setChecked(false);     //only toggle one button at a time
-                    buttonBoth.setChecked(false);
 
                     ArrayList<String> users = new ArrayList<>();
 
@@ -86,13 +95,13 @@ public class SearchResultsFragment extends Fragment {
                         users.add(object.get("name").toString().replaceAll("\"", ""));
                     }
 
-                    memberAdapters[0] = new CardViewUserAdapter(users);
-                    recyclerView.setAdapter(memberAdapters[0]);
+                    userAdapter[0] = new CardViewUserAdapter(users);
+                    recyclerView.setAdapter(userAdapter[0]);
 
                 } else {
                     // The toggle is disabled
-                    if (memberAdapters[0] != null) {
-                        memberAdapters[0].clearView();
+                    if (userAdapter[0] != null) {
+                        userAdapter[0].clearView();
                     }
 
                 }
@@ -106,7 +115,6 @@ public class SearchResultsFragment extends Fragment {
                 if (isChecked) {
                     // The toggle is enabled
                     buttonUsers.setChecked(false);
-                    buttonBoth.setChecked(false);
 
                     ArrayList<GroupInfo> groups = GroupInfo.parseGroupInfo(groupsJsonArray);
 
@@ -118,22 +126,6 @@ public class SearchResultsFragment extends Fragment {
                     if (groupAdapter[0] != null) {
                         groupAdapter[0].clearView();
                     }
-                }
-            }
-        });
-
-        //toggle search both
-        buttonBoth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-                    buttonUsers.setChecked(false);
-                    buttonGroups.setChecked(false);
-
-                } else {
-                    // The toggle is disabled
-
                 }
             }
         });

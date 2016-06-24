@@ -5,17 +5,18 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import sg.edu.nus.comp.orbital.synchro.GroupsJoined.GroupInfo;
-import sg.edu.nus.comp.orbital.synchro.Profile.ModuleList;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupInfo;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.ModuleList;
 
 /**
  * Created by angja_000 on 17/6/2016.
  *
  * Handler class to load data from SynchroAPI and store for ease of access by fragments
+ * stored for duration of app usage
  */
 public class SynchroDataLoader {
     private static JsonObject profile;
-    private static JsonArray modulesJsonArray;  //keep a copy in case
+    private static JsonArray modulesJsonArray;
     private static ArrayList<ModuleList> moduleLists;
 
     private static JsonArray groupsJsonArray;

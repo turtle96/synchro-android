@@ -17,6 +17,7 @@
     <!-- custom styles here-->
 
     <!-- header boards at the top of each page -->
+    <!-- for text views -->
     <style name="MainHeaderBoard">
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
@@ -47,6 +48,11 @@
 
     <!-- for sub-titles, additional headers etc-->
     <style name="SubHeader1" parent="Header1">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="SubHeader2" parent="Header1">
+        <item name="android:textStyle">normal</item>
         <item name="android:textSize">18sp</item>
     </style>
 
