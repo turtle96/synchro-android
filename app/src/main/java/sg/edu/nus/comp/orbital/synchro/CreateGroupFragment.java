@@ -11,11 +11,14 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.sql.BatchUpdateException;
 import java.util.Calendar;
 
 
@@ -69,6 +72,14 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
+        Button buttonCreate = (Button) rootView.findViewById(R.id.create_group_button);
+        buttonCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "created group", Toast.LENGTH_LONG).show();
+            }
+        });
+
         return rootView;
     }
 
@@ -119,18 +130,25 @@ public class CreateGroupFragment extends Fragment {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            String time;
+            String time, minuteStr;
+            if (minute < 10) {
+                minuteStr = "0" + minute;
+            }
+            else {
+                minuteStr = "" + minute;
+            }
+
             if (hourOfDay<12 && hourOfDay!=0) {
-                time = hourOfDay + ":" + minute + " am";
+                time = hourOfDay + ":" + minuteStr + " am";
             }
             else if (hourOfDay>12){
-                time = (hourOfDay - 12) + ":" + minute + " pm";
+                time = (hourOfDay - 12) + ":" + minuteStr + " pm";
             }
             else if (hourOfDay == 12) {
-                time = hourOfDay + ":" + minute + " pm";
+                time = hourOfDay + ":" + minuteStr + " pm";
             }
             else {  //24:00
-                time = 12 + ":" + minute + " am";
+                time = 12 + ":" + minuteStr + " am";
             }
             editTextTime.setText(time);
         }

@@ -39,14 +39,11 @@ public class DrawerActivity extends AppCompatActivity
 
             ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
             AsyncTaskRunner.setProgressDialog(progressDialog);
-            AsyncTaskRunner.loadInitialData(null);
+            AsyncTaskRunner.loadInitialData(DrawerActivity.this);
         }
         //sets landing page to Groups Joined if redirected from SplashActivity
         if (caller!=null && caller.equals("SplashActivity") && SynchroDataLoader.getGroupsJsonArray()!=null) {
-            FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
-            transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
-            transaction.commit();
+            redirectGroupsJoined();
         }
 
         handleIntent(getIntent());  //for search queries in search bar
@@ -67,6 +64,13 @@ public class DrawerActivity extends AppCompatActivity
         //cant get keyboard to show automatically, need to fix
 
         return true;
+    }
+
+    public void redirectGroupsJoined() {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+        transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
+        transaction.commit();
     }
 
     @Override

@@ -2,15 +2,9 @@ package sg.edu.nus.comp.orbital.synchro;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by angja_000 on 18/6/2016.
@@ -21,6 +15,7 @@ import java.util.ArrayList;
 public class AsyncTaskRunner {
 
     private static SplashActivity splashActivity;
+    private static DrawerActivity drawerActivity;
 
     private static ProgressBar progressBar;         //for SplashActivity
     private static ProgressDialog progressDialog;   //for after Login redirect to DrawerActivity
@@ -45,8 +40,13 @@ public class AsyncTaskRunner {
         after login: loading will be done in DrawerActivity + progressDialog
         splashscreen: loading will be done in SplashActivity + progressBar + redirect to DrawerActivity
     */
-    public static void loadInitialData(SplashActivity activity) {
-        splashActivity = activity;
+    public static void loadInitialData(Activity activity) {
+        if (activity instanceof SplashActivity) {
+            splashActivity = (SplashActivity) activity;
+        }
+        else if (activity instanceof DrawerActivity) {
+            drawerActivity = (DrawerActivity) activity;
+        }
 
         LoadResync loadResync = new LoadResync();
         LoadProfile loadProfile = new LoadProfile();
@@ -77,16 +77,22 @@ public class AsyncTaskRunner {
     //checks which progress type is being used and stops display accordingly
     //also calls redirect from SplashActivity if SplashActivity is detected
     private static void dismissProgressDialog() {
-        if (getLoadInitialDataStatus() && progressDialog!=null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-        else if (getLoadInitialDataStatus() && progressBar!=null) {
-            progressBar.setVisibility(View.GONE);
+        if (getLoadInitialDataStatus()) {
+            if (progressDialog!=null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            else if (progressBar!=null) {
+                progressBar.setVisibility(View.GONE);
+            }
+
+            if (splashActivity != null) {
+                splashActivity.redirectFromSplash();
+            }
+            else if (drawerActivity != null) {
+                drawerActivity.redirectGroupsJoined();
+            }
         }
 
-        if (splashActivity != null) {
-            splashActivity.redirectFromSplash();
-        }
     }
 
     /////////// Loader for Resyncing User Data /////////////
