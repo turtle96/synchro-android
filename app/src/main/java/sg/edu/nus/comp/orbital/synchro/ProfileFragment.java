@@ -94,8 +94,8 @@ public class ProfileFragment extends Fragment {
         TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
 
         //use this code if you want to display your real name instead of placeholder
-        //name.append(profile.get("name").toString().replaceAll("\"", ""));
-        name.append("Hermione Granger");
+        name.append(profile.get("name").toString().replaceAll("\"", ""));
+        //name.append("Hermione Granger");
 
         faculty.append(profile.get("faculty").toString().replaceAll("\"", ""));
         firstMajor.append(profile.get("first_major").toString().replaceAll("\"", ""));

@@ -1,11 +1,22 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 
 /**
@@ -14,6 +25,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class CreateGroupFragment extends Fragment {
+
+    private static EditText editTextDate;
+    private static EditText editTextTime;
 
     public CreateGroupFragment() {
         // Required empty public constructor
@@ -34,7 +48,92 @@ public class CreateGroupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_group, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_create_group, container, false);
+
+        editTextDate = (EditText) rootView.findViewById(R.id.inputGroupDate);
+        editTextTime = (EditText) rootView.findViewById(R.id.inputGroupTime);
+
+        ImageButton buttonCalendar = (ImageButton) rootView.findViewById(R.id.calendar_button);
+        buttonCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(view);
+            }
+        });
+
+        ImageButton buttonTime = (ImageButton) rootView.findViewById(R.id.time_button);
+        buttonTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTimePickerDialog(view);
+            }
+        });
+
+        return rootView;
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            String date = day + "/" + month + "/" + year;
+            editTextDate.setText(date);
+        }
+    }
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            String time;
+            if (hourOfDay<12 && hourOfDay!=0) {
+                time = hourOfDay + ":" + minute + " am";
+            }
+            else if (hourOfDay>12){
+                time = (hourOfDay - 12) + ":" + minute + " pm";
+            }
+            else if (hourOfDay == 12) {
+                time = hourOfDay + ":" + minute + " pm";
+            }
+            else {  //24:00
+                time = 12 + ":" + minute + " am";
+            }
+            editTextTime.setText(time);
+        }
     }
 
 }

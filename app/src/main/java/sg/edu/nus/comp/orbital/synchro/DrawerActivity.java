@@ -45,8 +45,6 @@ public class DrawerActivity extends AppCompatActivity
         if (caller!=null && caller.equals("SplashActivity") && SynchroDataLoader.getGroupsJsonArray()!=null) {
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
-            transaction.setCustomAnimations(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left,
-                    R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_right);
             transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
             transaction.commit();
         }

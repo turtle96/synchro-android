@@ -33,7 +33,7 @@ public class TabRecommendUsersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recommend_users_tab, container, false);
 
-        Toast.makeText(getContext(), "shows list of users with 'a' in their name", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "shows list of users with 'a' in their name", Toast.LENGTH_LONG).show();
 
         ArrayList<String> users = new ArrayList<>();
 

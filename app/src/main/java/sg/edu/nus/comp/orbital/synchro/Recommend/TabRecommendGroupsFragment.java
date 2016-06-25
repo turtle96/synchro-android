@@ -33,7 +33,7 @@ public class TabRecommendGroupsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recommend_groups_tab, container, false);
 
-        Toast.makeText(getContext(), "shows list of groups with 'm' in their name", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "shows list of groups with 'm' in their name", Toast.LENGTH_LONG).show();
 
         ArrayList<GroupInfo> groups = GroupInfo.parseAndFilterGroupInfo(groupsJsonArray, "m");
 
