@@ -37,7 +37,7 @@ public class AsyncTaskRunner {
         runs 3 separate AsyncTasks for faster execution
 
         will handle showing progress differently for after Login and Splashscreen loading
-        after login: loading will be done in DrawerActivity + progressDialog
+        after login: loading will be done in DrawerActivity + progressDialog + redirect to GroupsJoined
         splashscreen: loading will be done in SplashActivity + progressBar + redirect to DrawerActivity
     */
     public static void loadInitialData(Activity activity) {

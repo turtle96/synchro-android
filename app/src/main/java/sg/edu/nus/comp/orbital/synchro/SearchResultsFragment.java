@@ -56,7 +56,7 @@ public class SearchResultsFragment extends Fragment {
         final ToggleButton buttonUsers = (ToggleButton) rootView.findViewById(R.id.buttonUsers);
         final ToggleButton buttonGroups = (ToggleButton) rootView.findViewById(R.id.buttonGroups);
 
-        final JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
+        //final JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
         final JsonArray groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
 
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_search_results);
@@ -65,10 +65,12 @@ public class SearchResultsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        final CardViewUserAdapter[] userAdapter = new CardViewUserAdapter[1];
+        //final CardViewUserAdapter[] userAdapter = new CardViewUserAdapter[1];
         final CardViewGroupAdapter[] groupAdapter = new CardViewGroupAdapter[1];
 
         buttonUsers.setChecked(true);
+        displayUsers(recyclerView);
+        /*
         ArrayList<String> users = new ArrayList<>();
 
         //last 2 items are the programmers' names lol (excluded)
@@ -78,15 +80,17 @@ public class SearchResultsFragment extends Fragment {
         }
         userAdapter[0] = new CardViewUserAdapter(users);
         recyclerView.setAdapter(userAdapter[0]);
+        */
 
         //toggle search users only
         buttonUsers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                CardViewUserAdapter userAdapter = null;
                 if (isChecked) {
                     // The toggle is enabled
                     buttonGroups.setChecked(false);     //only toggle one button at a time
 
+                    /*
                     ArrayList<String> users = new ArrayList<>();
 
                     //last 2 items are the programmers' names lol (excluded)
@@ -97,12 +101,17 @@ public class SearchResultsFragment extends Fragment {
 
                     userAdapter[0] = new CardViewUserAdapter(users);
                     recyclerView.setAdapter(userAdapter[0]);
+                    */
+                    userAdapter = displayUsers(recyclerView);
 
                 } else {
+                    /*
                     // The toggle is disabled
                     if (userAdapter[0] != null) {
                         userAdapter[0].clearView();
                     }
+                    */
+                    clearUsers(userAdapter);    //doesnt seem to be working?
 
                 }
             }
@@ -131,6 +140,27 @@ public class SearchResultsFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private CardViewUserAdapter displayUsers(RecyclerView recyclerView) {
+        JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
+        ArrayList<String> users = new ArrayList<>();
+
+        //last 2 items are the programmers' names lol (excluded)
+        for (int i=0; i<15; i++) {
+            JsonObject object = usersJsonArray.get(i).getAsJsonObject();
+            users.add(object.get("name").toString().replaceAll("\"", ""));
+        }
+        CardViewUserAdapter userAdapter = new CardViewUserAdapter(users);
+        recyclerView.setAdapter(userAdapter);
+
+        return userAdapter;
+    }
+
+    private void clearUsers(CardViewUserAdapter userAdapter) {
+        if (userAdapter != null) {
+            userAdapter.clearView();
+        }
     }
 
 }

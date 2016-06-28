@@ -6,7 +6,7 @@
     tools:context=".CreateGroupFragment">
 
     <TextView
-        android:text="Create New Group"
+        android:text="@string/create_new_group"
         style="@style/MainHeaderBoard"/>
 
     <ScrollView
@@ -16,6 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
@@ -27,7 +28,7 @@
                     android:id="@+id/inputGroupName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Group Name"
+                    android:hint="@string/group_name"
                     android:inputType="textCapWords"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -36,13 +37,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp">
-                <EditText
-                    android:id="@+id/inputGroupType"
+                <TextView
+                    android:id="@+id/labelGroupType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Group Type"
-                    android:inputType="textCapSentences"/>
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/group_type"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="12sp"/>
+                <Spinner
+                    android:id="@+id/spinnerGroupType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:theme="@style/ThemeSpinner"/>
             </android.support.design.widget.TextInputLayout>
+
+
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_group_description"
@@ -53,8 +64,9 @@
                     android:id="@+id/inputGroupDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Description"
-                    android:inputType="textCapSentences"/>
+                    android:hint="@string/description"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="1000" />
             </android.support.design.widget.TextInputLayout>
 
             <RelativeLayout
@@ -66,9 +78,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_event_white_18dp"
-                    android:padding="10dp"
+                    android:padding="12dp"
                     android:layout_marginRight="5dp"
-                    android:backgroundTint="@color/colorPrimary"
                     android:layout_alignParentRight="true" />
 
                 <android.support.design.widget.TextInputLayout
@@ -83,7 +94,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="date"
-                        android:hint="Date" />
+                        android:hint="@string/date" />
+
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/time_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_schedule_white_18dp"
+                    android:padding="12dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentRight="true" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_group_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_toLeftOf="@+id/time_button">
+
+                    <EditText
+                        android:id="@+id/inputGroupTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/time" />
 
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
@@ -98,38 +139,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
-                    android:hint="Venue" />
+                    android:hint="@string/venue" />
             </android.support.design.widget.TextInputLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/time_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_schedule_white_18dp"
-                    android:padding="10dp"
-                    android:layout_marginRight="5dp"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:layout_alignParentRight="true" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_group_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_toLeftOf="@+id/time_button">
-
-                    <EditText
-                        android:id="@+id/inputGroupTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Time" />
-
-                </android.support.design.widget.TextInputLayout>
-            </RelativeLayout>
 
             <Button
                 android:id="@+id/create_group_button"
@@ -137,9 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
-                android:padding="5dp"
-                android:backgroundTint="@color/colorAccent"
-                android:text="Create"/>
+                android:text="@string/create"/>
 
         </LinearLayout>
 

@@ -4,21 +4,28 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.sql.BatchUpdateException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -57,6 +64,23 @@ public class CreateGroupFragment extends Fragment {
         editTextTime = (EditText) rootView.findViewById(R.id.inputGroupTime);
 
         ImageButton buttonCalendar = (ImageButton) rootView.findViewById(R.id.calendar_button);
+        ImageButton buttonTime = (ImageButton) rootView.findViewById(R.id.time_button);
+        Button buttonCreate = (Button) rootView.findViewById(R.id.create_group_button);
+
+        //setting color filters (backgroundTint only available api>21)
+        buttonCalendar.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary),
+                PorterDuff.Mode.MULTIPLY);
+        buttonTime.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary),
+                PorterDuff.Mode.MULTIPLY);
+        buttonCreate.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent),
+                PorterDuff.Mode.MULTIPLY);
+
+        Spinner spinnerGroupType = (Spinner) rootView.findViewById(R.id.spinnerGroupType);
+        String[] groupTypes = {"Study", "Project", "Misc"};
+        ArrayAdapter<String> adapterGroupType = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, groupTypes);
+        spinnerGroupType.setAdapter(adapterGroupType);
+
         buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +88,6 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        ImageButton buttonTime = (ImageButton) rootView.findViewById(R.id.time_button);
         buttonTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +95,6 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        Button buttonCreate = (Button) rootView.findViewById(R.id.create_group_button);
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,11 +105,13 @@ public class CreateGroupFragment extends Fragment {
         return rootView;
     }
 
+    //calendar dialog
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
+    //time dialog
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");

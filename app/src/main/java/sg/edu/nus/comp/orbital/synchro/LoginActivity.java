@@ -3,6 +3,7 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,7 +76,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 view.setVisibility(View.GONE);
-                Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_LONG).show();
+
+                Snackbar notifyInternet = Snackbar.make(view, "Internet please", Snackbar.LENGTH_INDEFINITE);
+                notifyInternet.setAction("Retry", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent launchLoginActivity = new Intent(LoginActivity.this, LoginActivity.class);
+                        launchLoginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        startActivity(launchLoginActivity);
+                        finish();
+                    }
+                });
+                notifyInternet.show();
             }
 
         });

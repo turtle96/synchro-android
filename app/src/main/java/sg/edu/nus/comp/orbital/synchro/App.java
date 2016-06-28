@@ -23,8 +23,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         this.appContext = this;
-
-        //TODO: set previously stored authtoken to SynchroAPI if user has logged in before
     }
 
     public static Context getContext(){

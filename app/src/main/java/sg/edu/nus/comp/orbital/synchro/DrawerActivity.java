@@ -33,17 +33,20 @@ public class DrawerActivity extends AppCompatActivity
 
         //means redirected from Login
         String caller = getIntent().getStringExtra("caller");
-        if (caller!=null && caller.equals("LoginActivity")) {
-            SynchroAPI.authenticate(AuthToken.getToken());
-            SynchroAPI.updateToken(AuthToken.getToken());
+        if (caller!=null) {
+            if (caller.equals("LoginActivity")) {
+                SynchroAPI.authenticate(AuthToken.getToken());
+                SynchroAPI.updateToken(AuthToken.getToken());
 
-            ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
-            AsyncTaskRunner.setProgressDialog(progressDialog);
-            AsyncTaskRunner.loadInitialData(DrawerActivity.this);
-        }
-        //sets landing page to Groups Joined if redirected from SplashActivity
-        if (caller!=null && caller.equals("SplashActivity") && SynchroDataLoader.getGroupsJsonArray()!=null) {
-            redirectGroupsJoined();
+                ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
+                AsyncTaskRunner.setProgressDialog(progressDialog);
+                AsyncTaskRunner.loadInitialData(DrawerActivity.this);
+            }
+            //sets landing page to Groups Joined if redirected from SplashActivity
+            else if (caller.equals("SplashActivity") && SynchroDataLoader.getGroupsJsonArray()!=null) {
+                redirectGroupsJoined();
+            }
+
         }
 
         handleIntent(getIntent());  //for search queries in search bar

@@ -1,5 +1,6 @@
 package sg.edu.nus.comp.orbital.synchro;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -66,6 +70,14 @@ public class ProfileFragment extends Fragment {
         displayProfileInfo(rootView);
         displayModulesTaken(rootView);
 
+        //this provides alternate layout since layer effect cannot be achieved pre-Lollipop
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ImageView profileHeader = (ImageView) rootView.findViewById(R.id.header_cover_image);
+            profileHeader.setImageResource(R.drawable.profile);
+            TextView profileName = (TextView) rootView.findViewById(R.id.user_profile_name);
+            profileName.setPadding(5, 80, 5, 80);
+        }
+
         return rootView;
     }
 
@@ -94,8 +106,8 @@ public class ProfileFragment extends Fragment {
         TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
 
         //use this code if you want to display your real name instead of placeholder
-        name.append(profile.get("name").toString().replaceAll("\"", ""));
-        //name.append("Hermione Granger");
+        //name.append(profile.get("name").toString().replaceAll("\"", ""));
+        name.append("Hermione Granger");
 
         faculty.append(profile.get("faculty").toString().replaceAll("\"", ""));
         firstMajor.append(profile.get("first_major").toString().replaceAll("\"", ""));

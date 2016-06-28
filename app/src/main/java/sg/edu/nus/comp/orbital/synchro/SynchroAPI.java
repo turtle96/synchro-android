@@ -1,8 +1,11 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -103,7 +106,8 @@ public class SynchroAPI {
 
     //for validation of current token
     //updates token if new token received
-    public static boolean validate() {
+    //returns string based on validation result for action to be taken accordingly
+    public static String validate() {
         updateToken(AuthToken.getToken());  //ensures token variable in SynchroApi is updated from SharedPrefs
 
         JsonObject result = null;
@@ -117,7 +121,7 @@ public class SynchroAPI {
         }
 
         if (result == null) {   //no object returned
-            return false;
+            return "Error";
         }
         else if (result.get("Success").toString().equals("true")) {
 
@@ -130,10 +134,10 @@ public class SynchroAPI {
                 updateToken(AuthToken.getToken());
             }
             authenticate(AuthToken.getToken());
-            return true;
+            return "Successful";
         }
         else {  //validate unsuccessful
-            return false;
+            return "Fail";
         }
     }
 

@@ -17,7 +17,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
                 android:height="56dp"
-                android:text="Group Details"
+                android:text="@string/group_details"
                 android:textColor="@color/plain_white"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
@@ -36,7 +36,7 @@
 
                     <TextView
                         android:id="@+id/labelGroupType"
-                        android:text="Group Type"
+                        android:text="@string/group_type"
                         style="@style/Header1"/>
 
                     <TextView
@@ -60,7 +60,7 @@
 
                     <TextView
                         android:id="@+id/labelDescription"
-                        android:text="Description"
+                        android:text="@string/description"
                         style="@style/Header1"/>
 
                     <TextView
@@ -85,7 +85,7 @@
 
                     <TextView
                         android:id="@+id/labelDate"
-                        android:text="Date"
+                        android:text="@string/date"
                         style="@style/Header1"/>
 
                     <TextView
@@ -95,7 +95,7 @@
 
                     <TextView
                         android:id="@+id/labelTime"
-                        android:text="Time"
+                        android:text="@string/time"
                         style="@style/Header1"/>
 
                     <TextView
@@ -105,7 +105,7 @@
 
                     <TextView
                         android:id="@+id/labelVenue"
-                        android:text="Venue"
+                        android:text="@string/venue"
                         style="@style/Header1"/>
 
                     <TextView

@@ -64,4 +64,9 @@
         <item name="android:paddingBottom">5dp</item>
     </style>
 
+    <style name="ThemeSpinner">
+        <!-- Default color for the dropdown arrow and line -->
+        <item name="colorControlNormal">@color/colorAccent</item>
+    </style>
+
 </resources>
