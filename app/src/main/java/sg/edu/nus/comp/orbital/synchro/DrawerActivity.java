@@ -44,13 +44,11 @@ public class DrawerActivity extends AppCompatActivity
             }
             //sets landing page to Groups Joined if redirected from SplashActivity
             else if (caller.equals("SplashActivity") && SynchroDataLoader.getGroupsJsonArray()!=null) {
-                redirectGroupsJoined();
+                redirectToGroupsJoined();
             }
-
         }
 
         handleIntent(getIntent());  //for search queries in search bar
-
     }
 
     @Override
@@ -64,15 +62,15 @@ public class DrawerActivity extends AppCompatActivity
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(true);
         searchView.requestFocusFromTouch();
-        //cant get keyboard to show automatically, need to fix
+        //TODO cant get keyboard to show automatically, need to fix
 
         return true;
     }
 
-    public void redirectGroupsJoined() {
+    public void redirectToGroupsJoined() {
         FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
-        transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.content_fragment, GroupsJoinedFragment.newInstance());
         transaction.commit();
     }
 

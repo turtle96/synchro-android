@@ -2,7 +2,6 @@ package sg.edu.nus.comp.orbital.synchro;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 /**
  * Created by angja_000 on 6/6/2016.

@@ -4,18 +4,16 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,8 +22,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.sql.BatchUpdateException;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -36,8 +32,12 @@ import java.util.Calendar;
  */
 public class CreateGroupFragment extends Fragment {
 
+    private static final int DESC_MAX_LENGTH = 1000;
+    private static final String[] GROUP_TYPES_LIST = {"Study", "Project", "Misc"};
+
     private static EditText editTextDate;
     private static EditText editTextTime;
+    private static EditText editTextDesc;
 
     public CreateGroupFragment() {
         // Required empty public constructor
@@ -48,7 +48,6 @@ public class CreateGroupFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      */
-    // TODO: Rename and change types and number of parameters
     public static CreateGroupFragment newInstance() {
         CreateGroupFragment fragment = new CreateGroupFragment();
         return fragment;
@@ -62,24 +61,43 @@ public class CreateGroupFragment extends Fragment {
 
         editTextDate = (EditText) rootView.findViewById(R.id.inputGroupDate);
         editTextTime = (EditText) rootView.findViewById(R.id.inputGroupTime);
+        editTextDesc = (EditText) rootView.findViewById(R.id.inputGroupDesc);
+
+        //Todo: need fixing
+        editTextDesc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (s.length() > DESC_MAX_LENGTH)
+                {
+                    editTextDesc.setError("Error");
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > DESC_MAX_LENGTH)
+                {
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > DESC_MAX_LENGTH)
+                {
+
+                }
+            }
+        });
+
+        Spinner spinnerGroupType = (Spinner) rootView.findViewById(R.id.spinnerGroupType);
+        ArrayAdapter<String> adapterGroupType = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, GROUP_TYPES_LIST);
+        spinnerGroupType.setAdapter(adapterGroupType);
 
         ImageButton buttonCalendar = (ImageButton) rootView.findViewById(R.id.calendar_button);
         ImageButton buttonTime = (ImageButton) rootView.findViewById(R.id.time_button);
         Button buttonCreate = (Button) rootView.findViewById(R.id.create_group_button);
-
-        //setting color filters (backgroundTint only available api>21)
-        buttonCalendar.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary),
-                PorterDuff.Mode.MULTIPLY);
-        buttonTime.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary),
-                PorterDuff.Mode.MULTIPLY);
-        buttonCreate.getBackground().setColorFilter(getResources().getColor(R.color.colorAccent),
-                PorterDuff.Mode.MULTIPLY);
-
-        Spinner spinnerGroupType = (Spinner) rootView.findViewById(R.id.spinnerGroupType);
-        String[] groupTypes = {"Study", "Project", "Misc"};
-        ArrayAdapter<String> adapterGroupType = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, groupTypes);
-        spinnerGroupType.setAdapter(adapterGroupType);
 
         buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,16 +135,18 @@ public class CreateGroupFragment extends Fragment {
         newFragment.show(getFragmentManager(), "timePicker");
     }
 
+    /////////// Date Picker Fragment //////////////
+
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
@@ -137,6 +157,8 @@ public class CreateGroupFragment extends Fragment {
             editTextDate.setText(date);
         }
     }
+
+    /////////// Time Picker Fragment ///////////////
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {

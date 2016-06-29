@@ -89,7 +89,7 @@ public class AsyncTaskRunner {
                 splashActivity.redirectFromSplash();
             }
             else if (drawerActivity != null) {
-                drawerActivity.redirectGroupsJoined();
+                drawerActivity.redirectToGroupsJoined();
             }
         }
 

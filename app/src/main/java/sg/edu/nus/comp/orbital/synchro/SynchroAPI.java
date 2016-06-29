@@ -1,17 +1,9 @@
 package sg.edu.nus.comp.orbital.synchro;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.koushikdutta.async.future.Future;
-import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.security.KeyStore;

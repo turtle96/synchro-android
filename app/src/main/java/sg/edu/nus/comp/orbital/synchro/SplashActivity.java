@@ -1,6 +1,5 @@
 package sg.edu.nus.comp.orbital.synchro;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
