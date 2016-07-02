@@ -52,20 +52,33 @@ public class AsyncTaskRunner {
         LoadProfile loadProfile = new LoadProfile();
         LoadGroupsJoined loadGroupsJoined = new LoadGroupsJoined();
 
-        loadResync.execute();
-        loadProfile.execute();
-        loadGroupsJoined.execute();
+        //todo: resync call takes really long, abt 10seconds, is there anyway to speed this up server side
+        //todo: code separate section for user to resync data
+        //only load resync on login
+        if (drawerActivity != null) {
+            loadResync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+        loadProfile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        loadGroupsJoined.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     //ensures progress dialog is stopped only when all 3 tasks are finished
     private static boolean getLoadInitialDataStatus() {
-        return (resyncFinished && profileFinished && groupsFinished);
+        if (drawerActivity != null) {
+            return (resyncFinished && profileFinished && groupsFinished);
+        }
+        else if (splashActivity != null) {
+            return (profileFinished && groupsFinished);
+        }
+        else {
+            return false;
+        }
     }
 
     //checks which progress type to use and display accordingly
     private static void initializeProgress() {
         if (progressDialog != null) {
-            progressDialog.setMessage("Loading");
+            progressDialog.setMessage("Syncing user data");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -129,6 +142,7 @@ public class AsyncTaskRunner {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             return null;
         }
         @Override
@@ -148,6 +162,7 @@ public class AsyncTaskRunner {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             return null;
         }
         @Override

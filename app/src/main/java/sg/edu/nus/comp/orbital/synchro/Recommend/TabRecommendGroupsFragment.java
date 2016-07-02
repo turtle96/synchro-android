@@ -8,14 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewGroupAdapter;
-import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupInfo;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
 import sg.edu.nus.comp.orbital.synchro.R;
 import sg.edu.nus.comp.orbital.synchro.SynchroAPI;
 
@@ -35,7 +34,7 @@ public class TabRecommendGroupsFragment extends Fragment {
 
         //Toast.makeText(getContext(), "shows list of groups with 'm' in their name", Toast.LENGTH_LONG).show();
 
-        ArrayList<GroupInfo> groups = GroupInfo.parseAndFilterGroupInfo(groupsJsonArray, "m");
+        ArrayList<Group> groups = Group.parseAndFilterGroups(groupsJsonArray, "m");
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_recommend_groups);
         recyclerView.setHasFixedSize(true);
@@ -43,7 +42,7 @@ public class TabRecommendGroupsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new CardViewGroupAdapter(groups, null));
+        recyclerView.setAdapter(new CardViewGroupAdapter(groups, null, null));
 
         return rootView;
     }

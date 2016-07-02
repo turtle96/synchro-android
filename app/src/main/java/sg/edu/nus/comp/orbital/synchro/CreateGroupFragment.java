@@ -5,8 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -24,6 +28,8 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,12 +38,14 @@ import java.util.Calendar;
  */
 public class CreateGroupFragment extends Fragment {
 
+    //TOdo should extract all constants for key into external class
+    private static final String GET_GROUP_KEY = "Group Object";
+
     private static final int DESC_MAX_LENGTH = 1000;
     private static final String[] GROUP_TYPES_LIST = {"Study", "Project", "Misc"};
 
     private static EditText editTextDate;
     private static EditText editTextTime;
-    private static EditText editTextDesc;
 
     public CreateGroupFragment() {
         // Required empty public constructor
@@ -59,41 +67,39 @@ public class CreateGroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_create_group, container, false);
 
-        editTextDate = (EditText) rootView.findViewById(R.id.inputGroupDate);
-        editTextTime = (EditText) rootView.findViewById(R.id.inputGroupTime);
-        editTextDesc = (EditText) rootView.findViewById(R.id.inputGroupDesc);
+        final Spinner spinnerGroupType = (Spinner) rootView.findViewById(R.id.spinnerGroupType);
+        ArrayAdapter<String> adapterGroupType = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, GROUP_TYPES_LIST);
+        spinnerGroupType.setAdapter(adapterGroupType);
 
-        //Todo: need fixing
+        final TextInputLayout layoutDesc = (TextInputLayout) rootView.findViewById(R.id.input_layout_group_description);
+        layoutDesc.setErrorEnabled(true);
+        final EditText editTextDesc = (EditText) rootView.findViewById(R.id.inputGroupDesc);
+
         editTextDesc.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (s.length() > DESC_MAX_LENGTH)
-                {
-                    editTextDesc.setError("Error");
-                }
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > DESC_MAX_LENGTH)
-                {
-
+                if (s.length() > DESC_MAX_LENGTH) {
+                    layoutDesc.setError("Exceeded max character limit of 1000");
+                }
+                else {
+                    layoutDesc.setError(null);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > DESC_MAX_LENGTH)
-                {
 
-                }
             }
         });
 
-        Spinner spinnerGroupType = (Spinner) rootView.findViewById(R.id.spinnerGroupType);
-        ArrayAdapter<String> adapterGroupType = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, GROUP_TYPES_LIST);
-        spinnerGroupType.setAdapter(adapterGroupType);
+        editTextDate = (EditText) rootView.findViewById(R.id.inputGroupDate);
+        editTextTime = (EditText) rootView.findViewById(R.id.inputGroupTime);
 
         ImageButton buttonCalendar = (ImageButton) rootView.findViewById(R.id.calendar_button);
         ImageButton buttonTime = (ImageButton) rootView.findViewById(R.id.time_button);
@@ -101,11 +107,9 @@ public class CreateGroupFragment extends Fragment {
 
         buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                showDatePickerDialog(view);
+            public void onClick(View view) {showDatePickerDialog(view);
             }
         });
-
         buttonTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,10 +117,36 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
+        final EditText editTextName = (EditText) rootView.findViewById(R.id.inputGroupName);
+        final EditText editTextVenue = (EditText) rootView.findViewById(R.id.inputGroupVenue);
+
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "created group", Toast.LENGTH_LONG).show();
+
+                String groupName, groupType, groupDesc, groupDate, groupTime, groupVenue;
+                groupName = editTextName.getText().toString();
+                groupType = spinnerGroupType.getSelectedItem().toString();
+                groupDesc = editTextDesc.getText().toString();
+                groupDate = editTextDate.getText().toString();
+                groupTime = editTextTime.getText().toString();
+                groupVenue = editTextVenue.getText().toString();
+
+                Group newGroup = new Group(groupName, groupType, groupDesc, groupDate, groupTime, groupVenue);
+
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+                transaction.setCustomAnimations(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left,
+                        R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_right);
+
+                ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(GET_GROUP_KEY, newGroup);
+                viewGroupFragment.setArguments(bundle);
+
+                transaction.replace(R.id.content_fragment, viewGroupFragment);
+                transaction.commit();
             }
         });
 
@@ -166,9 +196,9 @@ public class CreateGroupFragment extends Fragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
+            final Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
 
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,

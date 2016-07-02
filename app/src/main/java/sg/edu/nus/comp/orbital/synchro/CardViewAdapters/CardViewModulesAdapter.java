@@ -22,7 +22,7 @@ public class CardViewModulesAdapter extends RecyclerView.Adapter<CardViewModules
 
     private ArrayList<ModuleList> list;
 
-    public CardViewModulesAdapter(ArrayList<ModuleList> list, Context context) {
+    public CardViewModulesAdapter(ArrayList<ModuleList> list) {
         this.list  = list;
     }
 

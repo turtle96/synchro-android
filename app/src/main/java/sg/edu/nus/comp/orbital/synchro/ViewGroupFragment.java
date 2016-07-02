@@ -10,10 +10,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
 import sg.edu.nus.comp.orbital.synchro.ViewGroup.ViewGroupTabAdapter;
 
 /**
@@ -21,7 +23,9 @@ import sg.edu.nus.comp.orbital.synchro.ViewGroup.ViewGroupTabAdapter;
  */
 public class ViewGroupFragment extends Fragment {
 
+    private static final String GET_GROUP_KEY = "Group Object";
     private static JsonArray membersJsonArray = SynchroDataLoader.loadViewGroupData(5);
+    private static Group group;
 
     public ViewGroupFragment() {}
 
@@ -33,12 +37,18 @@ public class ViewGroupFragment extends Fragment {
     //getter method so that TabGroupMembersFragment can access
     //data is loaded upon ViewGroupFragment instantiation so cannot be immediately stored in child fragment
     public static JsonArray getMembersJsonArray() {return membersJsonArray;}
+    public static Group getGroup() {return group;}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_group, container, false);
+        setupTabs(rootView);
+
+        if (getArguments() != null) {
+            group = (Group) getArguments().getSerializable(GET_GROUP_KEY);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_join_group);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -48,7 +58,14 @@ public class ViewGroupFragment extends Fragment {
             }
         });
 
-        setupTabs(rootView);
+        TextView groupName = (TextView) rootView.findViewById(R.id.labelGroupName);
+
+        if (group != null) {
+            groupName.setText(group.getName());
+        }
+        else {
+            groupName.setText("Study Group CS1010");
+        }
 
         return rootView;
     }
@@ -88,7 +105,6 @@ public class ViewGroupFragment extends Fragment {
 
             }
         });
-
     }
 
 }

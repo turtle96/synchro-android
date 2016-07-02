@@ -25,6 +25,7 @@ import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewUserAdapter;
 public class TabRecommendUsersFragment extends Fragment {
 
     private static JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
+    private static ArrayList<String> users;
 
     public TabRecommendUsersFragment() {}
 
@@ -33,9 +34,26 @@ public class TabRecommendUsersFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recommend_users_tab, container, false);
 
-        //Toast.makeText(getContext(), "shows list of users with 'a' in their name", Toast.LENGTH_LONG).show();
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_recommend_users);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        ArrayList<String> users = new ArrayList<>();
+        if (users == null) {
+            getUsers();
+        }
+
+        recyclerView.setAdapter(new CardViewUserAdapter(users));
+
+        return rootView;
+    }
+
+    //temp data for mockup
+    private void getUsers() {
+        Toast.makeText(getContext(), "tralala", Toast.LENGTH_SHORT).show();
+
+        users = new ArrayList<>();
 
         //last 2 items are the programmers' names lol (excluded)
         for (int i=0; i<15; i++) {
@@ -45,15 +63,5 @@ public class TabRecommendUsersFragment extends Fragment {
                 users.add(object.get("name").toString().replaceAll("\"", ""));
             }
         }
-
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_recommend_users);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        recyclerView.setAdapter(new CardViewUserAdapter(users));
-
-        return rootView;
     }
 }

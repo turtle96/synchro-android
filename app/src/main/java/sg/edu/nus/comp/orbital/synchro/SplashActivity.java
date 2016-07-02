@@ -38,7 +38,6 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     });
                     notifyInternet.show();
-
                 }
                 else{
                     Intent launchLoginActivity = new Intent(SplashActivity.this, LoginActivity.class);
@@ -59,6 +58,7 @@ public class SplashActivity extends AppCompatActivity {
         SplashActivity.this.finish();
     }
 
+    //for reloading if internet connection is disrupted
     public void reloadSplash() {
         Intent launchSplashActivity = new Intent(SplashActivity.this, SplashActivity.class);
         SplashActivity.this.startActivity(launchSplashActivity);

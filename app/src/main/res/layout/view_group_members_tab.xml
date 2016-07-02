@@ -14,15 +14,8 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:height="56dp"
             android:text="Group Members"
-            android:textColor="@color/plain_white"
-            android:gravity="center_vertical"
-            android:paddingLeft="16dp"
-            android:textSize="20sp"/>
+            style="@style/MainHeader2"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_group_view"

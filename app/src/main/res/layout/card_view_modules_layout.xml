@@ -16,9 +16,15 @@
             android:text="year"
             style="@style/SubHeader1"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimary"/>
+
         <TextView
             android:id="@+id/valueModuleSem1"
             android:text="sem"
+            android:paddingTop="5dp"
             style="@style/SubHeader1"/>
 
         <TextView

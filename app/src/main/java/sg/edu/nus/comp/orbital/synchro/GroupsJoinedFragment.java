@@ -13,12 +13,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewGroupAdapter;
-import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupInfo;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
 
 public class GroupsJoinedFragment extends Fragment {
 
     //dummy user called, check AsyncTaskRunner
-    private static ArrayList<GroupInfo> groupInfos = SynchroDataLoader.getGroupInfos();
+    private static ArrayList<Group> groups = SynchroDataLoader.getGroups();
 
     public GroupsJoinedFragment() {
         // Required empty public constructor
@@ -59,7 +59,7 @@ public class GroupsJoinedFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new CardViewGroupAdapter(groupInfos, manager));
+        recyclerView.setAdapter(new CardViewGroupAdapter(groups, manager, null));
     }
 
 }

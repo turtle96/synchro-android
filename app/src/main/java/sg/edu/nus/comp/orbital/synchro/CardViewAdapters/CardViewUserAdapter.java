@@ -57,6 +57,7 @@ public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapte
         return list.size();
     }
 
+    //clears the recyclerview by clearing list of info
     public void clearView() {
         list.clear();
         notifyDataSetChanged();

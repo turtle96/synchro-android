@@ -16,6 +16,11 @@
     <string name="create_new_group">Create New Group</string>
     <string name="recommendations">Recommendations</string>
 
+    <string name="small_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et lacus sit amet
+        lectus suscipit eleifend. Nam gravida turpis in turpis feugiat dignissim. Nulla facilisi. Donec ultrices
+        turpis arcu, id feugiat sem sagittis non. Mauris eu tristique risus. Fusce eleifend ex id
+        lacus tempus laoreet.</string>
+
     <string name="medium_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Nam rutrum hendrerit nisi feugiat maximus. Duis pharetra ipsum ac quam dictum semper.
         In nec commodo arcu. Suspendisse quis ipsum ullamcorper, imperdiet lectus vel, malesuada ligula.
@@ -54,11 +59,6 @@
         Sed vulputate varius interdum. Nullam ultricies ex eu lacus egestas, vitae sagittis magna facilisis.
         Etiam semper augue vel rutrum condimentum. Vivamus risus odio, fringilla sit amet velit ac, varius
         ullamcorper nulla. Nullam sodales est sit amet tincidunt malesuada.</string>
-
-    <string name="small_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et lacus sit amet
-        lectus suscipit eleifend. Nam gravida turpis in turpis feugiat dignissim. Nulla facilisi. Donec ultrices
-        turpis arcu, id feugiat sem sagittis non. Mauris eu tristique risus. Fusce eleifend ex id
-        lacus tempus laoreet.</string>
 
     <string name="about_me">About Me</string>
     <string name="group_name">Group Name</string>

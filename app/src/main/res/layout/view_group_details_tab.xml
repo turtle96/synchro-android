@@ -3,118 +3,70 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dp"
-    android:background="@color/background_light_grey">
+    android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:height="56dp"
                 android:text="@string/group_details"
-                android:textColor="@color/plain_white"
-                android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:textSize="20sp"/>
+                style="@style/MainHeader2"/>
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp">
+                android:orientation="vertical"
+                android:layout_margin="15dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                <TextView
+                    android:id="@+id/labelGroupType"
+                    android:text="@string/group_type"
+                    style="@style/Header1"/>
 
-                    <TextView
-                        android:id="@+id/labelGroupType"
-                        android:text="@string/group_type"
-                        style="@style/Header1"/>
+                <TextView
+                    android:id="@+id/valueGroupType"
+                    style="@style/TextBody1"/>
 
-                    <TextView
-                        android:id="@+id/valueGroupType"
-                        android:text="e.g. Study/Project/Games"
-                        style="@style/TextBody1"/>
+                <TextView
+                    android:id="@+id/labelDescription"
+                    android:text="@string/description"
+                    style="@style/Header1"/>
 
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/valueDescription"
+                    style="@style/TextBody1"/>
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                <TextView
+                    android:id="@+id/labelDate"
+                    android:text="@string/date"
+                    style="@style/Header1"/>
 
-                    <TextView
-                        android:id="@+id/labelDescription"
-                        android:text="@string/description"
-                        style="@style/Header1"/>
+                <TextView
+                    android:id="@+id/valueDate"
+                    style="@style/TextBody1"/>
 
-                    <TextView
-                        android:id="@+id/valueDescription"
-                        android:text="@string/medium_text"
-                        style="@style/TextBody1"/>
+                <TextView
+                    android:id="@+id/labelTime"
+                    android:text="@string/time"
+                    style="@style/Header1"/>
 
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/valueTime"
+                    style="@style/TextBody1"/>
 
-            </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/labelVenue"
+                    android:text="@string/venue"
+                    style="@style/Header1"/>
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp">
+                <TextView
+                    android:id="@+id/valueVenue"
+                    style="@style/TextBody1"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/labelDate"
-                        android:text="@string/date"
-                        style="@style/Header1"/>
-
-                    <TextView
-                        android:id="@+id/valueDate"
-                        android:text="31st July 2078"
-                        style="@style/TextBody1"/>
-
-                    <TextView
-                        android:id="@+id/labelTime"
-                        android:text="@string/time"
-                        style="@style/Header1"/>
-
-                    <TextView
-                        android:id="@+id/valueTime"
-                        android:text="3pm"
-                        style="@style/TextBody1"/>
-
-                    <TextView
-                        android:id="@+id/labelVenue"
-                        android:text="@string/venue"
-                        style="@style/Header1"/>
-
-                    <TextView
-                        android:id="@+id/valueVenue"
-                        android:text="Room 666"
-                        style="@style/TextBody1"/>
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
 
         </LinearLayout>
 

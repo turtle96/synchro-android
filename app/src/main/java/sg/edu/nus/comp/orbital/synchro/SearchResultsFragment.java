@@ -1,7 +1,6 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 
-import android.app.Service;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.SearchView;
 import android.widget.ToggleButton;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewGroupAdapter;
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewUserAdapter;
-import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupInfo;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
 
 public class SearchResultsFragment extends Fragment {
 
@@ -65,8 +63,6 @@ public class SearchResultsFragment extends Fragment {
         buttonUsers.setChecked(true);
         displayUsers(recyclerView);
 
-        //Todo: test clearViews()
-
         //toggle search users only
         buttonUsers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -80,7 +76,6 @@ public class SearchResultsFragment extends Fragment {
                 }
                 else {
                     // The toggle is disabled
-                    clearUsers(userAdapter);    //doesnt seem to be working?
                 }
             }
         });
@@ -99,7 +94,6 @@ public class SearchResultsFragment extends Fragment {
                 }
                 else {
                     // The toggle is disabled
-                    clearGroups(groupAdapter);
                 }
             }
         });
@@ -135,9 +129,9 @@ public class SearchResultsFragment extends Fragment {
     //returns the CardViewGroupAdapter created so it can be cleared
     private CardViewGroupAdapter displayGroups(RecyclerView recyclerView) {
         JsonArray groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
-        ArrayList<GroupInfo> groups = GroupInfo.parseGroupInfo(groupsJsonArray);
+        ArrayList<Group> groups = Group.parseGroups(groupsJsonArray);
 
-        CardViewGroupAdapter groupAdapter = new CardViewGroupAdapter(groups, null);
+        CardViewGroupAdapter groupAdapter = new CardViewGroupAdapter(groups, null, null);
         recyclerView.setAdapter(groupAdapter);
 
         return groupAdapter;
