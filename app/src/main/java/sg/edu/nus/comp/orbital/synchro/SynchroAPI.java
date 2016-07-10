@@ -291,7 +291,7 @@ public class SynchroAPI {
                     .asJsonObject()
                     .get();
 
-            System.out.println("264 " + result.toString());
+            System.out.println("result " + result.toString());
 
 
         }catch (Exception ex){

@@ -30,7 +30,7 @@
 
             <TextView
                 android:id="@+id/valueGroupName"
-                android:text="groupData name"
+                android:text="group name"
                 style="@style/SubHeader1"/>
 
             <TextView

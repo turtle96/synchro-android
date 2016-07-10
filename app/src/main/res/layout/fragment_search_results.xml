@@ -43,8 +43,8 @@
                     android:layout_width="fill_parent"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textOn="group"
-                    android:textOff="group"
+                    android:textOn="groups"
+                    android:textOff="groups"
                     android:foreground="?android:attr/selectableItemBackground"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:background="@drawable/toggle_button_selector"/>
