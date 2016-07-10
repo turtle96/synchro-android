@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                     AuthToken.setToken(ivleToken);
 
                     //for debug
-                    Log.d("Synchro", ivleToken);
+                    //Log.d("Synchro", ivleToken);
                 }});
         }
     }

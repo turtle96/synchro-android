@@ -1,10 +1,14 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.gson.GsonArrayParser;
 
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -13,6 +17,8 @@ import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 /**
  * Created by kfwong on 6/2/16.
@@ -196,7 +202,7 @@ public class SynchroAPI {
         return result;
     }
 
-    //Retrieve list of Users belonging to a particular Group, given Group id
+    //Retrieve list of Users belonging to a particular GroupData, given GroupData id
     //JsonArray
     public JsonArray getUsersByGroupId(int groupId) {
         JsonArray result = null;
@@ -245,5 +251,51 @@ public class SynchroAPI {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    public void postNewGroup(GroupData group) {
+
+        JsonObject groupJson = new JsonObject();
+        groupJson.addProperty("name", group.getName());
+        groupJson.addProperty("type", group.getType());
+        groupJson.addProperty("description", group.getDescription());
+        groupJson.addProperty("date_happening", group.getDate() + group.getTime24Hour());
+        groupJson.addProperty("venue", group.getVenue());
+        groupJson.addProperty("tags", group.getType() + " " + "test 123 fallala");
+
+
+        System.out.println("HERE json 264 " + groupJson.toString());
+
+        try {
+/*
+            Ion.with(App.getContext())
+                .load(apiGroups)
+                .addHeader("Authorization", ivleAuthToken)
+                .setJsonObjectBody(groupJson)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                @Override
+                public void onCompleted(Exception e, JsonObject result) {
+                    Toast.makeText(App.getContext(), "hello", Toast.LENGTH_LONG).show();
+                    System.out.println("group " + result.toString());
+                    System.out.println("Error here " + e.toString());
+                }
+            });
+            */
+
+            JsonObject result;
+            result = Ion.with(App.getContext())
+                    .load(apiGroups)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .setJsonObjectBody(groupJson)
+                    .asJsonObject()
+                    .get();
+
+            System.out.println("264 " + result.toString());
+
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 }

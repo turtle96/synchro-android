@@ -7,20 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import sg.edu.nus.comp.orbital.synchro.App;
-import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 import sg.edu.nus.comp.orbital.synchro.R;
 import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
 
 /**
  * Created by angja_000 on 12/6/2016.
  *
- * Tab fragment for view group display
- * Displays all group details
+ * Tab fragment for view groupData display
+ * Displays all groupData details
  */
 public class TabGroupDetailsFragment extends Fragment{
 
-    private static Group group;
+    private static GroupData groupData;
 
     public TabGroupDetailsFragment() {}
 
@@ -29,7 +28,7 @@ public class TabGroupDetailsFragment extends Fragment{
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.view_group_details_tab, container, false);
 
-        group = ViewGroupFragment.getGroup();
+        groupData = ViewGroupFragment.getGroupData();
 
         TextView groupType = (TextView) rootView.findViewById(R.id.valueGroupType);
         TextView groupDesc = (TextView) rootView.findViewById(R.id.valueDescription);
@@ -37,12 +36,12 @@ public class TabGroupDetailsFragment extends Fragment{
         TextView time = (TextView) rootView.findViewById(R.id.valueTime);
         TextView venue = (TextView) rootView.findViewById(R.id.valueVenue);
 
-        if (group != null) {
-            groupType.setText(group.getType());
-            groupDesc.setText(group.getDescription());
-            date.setText(group.getDate());
-            time.setText(group.getTime());
-            venue.setText(group.getVenue());
+        if (groupData != null) {
+            groupType.setText(groupData.getType());
+            groupDesc.setText(groupData.getDescription());
+            date.setText(groupData.getDate());
+            time.setText(groupData.getTime());
+            venue.setText(groupData.getVenue());
         }
         else {
             groupType.setText("e.g. Study/Project/Games");

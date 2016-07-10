@@ -1,7 +1,6 @@
 package sg.edu.nus.comp.orbital.synchro.CardViewAdapters;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -15,27 +14,27 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.App;
-import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 import sg.edu.nus.comp.orbital.synchro.R;
 import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
 
 /**
  * Created by angja_000 on 9/6/2016.
  *
- * adapter for card views of group details
- * data set in the form of Group objects
+ * adapter for card views of groupData details
+ * data set in the form of GroupData objects
  */
 public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdapter.CardViewHolder>{
 
-    private static final String GET_GROUP_KEY = "Group Object";
-    private ArrayList<Group> list;
+    private static final String GET_GROUP_KEY = "GroupData Object";
+    private ArrayList<GroupData> list;
     private FragmentManager fragmentManager;
-    private Group group;
+    private GroupData groupData;
 
-    public CardViewGroupAdapter(ArrayList<Group> list, FragmentManager manager, Group group) {
+    public CardViewGroupAdapter(ArrayList<GroupData> list, FragmentManager manager, GroupData groupData) {
         this.list  = list;
         this.fragmentManager = manager;
-        this.group = group;
+        this.groupData = groupData;
     }
 
     @Override
@@ -48,12 +47,12 @@ public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdap
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
 
-        Group group = list.get(position);
-        String groupName = group.getName();
-        holder.image.setImageDrawable(group.getImage());
+        GroupData groupData = list.get(position);
+        String groupName = groupData.getName();
+        holder.image.setImageDrawable(groupData.getImage());
 
         holder.textName.setText(groupName);
-        holder.textDesc.setText(group.getDescriptionShort());
+        holder.textDesc.setText(groupData.getDescriptionShort());
         holder.groupName = groupName;
     }
 
@@ -94,9 +93,9 @@ public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdap
                         transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
                         ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
-                        if (group != null) {
+                        if (groupData != null) {
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable(GET_GROUP_KEY, group);
+                            bundle.putSerializable(GET_GROUP_KEY, groupData);
                             viewGroupFragment.setArguments(bundle);
                         }
 

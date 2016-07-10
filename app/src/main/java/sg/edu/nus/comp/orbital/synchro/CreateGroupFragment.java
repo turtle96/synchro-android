@@ -5,7 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -24,11 +24,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.Calendar;
 
-import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 
 /**
@@ -39,13 +38,15 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
 public class CreateGroupFragment extends Fragment {
 
     //TOdo should extract all constants for key into external class
-    private static final String GET_GROUP_KEY = "Group Object";
+    private static final String GET_GROUP_KEY = "GroupData Object";
 
     private static final int DESC_MAX_LENGTH = 1000;
     private static final String[] GROUP_TYPES_LIST = {"Study", "Project", "Misc"};
 
     private static EditText editTextDate;
     private static EditText editTextTime;
+
+    private static String time24Hour;
 
     public CreateGroupFragment() {
         // Required empty public constructor
@@ -123,44 +124,76 @@ public class CreateGroupFragment extends Fragment {
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "created group", Toast.LENGTH_LONG).show();
 
-                String groupName, groupType, groupDesc, groupDate, groupTime, groupVenue;
-                groupName = editTextName.getText().toString();
-                groupType = spinnerGroupType.getSelectedItem().toString();
-                groupDesc = editTextDesc.getText().toString();
-                groupDate = editTextDate.getText().toString();
-                groupTime = editTextTime.getText().toString();
-                groupVenue = editTextVenue.getText().toString();
+            String groupName, groupType, groupDesc, groupDate, groupTime, groupVenue;
+            groupName = editTextName.getText().toString().trim();
+            groupType = spinnerGroupType.getSelectedItem().toString().trim();
+            groupDesc = editTextDesc.getText().toString().trim();
+            groupDate = editTextDate.getText().toString().trim();
+            groupTime = editTextTime.getText().toString().trim();
+            groupVenue = editTextVenue.getText().toString().trim();
 
-                Group newGroup = new Group(groupName, groupType, groupDesc, groupDate, groupTime, groupVenue);
+            String[] fields = {groupName, groupType, groupDesc, groupDate, groupTime, groupVenue};
 
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
-                transaction.setCustomAnimations(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left,
-                        R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_right);
+            //todo: will probably need some validation for groupname to ensure no duplicate names
+            if (!checkFields(fields)) {
+                Snackbar checkFields = Snackbar.make(getView(), "Please make sure all fields are filled in :D",
+                        Snackbar.LENGTH_INDEFINITE);
+                checkFields.setAction("ok", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                });
+                checkFields.show();
+                return;
+            }
 
-                ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(GET_GROUP_KEY, newGroup);
-                viewGroupFragment.setArguments(bundle);
+            GroupData newGroupData = new GroupData(groupName, groupType, groupDesc, groupDate,
+                    groupTime, time24Hour, groupVenue);
 
-                transaction.replace(R.id.content_fragment, viewGroupFragment);
-                transaction.commit();
+            SynchroAPI.getInstance().postNewGroup(newGroupData);
+
+            //Toast.makeText(getContext(), "created group", Toast.LENGTH_LONG).show();
+
+            /*
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+            transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
+                    R.anim.fragment_fade_in, R.anim.fragment_fade_out);
+
+            ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(GET_GROUP_KEY, newGroupData);
+            viewGroupFragment.setArguments(bundle);
+
+            transaction.replace(R.id.content_fragment, viewGroupFragment);
+            transaction.commit();
+            */
             }
         });
 
         return rootView;
     }
 
+    //checks all the given strings in array for empty fields, will reject space characters only strings
+    //meaning if a field just has space without other characters will reject
+    private boolean checkFields(String[] fields) {
+        for (String f: fields) {
+            if (f.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //calendar dialog
-    public void showDatePickerDialog(View v) {
+    private void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
     //time dialog
-    public void showTimePickerDialog(View v) {
+    private void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
     }
@@ -169,6 +202,8 @@ public class CreateGroupFragment extends Fragment {
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
+
+        public DatePickerFragment() {}
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -183,7 +218,9 @@ public class CreateGroupFragment extends Fragment {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            String date = day + "/" + month + "/" + year;
+            month += 1;
+            //String date = day + "/" + month + "/" + year;
+            String date = year + "-" + month + "-" + day;
             editTextDate.setText(date);
         }
     }
@@ -192,6 +229,8 @@ public class CreateGroupFragment extends Fragment {
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
+
+        public TimePickerFragment() {}
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -206,6 +245,8 @@ public class CreateGroupFragment extends Fragment {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            time24Hour = hourOfDay + ":" + minute + ":00";
+
             String time, minuteStr;
             if (minute < 10) {
                 minuteStr = "0" + minute;

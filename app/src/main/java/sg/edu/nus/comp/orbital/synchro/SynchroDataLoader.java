@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
-import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.ModuleList;
 
 /**
@@ -20,7 +20,7 @@ public class SynchroDataLoader {
     private static ArrayList<ModuleList> moduleLists;
 
     private static JsonArray groupsJsonArray;
-    private static ArrayList<Group> groups;
+    private static ArrayList<GroupData> groupDatas;
 
     ////////// Getters //////////////////////
 
@@ -29,7 +29,7 @@ public class SynchroDataLoader {
     public static ArrayList<ModuleList> getModuleLists() {return moduleLists;}
 
     public static JsonArray getGroupsJsonArray() {return groupsJsonArray;}
-    public static ArrayList<Group> getGroups() {return groups;}
+    public static ArrayList<GroupData> getGroupDatas() {return groupDatas;}
 
     //////////////////////////////////////////
 
@@ -44,11 +44,11 @@ public class SynchroDataLoader {
         moduleLists = ModuleList.parseModules(modulesJsonArray);
     }
 
-    //loads details of the groups user has joined
-    //group details parsed to Group
+    //loads details of the groupDatas user has joined
+    //group details parsed to GroupData
     public static void loadGroupsJoinedData(int id) {
         groupsJsonArray = SynchroAPI.getInstance().getGroupsByUserId(id);
-        groups = Group.parseGroups(groupsJsonArray);
+        groupDatas = GroupData.parseGroups(groupsJsonArray);
     }
 
     //loads data of a group the user wants to view

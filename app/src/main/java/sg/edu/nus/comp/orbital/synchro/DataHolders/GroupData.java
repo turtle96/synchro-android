@@ -21,13 +21,13 @@ import sg.edu.nus.comp.orbital.synchro.R;
  * TODO: to consider, if name can be changed, hook each group object to a group id??? or isit already hooked to id
  * TODO: should have list of members as well, User objects
  */
-public class Group implements Serializable {
-    private String name, type, description, descriptionShort, date, time, venue;
+public class GroupData implements Serializable {
+    private String name, type, description, descriptionShort, date, time, time24Hour, venue;
     private TextDrawable image;
 
     //parameters: name, type, description, date, time, venue
     //be careful not to mess up ORDER!
-    public Group(String name, String type, String desc, String date, String time, String venue) {
+    public GroupData(String name, String type, String desc, String date, String time, String time24Hour, String venue) {
         this.name = name.replaceAll("\"", "");
         this.type = type;
         this.description = desc.replaceAll("\"", "");
@@ -41,6 +41,7 @@ public class Group implements Serializable {
 
         this.date = date;
         this.time = time;
+        this.time24Hour = time24Hour;
         this.venue = venue;
 
         ColorGenerator generator = ColorGenerator.MATERIAL;
@@ -56,47 +57,48 @@ public class Group implements Serializable {
     public String getDescriptionShort() {return descriptionShort;}
     public String getDate() {return date;}
     public String getTime() {return time;}
+    public String getTime24Hour() {return time24Hour;}
     public String getVenue() {return venue;}
     public TextDrawable getImage() {return image;}
 
     //////////// Parse Methods////////////
     /*
         static
-        takes in JsonArray of group details called from server and parses to Group objects
+        takes in JsonArray of group details called from server and parses to GroupData objects
         automatically adds in default placeholder string for descriptions
         returns ArrayList
     */
-    public static ArrayList<Group> parseGroups(JsonArray groupsJsonArray) {
-        ArrayList<Group> groups = new ArrayList<>();
+    public static ArrayList<GroupData> parseGroups(JsonArray groupsJsonArray) {
+        ArrayList<GroupData> groupDatas = new ArrayList<>();
 
         for (int i=0; i<groupsJsonArray.size(); i++) {
             JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
-            groups.add(new Group(object.get("name").toString(), "default type",
+            groupDatas.add(new GroupData(object.get("name").toString(), "default type",
                     App.getContext().getResources().getString(R.string.medium_text),
-                    "default date", "default time", "default venue"));
+                    "default date", "default time", "default time24", "default venue"));
         }
 
-        return groups;
+        return groupDatas;
     }
 
     /*  filter version: only returns list of all group names containing given string
         static
-        takes in JsonArray of group details called from server and parses to Group objects
+        takes in JsonArray of group details called from server and parses to GroupData objects
         automatically adds in default placeholder string for descriptions
         returns ArrayList
     */
-    public static ArrayList<Group> parseAndFilterGroups(JsonArray groupsJsonArray, String filterStr) {
-        ArrayList<Group> groups = new ArrayList<>();
+    public static ArrayList<GroupData> parseAndFilterGroups(JsonArray groupsJsonArray, String filterStr) {
+        ArrayList<GroupData> groupDatas = new ArrayList<>();
 
         for (int i=0; i<groupsJsonArray.size(); i++) {
             JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
             if (object.get("name").toString().contains(filterStr)) {
-                groups.add(new Group(object.get("name").toString(), "default type",
+                groupDatas.add(new GroupData(object.get("name").toString(), "default type",
                         App.getContext().getResources().getString(R.string.medium_text),
-                        "default date", "default time", "default venue"));
+                        "default date", "default time", "default time24", "default venue"));
             }
         }
 
-        return groups;
+        return groupDatas;
     }
 }

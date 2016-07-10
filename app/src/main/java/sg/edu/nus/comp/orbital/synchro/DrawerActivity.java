@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
@@ -13,11 +14,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.SearchView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,7 +45,7 @@ public class DrawerActivity extends AppCompatActivity
                 AsyncTaskRunner.loadInitialData(DrawerActivity.this);
             }
             //sets landing page to Groups Joined if redirected from SplashActivity
-            else if (caller.equals("SplashActivity") && SynchroDataLoader.getGroupsJsonArray()!=null) {
+            else if (caller.equals("SplashActivity")) {
                 redirectToGroupsJoined();
             }
         }
@@ -62,7 +64,6 @@ public class DrawerActivity extends AppCompatActivity
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(true);
         searchView.requestFocusFromTouch();
-        //TODO cant get keyboard to show automatically, need to fix
 
         return true;
     }
@@ -91,9 +92,9 @@ public class DrawerActivity extends AppCompatActivity
             searchResultsFragment.setArguments(bundle);
 
             FragmentManager manager = getSupportFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
-            transaction.setCustomAnimations(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left,
-                    R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_right);
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
+                    R.anim.fragment_fade_in, R.anim.fragment_fade_out);
             transaction.replace(R.id.content_fragment, searchResultsFragment);
             transaction.commit();
         }
@@ -139,8 +140,8 @@ public class DrawerActivity extends AppCompatActivity
 
                 // add all fragment into backstack
                 FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
-                transaction.setCustomAnimations(R.anim.fragment_slide_in_right, R.anim.fragment_slide_out_left,
-                        R.anim.fragment_slide_in_left, R.anim.fragment_slide_out_right);
+                transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
+                        R.anim.fragment_fade_in, R.anim.fragment_fade_out);
 
                 // replace the content_fragment with appropriate view
                 switch(id){
@@ -150,22 +151,30 @@ public class DrawerActivity extends AppCompatActivity
                         loginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                         loginActivity.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
                         startActivity(loginActivity);
-                    case R.id.nav_view_group:
-                        transaction.replace(R.id.content_fragment, ViewGroupFragment.newInstance());
+                    case R.id.nav_view_group: {
+                        //fragmentNavigation(manager, transaction, "ViewGroup", ViewGroupFragment.newInstance());
+                        transaction.replace(R.id.content_fragment, ViewGroupFragment.newInstance(), "ViewGroup");
                         break;
+                    }
+
                     case R.id.nav_search:
-                        transaction.replace(R.id.content_fragment, SearchResultsFragment.newInstance());
+                        //fragmentNavigation(manager, transaction, "SearchResults", SearchResultsFragment.newInstance());
+                        transaction.replace(R.id.content_fragment, SearchResultsFragment.newInstance(), "SearchResults");
                         break;
                     case R.id.nav_profile:
-                        transaction.replace(R.id.content_fragment, ProfileFragment.newInstance());
+                        //fragmentNavigation(manager, transaction, "Profile", ProfileFragment.newInstance());
+                        transaction.replace(R.id.content_fragment, ProfileFragment.newInstance(), "Profile");
                         break;
                     case R.id.nav_groups_joined:
+                        //fragmentNavigation(manager, transaction, "GroupsJoined", GroupsJoinedFragment.newInstance());
                         transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
                         break;
                     case R.id.nav_new_group:
+                        //fragmentNavigation(manager, transaction, "CreateGroup", CreateGroupFragment.newInstance());
                         transaction.replace(R.id.content_fragment, CreateGroupFragment.newInstance());
                         break;
                     case R.id.nav_recommendations:
+                        //fragmentNavigation(manager, transaction, "Recommend", RecommendationsFragment.newInstance());
                         transaction.replace(R.id.content_fragment, RecommendationsFragment.newInstance());
                         break;
                 }
@@ -176,6 +185,34 @@ public class DrawerActivity extends AppCompatActivity
         }, 300);
 
         return true;
+    }
+
+    //todo need to fix
+
+    /*  given FragmentManager, FragmentTransaction, fragment tag, and fragment instance
+        performs code logic to ensure no duplicate pages if current page is selected again
+        also prevent recreation of fragments
+        note: fragment new instance may or may be used
+    */
+    private void fragmentNavigation(FragmentManager manager, FragmentTransaction transaction, String tag,
+                                    Fragment fragment) {
+
+        transaction.hide(manager.findFragmentById(R.id.content_fragment));
+
+        if (manager.findFragmentByTag(tag) == null) {
+            Toast.makeText(DrawerActivity.this, "new", Toast.LENGTH_SHORT).show();
+
+            transaction.addToBackStack(null);
+
+            transaction.add(R.id.content_fragment, fragment, tag);
+
+        }
+        else if (!manager.findFragmentByTag(tag).isVisible()) {
+            Toast.makeText(DrawerActivity.this, "replace", Toast.LENGTH_SHORT).show();
+
+            transaction.addToBackStack(null);
+            transaction.show(manager.findFragmentByTag(tag));
+        }
     }
 
 }

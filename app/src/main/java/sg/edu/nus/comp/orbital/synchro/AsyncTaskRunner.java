@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 /**
  * Created by angja_000 on 18/6/2016.
@@ -52,12 +53,8 @@ public class AsyncTaskRunner {
         LoadProfile loadProfile = new LoadProfile();
         LoadGroupsJoined loadGroupsJoined = new LoadGroupsJoined();
 
-        //todo: resync call takes really long, abt 10seconds, is there anyway to speed this up server side
-        //todo: code separate section for user to resync data
         //only load resync on login
-        if (drawerActivity != null) {
-            loadResync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        }
+        loadResync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         loadProfile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         loadGroupsJoined.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -128,7 +125,11 @@ public class AsyncTaskRunner {
         @Override
         protected void onPostExecute(Void param) {
             resyncFinished = true;
-            dismissProgressDialog();
+
+            if (drawerActivity != null) {
+                dismissProgressDialog();
+            }
+            //Toast.makeText(App.getContext(), "Resync Done", Toast.LENGTH_SHORT).show();
         }
     }
 

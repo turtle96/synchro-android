@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewGroupAdapter;
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewUserAdapter;
-import sg.edu.nus.comp.orbital.synchro.DataHolders.Group;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 public class SearchResultsFragment extends Fragment {
 
@@ -129,9 +129,9 @@ public class SearchResultsFragment extends Fragment {
     //returns the CardViewGroupAdapter created so it can be cleared
     private CardViewGroupAdapter displayGroups(RecyclerView recyclerView) {
         JsonArray groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
-        ArrayList<Group> groups = Group.parseGroups(groupsJsonArray);
+        ArrayList<GroupData> groupDatas = GroupData.parseGroups(groupsJsonArray);
 
-        CardViewGroupAdapter groupAdapter = new CardViewGroupAdapter(groups, null, null);
+        CardViewGroupAdapter groupAdapter = new CardViewGroupAdapter(groupDatas, null, null);
         recyclerView.setAdapter(groupAdapter);
 
         return groupAdapter;
