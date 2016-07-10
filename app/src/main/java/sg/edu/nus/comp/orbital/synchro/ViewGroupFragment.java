@@ -24,7 +24,7 @@ import sg.edu.nus.comp.orbital.synchro.ViewGroup.ViewGroupTabAdapter;
 public class ViewGroupFragment extends Fragment {
 
     private static final String GET_GROUP_KEY = "GroupData Object";
-    private static JsonArray membersJsonArray = SynchroDataLoader.loadViewGroupData(5);
+    private static JsonArray membersJsonArray = SynchroDataLoader.loadViewGroupData("6");
     private static GroupData groupData;
 
     public ViewGroupFragment() {}
@@ -46,6 +46,7 @@ public class ViewGroupFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_view_group, container, false);
         setupTabs(rootView);
 
+        //todo: recode to call group data from server
         if (getArguments() != null) {
             groupData = (GroupData) getArguments().getSerializable(GET_GROUP_KEY);
         }

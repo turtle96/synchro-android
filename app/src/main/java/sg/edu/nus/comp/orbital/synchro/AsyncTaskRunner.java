@@ -23,6 +23,7 @@ public class AsyncTaskRunner {
 
     private static boolean resyncFinished = false;
     private static boolean profileFinished = false;
+    private static boolean modulesFinished = false;
     private static boolean groupsFinished = false;
 
     //sets progress dialog from whichever activity/fragment the async task is called
@@ -51,21 +52,29 @@ public class AsyncTaskRunner {
 
         LoadResync loadResync = new LoadResync();
         LoadProfile loadProfile = new LoadProfile();
-        LoadGroupsJoined loadGroupsJoined = new LoadGroupsJoined();
+        LoadModules loadModules = new LoadModules();
 
-        //only load resync on login
-        loadResync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        //this should ensure first time users are cached on server before calls to server are made
+        //to prevent NullPointerExceptions
+        if (drawerActivity != null) {
+            loadResync.execute();
+        }
+        else {
+            loadResync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
         loadProfile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        loadGroupsJoined.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        loadModules.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    //ensures progress dialog is stopped only when all 3 tasks are finished
+    //ensures progress dialog is stopped only when all tasks are finished
+    //login will require resync call to be finished first
     private static boolean getLoadInitialDataStatus() {
         if (drawerActivity != null) {
-            return (resyncFinished && profileFinished && groupsFinished);
+            return (resyncFinished && profileFinished && modulesFinished && groupsFinished);
         }
         else if (splashActivity != null) {
-            return (profileFinished && groupsFinished);
+            return (profileFinished && modulesFinished && groupsFinished);
         }
         else {
             return false;
@@ -134,6 +143,7 @@ public class AsyncTaskRunner {
     }
 
     /////////// Loader for Calling Profile /////////////
+    /** NOTE: calls groups joined after profile is loaded **/
     private static class LoadProfile extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -149,6 +159,31 @@ public class AsyncTaskRunner {
         @Override
         protected void onPostExecute(Void param) {
             profileFinished = true;
+
+            //since groups joined call needs user id, can only be loaded AFTER user data loaded
+            LoadGroupsJoined loadGroupsJoined = new LoadGroupsJoined();
+            loadGroupsJoined.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+            dismissProgressDialog();
+        }
+    }
+
+    /////////// Loader for Calling Modules /////////////
+    private static class LoadModules extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                SynchroDataLoader.loadModules();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void param) {
+            modulesFinished = true;
             dismissProgressDialog();
         }
     }
@@ -159,7 +194,7 @@ public class AsyncTaskRunner {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                SynchroDataLoader.loadGroupsJoinedData(1);
+                SynchroDataLoader.loadGroupsJoinedData(SynchroDataLoader.getUserProfile().getId());
             } catch (Exception e) {
                 e.printStackTrace();
             }

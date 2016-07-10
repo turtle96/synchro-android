@@ -61,12 +61,15 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp">
+            android:layout_margin="16dp">
 
             <TextView
                 android:id="@+id/labelDescription"
                 android:text="@string/about_me"
-                style="@style/Header1" />
+                style="@style/Header1Green" />
+
+            <View
+                style="@style/dividerStyleGreen"/>
 
             <TextView
                 android:text="@string/small_text"
@@ -92,6 +95,15 @@
                 style="@style/TextBody1" />
 
             <TextView
+                android:text="@string/second_major"
+                android:id="@+id/labelSecondMajor"
+                style="@style/Header1"/>
+
+            <TextView
+                android:id="@+id/valueSecondMajor"
+                style="@style/TextBody1" />
+
+            <TextView
                 android:text="@string/matriculation_year"
                 android:id="@+id/labelMatriculationYear"
                 style="@style/Header1"/>
@@ -102,18 +114,30 @@
 
         </LinearLayout>
 
-        <TextView
-            android:text="@string/modules_taken"
-            android:id="@+id/labelModulesTaken"
-            style="@style/Header1"
-            android:paddingLeft="15dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+
+            <TextView
+                android:text="@string/modules_taken"
+                android:id="@+id/labelModulesTaken"
+                style="@style/Header1Green"/>
+
+            <View
+                style="@style/dividerStyleGreen"/>
+
+        </LinearLayout>
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            android:layout_margin="5dp">
+            android:layout_margin="16dp">
 
         </android.support.v7.widget.RecyclerView>
 

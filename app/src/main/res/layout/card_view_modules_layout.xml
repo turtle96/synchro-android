@@ -2,41 +2,48 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="3dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/valueModuleYear"
-            android:text="year"
-            style="@style/SubHeader1"/>
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/colorPrimary"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/valueModuleYear"
+                android:text="year"
+                style="@style/SubHeader1"
+                android:textColor="@color/colorAccent"/>
+
+            <View
+                style="@style/dividerStyleAccent"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="8dp"/>
+
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/valueModuleSem1"
             android:text="sem"
             android:paddingTop="5dp"
-            style="@style/SubHeader1"/>
+            style="@style/SubHeader1" />
 
         <TextView
             android:id="@+id/valueModulesTakenSem1"
             android:text="modules"
-            style="@style/TextBody1"/>
+            style="@style/TextBody1" />
 
         <TextView
             android:id="@+id/valueModuleSem2"
             android:text="sem"
-            style="@style/SubHeader1"
-            android:paddingTop="0dp"/>
+            style="@style/SubHeader1" />
 
         <TextView
             android:id="@+id/valueModulesTakenSem2"

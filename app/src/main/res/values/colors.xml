@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#9ccc65</color>
-    <color name="colorPrimaryDark">#689f38</color>
-    <color name="colorAccent">#ff9e80</color>
+    <color name="colorPrimary">#9ccc65</color>  <!-- Light Green 400 -->
+    <color name="colorPrimaryDark">#689f38</color>  <!-- Light Green 700 -->
+    <color name="colorAccent">#ff9e80</color>   <!-- Deep Orange A100 -->
 
+    <color name="text_green">#8BC34A</color> <!-- Light Green 500 -->
     <color name="background_light_grey">#EEEEEE</color>
     <color name="background_dark_grey">#212121</color>
     <color name="plain_white">#fafafa</color>

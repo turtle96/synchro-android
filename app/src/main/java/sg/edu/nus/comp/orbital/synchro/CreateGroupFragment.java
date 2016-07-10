@@ -148,7 +148,7 @@ public class CreateGroupFragment extends Fragment {
                 return;
             }
 
-            GroupData newGroupData = new GroupData(groupName, groupType, groupDesc, groupDate,
+            GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, groupDate,
                     groupTime, time24Hour, groupVenue);
 
             SynchroAPI.getInstance().postNewGroup(newGroupData);

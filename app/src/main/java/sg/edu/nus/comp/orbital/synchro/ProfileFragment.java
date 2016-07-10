@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,16 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
-
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewModulesAdapter;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.ModuleList;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 
 public class ProfileFragment extends Fragment {
 
-    private static JsonObject profile = SynchroDataLoader.getProfile();
+    private static User profile = SynchroDataLoader.getUserProfile();
     private static ArrayList<ModuleList> moduleLists = SynchroDataLoader.getModuleLists();
 
     public ProfileFragment() {
@@ -101,16 +99,31 @@ public class ProfileFragment extends Fragment {
         TextView name = (TextView) rootView.findViewById(R.id.user_profile_name);
         TextView faculty = (TextView) rootView.findViewById(R.id.valueFaculty);
         TextView firstMajor = (TextView) rootView.findViewById(R.id.valueFirstMajor);
+        TextView secondMajor = (TextView) rootView.findViewById(R.id.valueSecondMajor);
         TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
 
         //use this code if you want to display your real name instead of placeholder
-        //name.setText(profile.get("name").toString().replaceAll("\"", ""));
-        name.setText("Hermione Granger");
+        name.setText(profile.getName());
+        //name.setText("Hermione Granger");
 
-        faculty.setText(profile.get("faculty").toString().replaceAll("\"", ""));
-        firstMajor.setText(profile.get("first_major").toString().replaceAll("\"", ""));
-        year.setText(profile.get("matriculation_year").toString().replaceAll("\"", ""));
+        faculty.setText(profile.getFaculty());
 
+        if (profile.hasFirstMajor()) {
+            firstMajor.setText(profile.getFirstMajor());
+        }
+        else {
+            rootView.findViewById(R.id.labelFirstMajor).setVisibility(View.GONE);
+            firstMajor.setVisibility(View.GONE);
+        }
+        if (profile.hasSecondMajor()) {
+            secondMajor.setText(profile.getSecondMajor());
+        }
+        else {
+            rootView.findViewById(R.id.labelSecondMajor).setVisibility(View.GONE);
+            secondMajor.setVisibility(View.GONE);
+        }
+
+        year.setText(profile.getYear());
     }
 
     @Override

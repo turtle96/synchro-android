@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.ModuleList;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 
 /**
  * Created by angja_000 on 17/6/2016.
@@ -15,7 +16,9 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.ModuleList;
  * stored for duration of app usage
  */
 public class SynchroDataLoader {
-    private static JsonObject profile;
+    private static JsonObject profileJson;
+    private static User userProfile;
+
     private static JsonArray modulesJsonArray;
     private static ArrayList<ModuleList> moduleLists;
 
@@ -24,7 +27,9 @@ public class SynchroDataLoader {
 
     ////////// Getters //////////////////////
 
-    public static JsonObject getProfile() {return profile;}
+    public static JsonObject getProfileJson() {return profileJson;}
+    public static User getUserProfile() {return userProfile;}
+
     public static JsonArray getModulesJsonArray() {return modulesJsonArray;}
     public static ArrayList<ModuleList> getModuleLists() {return moduleLists;}
 
@@ -36,23 +41,28 @@ public class SynchroDataLoader {
     /****** Load Methods *******/
 
     //loads and stores profile data
-    //user details + modules
-    //modules are parsed to ModuleLists
+    //user details
     public static void loadProfileData() {
-        profile = SynchroAPI.getInstance().getMe();
+        profileJson = SynchroAPI.getInstance().getMe();
+        userProfile = User.parseSingleUser(profileJson);
+    }
+
+    //loads and stores modules
+    //modules are parsed to ModuleLists
+    public static void loadModules() {
         modulesJsonArray = SynchroAPI.getInstance().getMeModules();
         moduleLists = ModuleList.parseModules(modulesJsonArray);
     }
 
     //loads details of the groupDatas user has joined
     //group details parsed to GroupData
-    public static void loadGroupsJoinedData(int id) {
+    public static void loadGroupsJoinedData(String id) {
         groupsJsonArray = SynchroAPI.getInstance().getGroupsByUserId(id);
         groupDatas = GroupData.parseGroups(groupsJsonArray);
     }
 
     //loads data of a group the user wants to view
-    public static JsonArray loadViewGroupData(int id) {
+    public static JsonArray loadViewGroupData(String id) {
         return SynchroAPI.getInstance().getUsersByGroupId(id);
     }
 

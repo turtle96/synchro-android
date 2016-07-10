@@ -58,6 +58,10 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="Header1Green" parent="Header1">
+        <item name="android:textColor">@color/text_green</item>
+    </style>
+
     <!-- for sub-titles, additional headers etc-->
     <style name="SubHeader1" parent="Header1">
         <item name="android:textSize">18sp</item>
@@ -79,6 +83,16 @@
     <style name="ThemeSpinner">
         <!-- Default color for the dropdown arrow and line -->
         <item name="colorControlNormal">@color/colorAccent</item>
+    </style>
+
+    <style name="dividerStyleGreen">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="dividerStyleAccent" parent="dividerStyleGreen">
+        <item name="android:background">@color/colorAccent</item>
     </style>
 
 </resources>

@@ -185,9 +185,24 @@ public class SynchroAPI {
         return result;
     }
 
+    public JsonObject getUserById(String userId) {
+        JsonObject result = null;
+        String apiUsersId = apiUsers + "/" + userId;
+        try {
+            result = Ion.with(App.getContext())
+                    .load(apiUsersId)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonObject()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
     //Retrieve list of Groups a particular User belongs to, given user id
     //JsonArray
-    public JsonArray getGroupsByUserId(int userId) {
+    public JsonArray getGroupsByUserId(String userId) {
         JsonArray result = null;
         String apiUserGroups = API_BASE_URL + "users/" + userId +"/groups";
         try {
@@ -204,7 +219,7 @@ public class SynchroAPI {
 
     //Retrieve list of Users belonging to a particular GroupData, given GroupData id
     //JsonArray
-    public JsonArray getUsersByGroupId(int groupId) {
+    public JsonArray getUsersByGroupId(String groupId) {
         JsonArray result = null;
         String apiGroupUsers = API_BASE_URL + "groups/" + groupId +"/users";
         try {
@@ -295,7 +310,7 @@ public class SynchroAPI {
 
 
         }catch (Exception ex){
-            ex.printStackTrace();
+            System.out.println("Error here" + ex.toString());
         }
     }
 }

@@ -74,8 +74,9 @@ public class SearchResultsFragment extends Fragment {
                     buttonGroups.setChecked(false);     //only toggle one button at a time
                     userAdapter = displayUsers(recyclerView);
                 }
-                else {
+                else if (!buttonGroups.isChecked()) {
                     // The toggle is disabled
+                    buttonUsers.setChecked(true);
                 }
             }
         });
@@ -92,8 +93,9 @@ public class SearchResultsFragment extends Fragment {
                     buttonUsers.setChecked(false);
                     groupAdapter = displayGroups(recyclerView);
                 }
-                else {
+                else if (!buttonUsers.isChecked()) {
                     // The toggle is disabled
+                    buttonGroups.setChecked(true);
                 }
             }
         });

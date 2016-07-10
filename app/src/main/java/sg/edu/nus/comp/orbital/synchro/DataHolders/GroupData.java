@@ -22,12 +22,14 @@ import sg.edu.nus.comp.orbital.synchro.R;
  * TODO: should have list of members as well, User objects
  */
 public class GroupData implements Serializable {
-    private String name, type, description, descriptionShort, date, time, time24Hour, venue;
+    private String id, name, type, description, descriptionShort, date, time, time24Hour, venue;
     private TextDrawable image;
 
     //parameters: name, type, description, date, time, venue
     //be careful not to mess up ORDER!
-    public GroupData(String name, String type, String desc, String date, String time, String time24Hour, String venue) {
+    public GroupData(String id, String name, String type, String desc, String date, String time,
+                     String time24Hour, String venue) {
+        this.id = id;
         this.name = name.replaceAll("\"", "");
         this.type = type;
         this.description = desc.replaceAll("\"", "");
@@ -51,6 +53,7 @@ public class GroupData implements Serializable {
     }
 
     ////////// Getters ////////////////
+    public String getId() {return id;}
     public String getName() {return name;}
     public String getType() {return type;}
     public String getDescription() {return description;}
@@ -60,6 +63,11 @@ public class GroupData implements Serializable {
     public String getTime24Hour() {return time24Hour;}
     public String getVenue() {return venue;}
     public TextDrawable getImage() {return image;}
+
+    ////////// Setters /////////////
+    public void setId(String id) {
+        this.id = id;
+    }
 
     //////////// Parse Methods////////////
     /*
@@ -73,8 +81,8 @@ public class GroupData implements Serializable {
 
         for (int i=0; i<groupsJsonArray.size(); i++) {
             JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
-            groupDatas.add(new GroupData(object.get("name").toString(), "default type",
-                    App.getContext().getResources().getString(R.string.medium_text),
+            groupDatas.add(new GroupData(object.get("id").toString(), object.get("name").toString(),
+                    "default type", App.getContext().getResources().getString(R.string.medium_text),
                     "default date", "default time", "default time24", "default venue"));
         }
 
@@ -93,8 +101,8 @@ public class GroupData implements Serializable {
         for (int i=0; i<groupsJsonArray.size(); i++) {
             JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
             if (object.get("name").toString().contains(filterStr)) {
-                groupDatas.add(new GroupData(object.get("name").toString(), "default type",
-                        App.getContext().getResources().getString(R.string.medium_text),
+                groupDatas.add(new GroupData(object.get("id").toString(), object.get("name").toString(),
+                        "default type", App.getContext().getResources().getString(R.string.medium_text),
                         "default date", "default time", "default time24", "default venue"));
             }
         }
