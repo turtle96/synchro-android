@@ -84,7 +84,7 @@ public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdap
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Toast.makeText(App.getContext(), "clicked " + groupName, Toast.LENGTH_LONG).show();
+
                     System.out.println(groupName + " group id: " + groupId);
 
                     if (fragmentManager != null) {

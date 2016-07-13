@@ -5,7 +5,6 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.App;
@@ -21,14 +20,15 @@ import sg.edu.nus.comp.orbital.synchro.R;
  * TODO: to consider, if name can be changed, hook each group object to a group id??? or isit already hooked to id
  */
 public class GroupData {
-    private String id, name, type, description, descriptionShort, time, time24Hour, venue;
+    private String id, name, type, description, descriptionShort, venue;
     private String dateYear, dateMonth, dateDay;    //this is for the date
+    private int timeHour, timeMinute;
     private TextDrawable image;
 
-    //parameters: id, name, type, description, dateYear, dateMonth, dateDay, time, time24hr, venue
+    //parameters: id, name, type, description, dateYear, dateMonth, dateDay, timeHr, timeMinute, venue
     //be careful not to mess up ORDER!
     public GroupData(String id, String name, String type, String desc, String dateYear, String dateMonth,
-                     String dateDay, String time, String time24Hour, String venue) {
+                     String dateDay, int timeHour, int timeMinute, String venue) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -44,8 +44,8 @@ public class GroupData {
         this.dateYear = dateYear;
         this.dateMonth = dateMonth;
         this.dateDay = dateDay;
-        this.time = time;
-        this.time24Hour = time24Hour;
+        this.timeHour = timeHour;
+        this.timeMinute = timeMinute;
         this.venue = venue;
 
         ColorGenerator generator = ColorGenerator.MATERIAL;
@@ -62,17 +62,55 @@ public class GroupData {
     public String getDescriptionShort() {return descriptionShort;}
     public String getDate() {return formatDate(dateYear, dateMonth, dateDay);}
     public String getDateServerFormat() {return formatDateServer(dateYear, dateMonth, dateDay);}
-    public String getTime() {return time;}
-    public String getTime24Hour() {return time24Hour;}
+    public String getTime() {return formatTime(timeHour, timeMinute);}
+    public String getTimeServerFormat() {return formatTimeServer(timeHour, timeMinute);}
     public String getVenue() {return venue;}
     public TextDrawable getImage() {return image;}
 
+    ///////// Formatters ///////////
+
+    // dd/mm/yyyy
     public static String formatDate(String year, String month, String day) {
         return day + "/" + month + "/" + year;
     }
 
+    // yyyy-mm-dd
     public static String formatDateServer(String year, String month, String day) {
         return year + "-" + month + "-" + day;
+    }
+
+    //static method
+    //needs params to get formatted string with 12 hr format + AM/PM
+    //hh:mm AM/PM
+    public static String formatTime(int hourOfDay, int minute) {
+        String time, minuteStr;
+
+        if (minute < 10) {
+            minuteStr = "0" + minute;
+        }
+        else {
+            minuteStr = "" + minute;
+        }
+
+        if (hourOfDay<12 && hourOfDay!=0) {
+            time = hourOfDay + ":" + minuteStr + " am";
+        }
+        else if (hourOfDay>12){
+            time = (hourOfDay - 12) + ":" + minuteStr + " pm";
+        }
+        else if (hourOfDay == 12) {
+            time = hourOfDay + ":" + minuteStr + " pm";
+        }
+        else {  //24:00
+            time = 12 + ":" + minuteStr + " am";
+        }
+
+        return time;
+    }
+
+    //server time format hh:mm:ss
+    public static String formatTimeServer(int hourOfDay, int minute) {
+        return hourOfDay + ":" + minute + ":00";
     }
 
     ////////// Setters /////////////
@@ -82,6 +120,7 @@ public class GroupData {
 
     //////////// Parse Methods////////////
 
+    //converts JsonObject of group details to GroupData object and returns
     public static GroupData parseSingleGroup(JsonObject group) {
         String type, description, dateYear, dateMonth, dateDay, time, time24Hour, venue;
 
@@ -117,29 +156,8 @@ public class GroupData {
         hourOfDay = Integer.valueOf(tokens[0]);
         minute = Integer.valueOf(tokens[1]);
 
-        String minuteStr;
-        if (minute < 10) {
-            minuteStr = "0" + minute;
-        }
-        else {
-            minuteStr = "" + minute;
-        }
-
-        if (hourOfDay<12 && hourOfDay!=0) {
-            time = hourOfDay + ":" + minuteStr + " am";
-        }
-        else if (hourOfDay>12){
-            time = (hourOfDay - 12) + ":" + minuteStr + " pm";
-        }
-        else if (hourOfDay == 12) {
-            time = hourOfDay + ":" + minuteStr + " pm";
-        }
-        else {  //24:00
-            time = 12 + ":" + minuteStr + " am";
-        }
-
         return new GroupData(group.get("id").getAsString(), group.get("name").getAsString(), type,
-                description, dateYear, dateMonth, dateDay, time, time24Hour, venue);
+                description, dateYear, dateMonth, dateDay, hourOfDay, minute, venue);
     }
 
     /*
@@ -159,7 +177,8 @@ public class GroupData {
         return groupDatas;
     }
 
-    /*  temporary for preview only
+    /*  todo remove when recommendations merged to backend
+        temporary for recommendations preview only
         filter version: only returns list of all group names containing given string
         static
         takes in JsonArray of group details called from server and parses to GroupData objects
@@ -186,7 +205,7 @@ public class GroupData {
         groupJson.addProperty("name", getName());
         groupJson.addProperty("type", getType());
         groupJson.addProperty("description", getDescription());
-        groupJson.addProperty("date_happening", getDateServerFormat() + " " + getTime24Hour());
+        groupJson.addProperty("date_happening", getDateServerFormat() + " " + getTimeServerFormat());
         groupJson.addProperty("venue", getVenue());
         groupJson.addProperty("tags", getType());
 

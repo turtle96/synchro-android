@@ -22,6 +22,8 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 /**
  * Created by kfwong on 6/2/16.
+ *
+ * stores all methods for accessing server
  */
 public class SynchroAPI {
 
@@ -43,6 +45,7 @@ public class SynchroAPI {
     private static final String apiMeResync = API_BASE_URL + "me/resync";
     private static final String apiMe = API_BASE_URL + "me";
     private static final String apiMeModules = API_BASE_URL + "me/modulesTaken";
+    private static final String apiMeGroups = API_BASE_URL + "me/groups/";
     private static final String apiUsers = API_BASE_URL + "users";
     private static final String apiGroups = API_BASE_URL + "groups";
 
@@ -284,6 +287,8 @@ public class SynchroAPI {
         return result;
     }
 
+    //POST new group to server
+    //returns group id in string
     public String postNewGroup(GroupData group) {
 
         JsonObject groupJson = group.parseToPostGroupJson();
@@ -312,9 +317,32 @@ public class SynchroAPI {
         else {
             Toast.makeText(App.getContext(), "group created", Toast.LENGTH_SHORT).show();
             id = result.get("id").getAsString();
-            System.out.println("here group id: " + id);
+            //System.out.println("here group id: " + id);
         }
 
         return id;
+    }
+
+    //given group id, sends post request to join group
+    public void postJoinGroup(String groupId) {
+
+        String url = apiMeGroups + groupId + "/join";
+
+        try {
+            Ion.with(App.getContext())
+                .load(url)
+                .addHeader("Authorization", ivleAuthToken)
+                .setJsonObjectBody(new JsonObject())
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        Toast.makeText(App.getContext(), result.get("message").getAsString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+
     }
 }

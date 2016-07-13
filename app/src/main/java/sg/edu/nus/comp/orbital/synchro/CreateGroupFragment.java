@@ -47,7 +47,8 @@ public class CreateGroupFragment extends Fragment {
     private static EditText editTextDate;
     private static EditText editTextTime;
 
-    private static String time24Hour, dateYear, dateMonth, dateDay;     //different format for server submission
+    private static String dateYear, dateMonth, dateDay;
+    private static int timeHour, timeMinute;
 
     public CreateGroupFragment() {
         // Required empty public constructor
@@ -71,7 +72,7 @@ public class CreateGroupFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         final Spinner spinnerGroupType = (Spinner) view.findViewById(R.id.spinnerGroupType);
@@ -143,7 +144,7 @@ public class CreateGroupFragment extends Fragment {
 
             //todo: will probably need some validation for groupname to ensure no duplicate names
             if (!checkFields(fields)) {
-                Snackbar checkFields = Snackbar.make(getView(), "Please make sure all fields are filled in :D",
+                Snackbar checkFields = Snackbar.make(view, "Please make sure all fields are filled in :D",
                         Snackbar.LENGTH_LONG);
                 checkFields.setAction("ok", new View.OnClickListener() {
                     @Override
@@ -155,11 +156,11 @@ public class CreateGroupFragment extends Fragment {
             }
 
             GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, dateYear,
-                    dateMonth, dateDay, groupTime, time24Hour, groupVenue);
+                    dateMonth, dateDay, timeHour, timeMinute, groupVenue);
 
             String groupId = SynchroAPI.getInstance().postNewGroup(newGroupData);
-
             newGroupData.setId(groupId);
+            SynchroAPI.getInstance().postJoinGroup(groupId);
 
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
@@ -223,11 +224,11 @@ public class CreateGroupFragment extends Fragment {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             month += 1;
-            String date = day + "/" + month + "/" + year;
             dateYear = Integer.toString(year);
             dateMonth = Integer.toString(month);
             dateDay = Integer.toString(day);
-            editTextDate.setText(date);
+
+            editTextDate.setText(GroupData.formatDate(dateYear, dateMonth, dateDay));
         }
     }
 
@@ -251,29 +252,10 @@ public class CreateGroupFragment extends Fragment {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            time24Hour = hourOfDay + ":" + minute + ":00";
+            timeHour = hourOfDay;
+            timeMinute = minute;
 
-            String time, minuteStr;
-            if (minute < 10) {
-                minuteStr = "0" + minute;
-            }
-            else {
-                minuteStr = "" + minute;
-            }
-
-            if (hourOfDay<12 && hourOfDay!=0) {
-                time = hourOfDay + ":" + minuteStr + " am";
-            }
-            else if (hourOfDay>12){
-                time = (hourOfDay - 12) + ":" + minuteStr + " pm";
-            }
-            else if (hourOfDay == 12) {
-                time = hourOfDay + ":" + minuteStr + " pm";
-            }
-            else {  //24:00
-                time = 12 + ":" + minuteStr + " am";
-            }
-            editTextTime.setText(time);
+            editTextTime.setText(GroupData.formatTime(hourOfDay, minute));
         }
     }
 

@@ -23,6 +23,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String status = SynchroAPI.validate();
+
                 if (status.equals(STATUS_SUCCESS)) {
                     ProgressBar progressBar = (ProgressBar) findViewById(R.id.splashProgressBar);
                     AsyncTaskRunner.setProgressBar(progressBar);

@@ -3,6 +3,7 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -43,13 +44,13 @@ public class LoginActivity extends AppCompatActivity {
     //redirects user after authentication
     private void loginUser() {
         WebView webview = (WebView) findViewById(R.id.webview_login);
-
         webview.getSettings().setJavaScriptEnabled(true);
-        webview.addJavascriptInterface(new MyJavaScriptInterface(this), "HtmlViewer");
+        webview.addJavascriptInterface(new MyJavaScriptInterface(), "HtmlViewer");
 
         webview.loadUrl(SynchroAPI.ivleLogin);
 
         webview.setWebViewClient(new WebViewClient() {
+
             @Override
             public void onPageFinished(WebView view, String url) {
 
@@ -62,10 +63,8 @@ public class LoginActivity extends AppCompatActivity {
                         redirects to landing page
                     */
                     if (url.equals(SynchroAPI.ivleLoginSuccess)) {
-
                         view.loadUrl("javascript:window.HtmlViewer.showHTML" +
                                 "('&lt;html&gt;'+document.getElementsByTagName('html')[0].innerHTML+'&lt;/html&gt;');");
-
                         redirectUser();
 
                     } else {  //in case anything else happens
@@ -98,14 +97,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //for extracting html source code and saving token to SharedPrefs
-    class MyJavaScriptInterface
-    {
-        private Context ctx;
+    private class MyJavaScriptInterface {
 
-        MyJavaScriptInterface(Context ctx)
-        {
-            this.ctx = ctx;
-        }
+        MyJavaScriptInterface() {}
 
         @JavascriptInterface
         public void showHTML(final String html)

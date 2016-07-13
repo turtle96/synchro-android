@@ -113,12 +113,12 @@ public class AsyncTaskRunner {
             if (splashActivity != null) {
                 System.out.println("redirect splash");
                 splashActivity.redirectFromSplash();
-                splashActivity = null;
+                splashActivity = null;                  //resets to null to prevent overlap if AsyncTask called again
             }
             else if (drawerActivity != null) {
                 System.out.println("redirect drawer");
                 drawerActivity.redirectToGroupsJoined();
-                drawerActivity = null;
+                drawerActivity = null;                 //resets to null to prevent overlap if AsyncTask called again
             }
         }
 
