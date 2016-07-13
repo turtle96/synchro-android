@@ -14,6 +14,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.App;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 import sg.edu.nus.comp.orbital.synchro.R;
 
 /**
@@ -21,12 +22,14 @@ import sg.edu.nus.comp.orbital.synchro.R;
  *
  * adaptor for card views that display various users' names and profile image (TextDrawable for now)
  * onClick should redirect to respective user profiles (dummy onClick for now)
+ *
+ * //todo reformat to user
  */
 public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapter.CardViewHolder> {
 
-    private ArrayList<String> list;
+    private ArrayList<User> list;
 
-    public CardViewUserAdapter(ArrayList<String> list) {
+    public CardViewUserAdapter(ArrayList<User> list) {
         this.list  = list;
     }
 
@@ -40,16 +43,11 @@ public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapte
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
 
-        String memberName = list.get(position);
+        User member = list.get(position);
 
-        ColorGenerator generator = ColorGenerator.MATERIAL;
-        int color = generator.getRandomColor();
-        TextDrawable drawable = TextDrawable.builder()
-                .buildRound(memberName.substring(0, 1), color);
-
-        holder.image.setImageDrawable(drawable);
-        holder.textUserName.setText(memberName);
-        holder.memberName = memberName;
+        holder.image.setImageDrawable(member.getProfileImage());
+        holder.textUserName.setText(member.getName());
+        holder.memberName = member.getName();
     }
 
     @Override
@@ -68,7 +66,7 @@ public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapte
         private ImageView image;
         private TextView textUserName;
         private View view;
-        private String memberName;
+        private String memberName;  //for toast only, delete if toast not used
 
         public CardViewHolder(View itemView) {
             super(itemView);

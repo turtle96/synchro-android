@@ -63,9 +63,6 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        displayProfileInfo(rootView);
-        displayModulesTaken(rootView);
-
         //this provides alternate layout since layer effect cannot be achieved pre-Lollipop
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
             ImageView profileHeader = (ImageView) rootView.findViewById(R.id.header_cover_image);
@@ -75,6 +72,14 @@ public class ProfileFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        displayProfileInfo(view);
+        displayModulesTaken(view);
     }
 
     /*
@@ -103,8 +108,8 @@ public class ProfileFragment extends Fragment {
         TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
 
         //use this code if you want to display your real name instead of placeholder
-        name.setText(profile.getName());
-        //name.setText("Hermione Granger");
+        //name.setText(profile.getName());
+        name.setText("Hermione Granger");
 
         faculty.setText(profile.getFaculty());
 

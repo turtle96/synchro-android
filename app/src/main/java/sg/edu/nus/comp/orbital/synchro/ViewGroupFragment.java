@@ -2,6 +2,7 @@ package sg.edu.nus.comp.orbital.synchro;
 
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 import sg.edu.nus.comp.orbital.synchro.ViewGroup.ViewGroupTabAdapter;
 
 /**
@@ -23,9 +28,10 @@ import sg.edu.nus.comp.orbital.synchro.ViewGroup.ViewGroupTabAdapter;
  */
 public class ViewGroupFragment extends Fragment {
 
-    private static final String GET_GROUP_KEY = "GroupData Object";
-    private static JsonArray membersJsonArray = SynchroDataLoader.loadViewGroupData("6");
-    private static GroupData groupData;
+    private static final String GET_GROUP_ID = "Group Id";
+    private String groupId;
+    private ArrayList<User> members;
+    private GroupData groupData;
 
     public ViewGroupFragment() {}
 
@@ -34,10 +40,8 @@ public class ViewGroupFragment extends Fragment {
         return fragment;
     }
 
-    //getter method so that TabGroupMembersFragment can access
-    //data is loaded upon ViewGroupFragment instantiation so cannot be immediately stored in child fragment
-    public static JsonArray getMembersJsonArray() {return membersJsonArray;}
-    public static GroupData getGroupData() {return groupData;}
+    public GroupData getGroupData() {return groupData;}
+    public ArrayList<User> getMembers() {return members;}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,13 +49,28 @@ public class ViewGroupFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_group, container, false);
         setupTabs(rootView);
+        return rootView;
+    }
 
-        //todo: recode to call group data from server
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        JsonArray membersJsonArray;
+
         if (getArguments() != null) {
-            groupData = (GroupData) getArguments().getSerializable(GET_GROUP_KEY);
+            groupId = getArguments().getString(GET_GROUP_ID);
+            JsonObject groupJson = SynchroAPI.getInstance().getGroupById(groupId);
+            groupData = GroupData.parseSingleGroup(groupJson);
+            membersJsonArray = SynchroAPI.getInstance().getUsersByGroupId(groupId);
+        }
+        else {
+            membersJsonArray = SynchroAPI.getInstance().getUsersByGroupId("20");
         }
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_join_group);
+        members = User.parseUsers(membersJsonArray);
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +78,7 @@ public class ViewGroupFragment extends Fragment {
             }
         });
 
-        TextView groupName = (TextView) rootView.findViewById(R.id.labelGroupName);
+        TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
 
         if (groupData != null) {
             groupName.setText(groupData.getName());
@@ -67,8 +86,6 @@ public class ViewGroupFragment extends Fragment {
         else {
             groupName.setText("Study Group CS1010");
         }
-
-        return rootView;
     }
 
     //setup tab layouts and child fragments: GroupDetails and GroupMembers
@@ -79,8 +96,8 @@ public class ViewGroupFragment extends Fragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewGroupPager);
-        ViewGroupTabAdapter adaptor = new ViewGroupTabAdapter(getChildFragmentManager());
-        viewPager.setAdapter(adaptor);
+        ViewGroupTabAdapter adapter = new ViewGroupTabAdapter(getChildFragmentManager());
+        viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getContext(), R.color.background_light_grey));

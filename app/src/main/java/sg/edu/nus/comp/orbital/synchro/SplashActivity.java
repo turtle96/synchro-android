@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
                     });
                     notifyInternet.show();
                 }
-                else{
+                else if (status.equals(STATUS_FAIL)) {
                     Intent launchLoginActivity = new Intent(SplashActivity.this, LoginActivity.class);
                     launchLoginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     SplashActivity.this.startActivity(launchLoginActivity);

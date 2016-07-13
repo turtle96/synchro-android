@@ -26,15 +26,12 @@ import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
  */
 public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdapter.CardViewHolder>{
 
-    private static final String GET_GROUP_KEY = "GroupData Object";
     private ArrayList<GroupData> list;
     private FragmentManager fragmentManager;
-    private GroupData groupData;
 
-    public CardViewGroupAdapter(ArrayList<GroupData> list, FragmentManager manager, GroupData groupData) {
+    public CardViewGroupAdapter(ArrayList<GroupData> list, FragmentManager manager) {
         this.list  = list;
         this.fragmentManager = manager;
-        this.groupData = groupData;
     }
 
     @Override
@@ -48,12 +45,12 @@ public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdap
     public void onBindViewHolder(CardViewHolder holder, int position) {
 
         GroupData groupData = list.get(position);
-        String groupName = groupData.getName();
-        holder.image.setImageDrawable(groupData.getImage());
 
-        holder.textName.setText(groupName);
+        holder.groupId = groupData.getId();
+        holder.image.setImageDrawable(groupData.getImage());
+        holder.textName.setText(groupData.getName());
         holder.textDesc.setText(groupData.getDescriptionShort());
-        holder.groupName = groupName;
+        holder.groupName = groupData.getName();
     }
 
     @Override
@@ -68,7 +65,9 @@ public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdap
     }
 
     protected class CardViewHolder extends RecyclerView.ViewHolder {
+        private static final String GET_GROUP_ID = "Group Id";
 
+        private String groupId = "default id";
         private ImageView image;
         private TextView textName, textDesc;
         private View view;
@@ -85,17 +84,23 @@ public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdap
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(App.getContext(), "clicked " + groupName, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(App.getContext(), "clicked " + groupName, Toast.LENGTH_LONG).show();
+                    System.out.println(groupName + " group id: " + groupId);
 
                     if (fragmentManager != null) {
                         // add all fragment into backstack
                         FragmentTransaction transaction = fragmentManager.beginTransaction().addToBackStack(null);
-                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                                android.R.anim.fade_in, android.R.anim.fade_out);
 
                         ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
-                        if (groupData != null) {
+
+                        if (groupId.equals("default id")) {
+                            System.out.println("Error retrieving group id");
+                        }
+                        else {
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable(GET_GROUP_KEY, groupData);
+                            bundle.putString(GET_GROUP_ID, groupId);
                             viewGroupFragment.setArguments(bundle);
                         }
 

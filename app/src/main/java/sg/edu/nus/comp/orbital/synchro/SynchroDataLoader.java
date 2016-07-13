@@ -14,6 +14,8 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
  *
  * Handler class to load data from SynchroAPI and store for ease of access by fragments
  * stored for duration of app usage
+ * data that will be used frequently and unlikely to change for duration of app
+ * NOTE: if user joins group might need to refresh the groups joined page (not tested yet)
  */
 public class SynchroDataLoader {
     private static JsonObject profileJson;
@@ -59,11 +61,6 @@ public class SynchroDataLoader {
     public static void loadGroupsJoinedData(String id) {
         groupsJsonArray = SynchroAPI.getInstance().getGroupsByUserId(id);
         groupDatas = GroupData.parseGroups(groupsJsonArray);
-    }
-
-    //loads data of a group the user wants to view
-    public static JsonArray loadViewGroupData(String id) {
-        return SynchroAPI.getInstance().getUsersByGroupId(id);
     }
 
 }

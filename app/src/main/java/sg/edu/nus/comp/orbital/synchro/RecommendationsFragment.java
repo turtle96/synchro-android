@@ -2,6 +2,7 @@ package sg.edu.nus.comp.orbital.synchro;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,20 +36,22 @@ public class RecommendationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_recommendations, container, false);
+        return inflater.inflate(R.layout.fragment_recommendations, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         ArrayList<GroupData> groupDatas = GroupData.parseAndFilterGroups(groupsJsonArray, "m");
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_recommend_groups);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_recommend_groups);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new CardViewGroupAdapter(groupDatas, null, null));
-
-        return rootView;
+        recyclerView.setAdapter(new CardViewGroupAdapter(groupDatas, getFragmentManager()));
     }
-
 
 }

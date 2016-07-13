@@ -79,7 +79,7 @@
             <TextView
                 android:text="@string/faculty"
                 android:id="@+id/labelFaculty"
-                style="@style/Header1" />
+                style="@style/SubHeader1" />
 
             <TextView
                 android:id="@+id/valueFaculty"
@@ -88,7 +88,7 @@
             <TextView
                 android:text="@string/first_major"
                 android:id="@+id/labelFirstMajor"
-                style="@style/Header1" />
+                style="@style/SubHeader1" />
 
             <TextView
                 android:id="@+id/valueFirstMajor"
@@ -97,7 +97,7 @@
             <TextView
                 android:text="@string/second_major"
                 android:id="@+id/labelSecondMajor"
-                style="@style/Header1"/>
+                style="@style/SubHeader1"/>
 
             <TextView
                 android:id="@+id/valueSecondMajor"
@@ -106,7 +106,7 @@
             <TextView
                 android:text="@string/matriculation_year"
                 android:id="@+id/labelMatriculationYear"
-                style="@style/Header1"/>
+                style="@style/SubHeader1"/>
 
             <TextView
                 android:id="@+id/valueMatriculationYear"

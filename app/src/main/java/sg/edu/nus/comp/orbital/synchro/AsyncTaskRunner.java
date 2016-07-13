@@ -11,6 +11,7 @@ import android.widget.Toast;
  * Created by angja_000 on 18/6/2016.
  *
  * Runs AsyncTasks for app, displays progress indicators accordingly
+ * NOTE: to check on sequence of task execution, or check on speeds, use the commented system.out.println statements
  *
  */
 public class AsyncTaskRunner {
@@ -54,10 +55,13 @@ public class AsyncTaskRunner {
         LoadProfile loadProfile = new LoadProfile();
         LoadModules loadModules = new LoadModules();
 
-        //this should ensure first time users are cached on server before calls to server are made
+        //this should ensure first time users are cached on server (resynced) BEFORE calls to server are made
         //to prevent NullPointerExceptions
         if (drawerActivity != null) {
-            loadResync.execute();
+            initializeProgress();
+            SynchroAPI.getInstance().getMeResync();
+            resyncFinished = true;
+            //System.out.println("Resync done");
         }
         else {
             loadResync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -69,6 +73,7 @@ public class AsyncTaskRunner {
 
     //ensures progress dialog is stopped only when all tasks are finished
     //login will require resync call to be finished first
+    //if user already logged in, resync will load in background
     private static boolean getLoadInitialDataStatus() {
         if (drawerActivity != null) {
             return (resyncFinished && profileFinished && modulesFinished && groupsFinished);
@@ -84,6 +89,7 @@ public class AsyncTaskRunner {
     //checks which progress type to use and display accordingly
     private static void initializeProgress() {
         if (progressDialog != null) {
+            //System.out.println("progressing");
             progressDialog.setMessage("Syncing user data");
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -105,10 +111,14 @@ public class AsyncTaskRunner {
             }
 
             if (splashActivity != null) {
+                System.out.println("redirect splash");
                 splashActivity.redirectFromSplash();
+                splashActivity = null;
             }
             else if (drawerActivity != null) {
+                System.out.println("redirect drawer");
                 drawerActivity.redirectToGroupsJoined();
+                drawerActivity = null;
             }
         }
 
@@ -138,7 +148,8 @@ public class AsyncTaskRunner {
             if (drawerActivity != null) {
                 dismissProgressDialog();
             }
-            //Toast.makeText(App.getContext(), "Resync Done", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), "Resync Done", Toast.LENGTH_SHORT).show();
+            //System.out.println("Resync done");
         }
     }
 
@@ -165,6 +176,8 @@ public class AsyncTaskRunner {
             loadGroupsJoined.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             dismissProgressDialog();
+
+            //System.out.println("Profile done");
         }
     }
 
@@ -205,6 +218,8 @@ public class AsyncTaskRunner {
         protected void onPostExecute(Void param) {
             groupsFinished = true;
             dismissProgressDialog();
+
+            //System.out.println("Groups done");
         }
     }
 }

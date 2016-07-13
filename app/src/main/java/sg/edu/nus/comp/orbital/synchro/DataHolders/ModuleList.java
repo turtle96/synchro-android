@@ -12,15 +12,16 @@ import java.util.ArrayList;
  * each ModuleList object contains a list of modules for each year
  * split into 2 strings, under sem 1 & 2 respectively
  * automatically removes quote marks from JsonObjects parsed
+ *
+ * NOTE: for future development will be good to add in variables for special terms
  */
 public class ModuleList {
 
     private String listSem1, listSem2, year;
 
     //initializes both lists
-    //will replace "" marks
     public ModuleList(String year) {
-        this.year = "Year " + year.replaceAll("\"", "");
+        this.year = "Year " + year;
         listSem1 = "";
         listSem2 = "";
     }
@@ -33,15 +34,25 @@ public class ModuleList {
     /****** Methods to Add to Lists *******/
 
     //send in additional module names to concat to existing list of SEM 1
-    //will replace "" marks
-    public void addToListSem1(String str) {
-        listSem1 = listSem1 + str.replaceAll("\"", "");
+    private void addToListSem1(String str) {
+        if (listSem1.equals("")) {
+            listSem1 = listSem1 + str;
+        }
+        else {
+            listSem1 = listSem1 + "\n" + str;
+        }
+
     }
 
     //send in additional module names to concat to existing list of SEM 2
-    //will replace "" marks
-    public void addToListSem2(String str) {
-        listSem2 = listSem2 + str.replaceAll("\"", "");
+    private void addToListSem2(String str) {
+
+        if (listSem2.equals("")) {
+            listSem2 = listSem2 + str;
+        }
+        else {
+            listSem2 = listSem2 + "\n" + str;
+        }
     }
 
     //////////////////////////////////////
@@ -52,33 +63,33 @@ public class ModuleList {
         ArrayList<ModuleList> moduleLists = new ArrayList<>();
 
         int yearCounter = 0;    //index counter for modulesByYear
-        String yearTracker = modulesJsonArray.get(0).getAsJsonObject().get("year_taken").toString();
-        String semTracker = modulesJsonArray.get(0).getAsJsonObject().get("semester_taken").toString();
+        String yearTracker = modulesJsonArray.get(0).getAsJsonObject().get("year_taken").getAsString();
+        String semTracker = modulesJsonArray.get(0).getAsJsonObject().get("semester_taken").getAsString();
         moduleLists.add(new ModuleList(yearTracker));   //initialize
 
         for (int i = 0; i< modulesJsonArray.size(); i++) {
             JsonObject object = modulesJsonArray.get(i).getAsJsonObject();
 
-            if (!object.get("year_taken").toString().equals(yearTracker)) {
-                yearTracker = object.get("year_taken").toString();
+            if (!object.get("year_taken").getAsString().equals(yearTracker)) {
+                yearTracker = object.get("year_taken").getAsString();
                 yearCounter++;
                 moduleLists.add(new ModuleList(yearTracker));   //initialize
             }
-            if (!object.get("semester_taken").toString().equals(semTracker)) {
-                semTracker = object.get("semester_taken").toString();
+            if (!object.get("semester_taken").getAsString().equals(semTracker)) {
+                semTracker = object.get("semester_taken").getAsString();
             }
 
             JsonObject moduleObj = object.getAsJsonObject("module");
 
             //sort info into correct sem
             //each sem string contains the entire module list
-            if (semTracker.replaceAll("\"", "").equals("1")) {
-                moduleLists.get(yearCounter).addToListSem1(moduleObj.get("module_code").toString()
-                        + ": " + moduleObj.get("module_title").toString() + "\n");
+            if (semTracker.equals("1")) {
+                moduleLists.get(yearCounter).addToListSem1(moduleObj.get("module_code").getAsString()
+                        + ": " + moduleObj.get("module_title").getAsString());
             }
-            else {
-                moduleLists.get(yearCounter).addToListSem2(moduleObj.get("module_code").toString()
-                        + ": " + moduleObj.get("module_title").toString() + "\n");
+            else if (semTracker.equals("2")) {
+                moduleLists.get(yearCounter).addToListSem2(moduleObj.get("module_code").getAsString()
+                        + ": " + moduleObj.get("module_title").getAsString());
             }
 
         }

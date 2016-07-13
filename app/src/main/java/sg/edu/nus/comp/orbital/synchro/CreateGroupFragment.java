@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -38,15 +39,15 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 public class CreateGroupFragment extends Fragment {
 
     //TOdo should extract all constants for key into external class
-    private static final String GET_GROUP_KEY = "GroupData Object";
 
     private static final int DESC_MAX_LENGTH = 1000;
     private static final String[] GROUP_TYPES_LIST = {"Study", "Project", "Misc"};
+    private static final String GET_GROUP_ID = "Group Id";
 
     private static EditText editTextDate;
     private static EditText editTextTime;
 
-    private static String time24Hour;
+    private static String time24Hour, dateYear, dateMonth, dateDay;     //different format for server submission
 
     public CreateGroupFragment() {
         // Required empty public constructor
@@ -66,16 +67,21 @@ public class CreateGroupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_create_group, container, false);
+        return inflater.inflate(R.layout.fragment_create_group, container, false);
+    }
 
-        final Spinner spinnerGroupType = (Spinner) rootView.findViewById(R.id.spinnerGroupType);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        final Spinner spinnerGroupType = (Spinner) view.findViewById(R.id.spinnerGroupType);
         ArrayAdapter<String> adapterGroupType = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, GROUP_TYPES_LIST);
         spinnerGroupType.setAdapter(adapterGroupType);
 
-        final TextInputLayout layoutDesc = (TextInputLayout) rootView.findViewById(R.id.input_layout_group_description);
+        final TextInputLayout layoutDesc = (TextInputLayout) view.findViewById(R.id.input_layout_group_description);
         layoutDesc.setErrorEnabled(true);
-        final EditText editTextDesc = (EditText) rootView.findViewById(R.id.inputGroupDesc);
+        final EditText editTextDesc = (EditText) view.findViewById(R.id.inputGroupDesc);
 
         editTextDesc.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,12 +105,12 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        editTextDate = (EditText) rootView.findViewById(R.id.inputGroupDate);
-        editTextTime = (EditText) rootView.findViewById(R.id.inputGroupTime);
+        editTextDate = (EditText) view.findViewById(R.id.inputGroupDate);
+        editTextTime = (EditText) view.findViewById(R.id.inputGroupTime);
 
-        ImageButton buttonCalendar = (ImageButton) rootView.findViewById(R.id.calendar_button);
-        ImageButton buttonTime = (ImageButton) rootView.findViewById(R.id.time_button);
-        Button buttonCreate = (Button) rootView.findViewById(R.id.create_group_button);
+        ImageButton buttonCalendar = (ImageButton) view.findViewById(R.id.calendar_button);
+        ImageButton buttonTime = (ImageButton) view.findViewById(R.id.time_button);
+        Button buttonCreate = (Button) view.findViewById(R.id.create_group_button);
 
         buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,8 +124,8 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        final EditText editTextName = (EditText) rootView.findViewById(R.id.inputGroupName);
-        final EditText editTextVenue = (EditText) rootView.findViewById(R.id.inputGroupVenue);
+        final EditText editTextName = (EditText) view.findViewById(R.id.inputGroupName);
+        final EditText editTextVenue = (EditText) view.findViewById(R.id.inputGroupVenue);
 
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +144,7 @@ public class CreateGroupFragment extends Fragment {
             //todo: will probably need some validation for groupname to ensure no duplicate names
             if (!checkFields(fields)) {
                 Snackbar checkFields = Snackbar.make(getView(), "Please make sure all fields are filled in :D",
-                        Snackbar.LENGTH_INDEFINITE);
+                        Snackbar.LENGTH_LONG);
                 checkFields.setAction("ok", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -148,31 +154,29 @@ public class CreateGroupFragment extends Fragment {
                 return;
             }
 
-            GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, groupDate,
-                    groupTime, time24Hour, groupVenue);
+            GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, dateYear,
+                    dateMonth, dateDay, groupTime, time24Hour, groupVenue);
 
-            SynchroAPI.getInstance().postNewGroup(newGroupData);
+            String groupId = SynchroAPI.getInstance().postNewGroup(newGroupData);
 
-            //Toast.makeText(getContext(), "created group", Toast.LENGTH_LONG).show();
+            newGroupData.setId(groupId);
 
-            /*
             FragmentManager manager = getFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+            FragmentTransaction transaction = manager.beginTransaction();
             transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
                     R.anim.fragment_fade_in, R.anim.fragment_fade_out);
 
             ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(GET_GROUP_KEY, newGroupData);
+            bundle.putString(GET_GROUP_ID, groupId);
             viewGroupFragment.setArguments(bundle);
 
             transaction.replace(R.id.content_fragment, viewGroupFragment);
             transaction.commit();
-            */
+
             }
         });
 
-        return rootView;
     }
 
     //checks all the given strings in array for empty fields, will reject space characters only strings
@@ -219,8 +223,10 @@ public class CreateGroupFragment extends Fragment {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             month += 1;
-            //String date = day + "/" + month + "/" + year;
-            String date = year + "-" + month + "-" + day;
+            String date = day + "/" + month + "/" + year;
+            dateYear = Integer.toString(year);
+            dateMonth = Integer.toString(month);
+            dateDay = Integer.toString(day);
             editTextDate.setText(date);
         }
     }

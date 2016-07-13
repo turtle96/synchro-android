@@ -1,5 +1,6 @@
 package sg.edu.nus.comp.orbital.synchro;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
 
-                //this sets webview to invisible ONLY if not the login page to IVLE
+                //this sets webview to gone ONLY if not the login page to IVLE
                 if (!url.equals(SynchroAPI.ivleLogin)) {
                     view.setVisibility(View.GONE);
 
@@ -60,8 +62,10 @@ public class LoginActivity extends AppCompatActivity {
                         redirects to landing page
                     */
                     if (url.equals(SynchroAPI.ivleLoginSuccess)) {
+
                         view.loadUrl("javascript:window.HtmlViewer.showHTML" +
                                 "('&lt;html&gt;'+document.getElementsByTagName('html')[0].innerHTML+'&lt;/html&gt;');");
+
                         redirectUser();
 
                     } else {  //in case anything else happens

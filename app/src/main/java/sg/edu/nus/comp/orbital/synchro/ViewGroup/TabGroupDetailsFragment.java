@@ -1,5 +1,6 @@
 package sg.edu.nus.comp.orbital.synchro.ViewGroup;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,22 +20,28 @@ import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
  */
 public class TabGroupDetailsFragment extends Fragment{
 
-    private static GroupData groupData;
+    private GroupData groupData;
 
     public TabGroupDetailsFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.view_group_details_tab, container, false);
+        return inflater.inflate(R.layout.view_group_details_tab, container, false);
+    }
 
-        groupData = ViewGroupFragment.getGroupData();
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        TextView groupType = (TextView) rootView.findViewById(R.id.valueGroupType);
-        TextView groupDesc = (TextView) rootView.findViewById(R.id.valueDescription);
-        TextView date = (TextView) rootView.findViewById(R.id.valueDate);
-        TextView time = (TextView) rootView.findViewById(R.id.valueTime);
-        TextView venue = (TextView) rootView.findViewById(R.id.valueVenue);
+        ViewGroupFragment viewGroupFragment = (ViewGroupFragment) getParentFragment();
+        groupData = viewGroupFragment.getGroupData();
+
+        TextView groupType = (TextView) view.findViewById(R.id.valueGroupType);
+        TextView groupDesc = (TextView) view.findViewById(R.id.valueDescription);
+        TextView date = (TextView) view.findViewById(R.id.valueDate);
+        TextView time = (TextView) view.findViewById(R.id.valueTime);
+        TextView venue = (TextView) view.findViewById(R.id.valueVenue);
 
         if (groupData != null) {
             groupType.setText(groupData.getType());
@@ -50,7 +57,5 @@ public class TabGroupDetailsFragment extends Fragment{
             time.setText("3pm");
             venue.setText("Room 666");
         }
-
-        return rootView;
     }
 }

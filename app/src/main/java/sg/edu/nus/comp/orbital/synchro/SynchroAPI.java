@@ -27,7 +27,7 @@ public class SynchroAPI {
 
     private static SynchroAPI self;
     private static String ivleApiKey = "PK3n2PGjXR4OooZPZyelQ";
-    private static String ivleAuthToken;
+    private static String ivleAuthToken = AuthToken.getToken();
 
     // the following attributes is for self signed SSL cert in staging/dev server. Useless if the SSL is verfied CA.
     private static SSLContext sslContext;
@@ -39,7 +39,7 @@ public class SynchroAPI {
     private static String ivleValidate = "https://ivle.nus.edu.sg/api/Lapi.svc/Validate?APIKey=" + ivleApiKey + "&Token=" + ivleAuthToken;
 
     // Synchro API endpoints
-    private static final String API_BASE_URL = "https://ec2-52-77-240-7.ap-southeast-1.compute.amazonaws.com/api/v1/";
+    private static final String API_BASE_URL = "https://52.77.240.7/api/v1/";
     private static final String apiMeResync = API_BASE_URL + "me/resync";
     private static final String apiMe = API_BASE_URL + "me";
     private static final String apiMeModules = API_BASE_URL + "me/modulesTaken";
@@ -64,6 +64,7 @@ public class SynchroAPI {
     //need to call every time app launches, so that getInstance() works
     public static void authenticate(String ivleAuthToken) {
         self = new SynchroAPI(ivleAuthToken);
+        //System.out.println("token " + ivleAuthToken);
         configureSelfSignedSSL();
         configureIon();
     }
@@ -106,7 +107,6 @@ public class SynchroAPI {
     //updates token if new token received
     //returns string based on validation result for action to be taken accordingly
     public static String validate() {
-        updateToken(AuthToken.getToken());  //ensures token variable in SynchroApi is updated from SharedPrefs
 
         JsonObject result = null;
         try {
@@ -123,12 +123,8 @@ public class SynchroAPI {
         }
         else if (result.get("Success").toString().equals("true")) {
 
-            /*  checks if returned token is a newly generated one for replacement
-                =_= apparently the returned token is within "" so compare properly!
-            */
-            if (!result.get("Token").toString().replaceAll("\"", "").equals(AuthToken.getToken())) {
-                //takes out the "" marks
-                AuthToken.setToken(result.get("Token").toString().replaceAll("\"", ""));
+            if (!result.get("Token").getAsString().equals(AuthToken.getToken())) {
+                AuthToken.setToken(result.get("Token").getAsString());
                 updateToken(AuthToken.getToken());
             }
             authenticate(AuthToken.getToken());
@@ -151,6 +147,7 @@ public class SynchroAPI {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+
         return result;
     }
 
@@ -166,6 +163,7 @@ public class SynchroAPI {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+
         return result;
     }
 
@@ -185,6 +183,7 @@ public class SynchroAPI {
         return result;
     }
 
+    //retrieve a user's details by id
     public JsonObject getUserById(String userId) {
         JsonObject result = null;
         String apiUsersId = apiUsers + "/" + userId;
@@ -198,6 +197,23 @@ public class SynchroAPI {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    //retrieve a group's details by id
+    public JsonObject getGroupById(String groupId) {
+        JsonObject result = null;
+        String apiGroupsId = apiGroups + "/" + groupId;
+        try {
+            result = Ion.with(App.getContext())
+                    .load(apiGroupsId)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonObject()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+
     }
 
     //Retrieve list of Groups a particular User belongs to, given user id
@@ -268,49 +284,37 @@ public class SynchroAPI {
         return result;
     }
 
-    public void postNewGroup(GroupData group) {
+    public String postNewGroup(GroupData group) {
 
-        JsonObject groupJson = new JsonObject();
-        groupJson.addProperty("name", group.getName());
-        groupJson.addProperty("type", group.getType());
-        groupJson.addProperty("description", group.getDescription());
-        groupJson.addProperty("date_happening", group.getDate() + group.getTime24Hour());
-        groupJson.addProperty("venue", group.getVenue());
-        groupJson.addProperty("tags", group.getType() + " " + "test 123 fallala");
+        JsonObject groupJson = group.parseToPostGroupJson();
+        System.out.println("Json here " + groupJson.toString());
 
-
-        System.out.println("HERE json 264 " + groupJson.toString());
+        String id = "default id";
+        JsonObject result = null;
 
         try {
-/*
-            Ion.with(App.getContext())
-                .load(apiGroups)
-                .addHeader("Authorization", ivleAuthToken)
-                .setJsonObjectBody(groupJson)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                @Override
-                public void onCompleted(Exception e, JsonObject result) {
-                    Toast.makeText(App.getContext(), "hello", Toast.LENGTH_LONG).show();
-                    System.out.println("group " + result.toString());
-                    System.out.println("Error here " + e.toString());
-                }
-            });
-            */
-
-            JsonObject result;
             result = Ion.with(App.getContext())
                     .load(apiGroups)
-                    .addHeader("Authorization", ivleAuthToken)
+                    .setHeader("Authorization", ivleAuthToken)
+                    .setHeader("Content-Type", "application/json")
                     .setJsonObjectBody(groupJson)
                     .asJsonObject()
                     .get();
 
-            System.out.println("result " + result.toString());
-
-
         }catch (Exception ex){
             System.out.println("Error here" + ex.toString());
         }
+
+
+        if (result == null) {
+            Toast.makeText(App.getContext(), "Error creating group", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(App.getContext(), "group created", Toast.LENGTH_SHORT).show();
+            id = result.get("id").getAsString();
+            System.out.println("here group id: " + id);
+        }
+
+        return id;
     }
 }

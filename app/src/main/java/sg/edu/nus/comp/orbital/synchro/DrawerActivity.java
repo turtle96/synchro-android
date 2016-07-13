@@ -3,6 +3,7 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -37,8 +39,8 @@ public class DrawerActivity extends AppCompatActivity
         String caller = getIntent().getStringExtra("caller");
         if (caller!=null) {
             if (caller.equals("LoginActivity")) {
+
                 SynchroAPI.authenticate(AuthToken.getToken());
-                SynchroAPI.updateToken(AuthToken.getToken());
 
                 ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
                 AsyncTaskRunner.setProgressDialog(progressDialog);
@@ -145,12 +147,7 @@ public class DrawerActivity extends AppCompatActivity
 
                 // replace the content_fragment with appropriate view
                 switch(id){
-                    case R.id.nav_login:
-                        // do not add loginactivity into backstack
-                        Intent loginActivity = new Intent(DrawerActivity.this, LoginActivity.class);
-                        loginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        loginActivity.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-                        startActivity(loginActivity);
+
                     case R.id.nav_view_group: {
                         //fragmentNavigation(manager, transaction, "ViewGroup", ViewGroupFragment.newInstance());
                         transaction.replace(R.id.content_fragment, ViewGroupFragment.newInstance(), "ViewGroup");
@@ -176,6 +173,34 @@ public class DrawerActivity extends AppCompatActivity
                     case R.id.nav_recommendations:
                         //fragmentNavigation(manager, transaction, "Recommend", RecommendationsFragment.newInstance());
                         transaction.replace(R.id.content_fragment, RecommendationsFragment.newInstance());
+                        break;
+                    case R.id.nav_logout:
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DrawerActivity.this,
+                                R.style.AlertDialogStyle);
+                        alertDialog.setTitle("Logout");
+                        alertDialog.setMessage("Are you sure you want to logout?");
+                        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //logout
+                                AuthToken.setToken("logout");
+                                SynchroAPI.updateToken(AuthToken.getToken());
+
+                                // do not add loginactivity into backstack
+                                Intent loginActivity = new Intent(DrawerActivity.this, LoginActivity.class);
+                                loginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                loginActivity.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+                                startActivity(loginActivity);
+                                finish();
+                            }
+                        });
+                        alertDialog.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        alertDialog.show();
                         break;
                 }
 

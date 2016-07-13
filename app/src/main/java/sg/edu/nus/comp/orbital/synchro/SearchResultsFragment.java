@@ -2,6 +2,7 @@ package sg.edu.nus.comp.orbital.synchro;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewGroupAdapter;
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewUserAdapter;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 
 public class SearchResultsFragment extends Fragment {
 
@@ -41,8 +43,14 @@ public class SearchResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
-        SearchView searchView = (SearchView) rootView.findViewById(R.id.searchViewInFragment);
+        return inflater.inflate(R.layout.fragment_search_results, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SearchView searchView = (SearchView) view.findViewById(R.id.searchViewInFragment);
 
         //prevents shutdown if accessed from drawer menu
         if (getArguments() != null) {
@@ -50,11 +58,12 @@ public class SearchResultsFragment extends Fragment {
             searchView.setQuery(query, false);
         }
 
-        //display results according to filters
-        final ToggleButton buttonUsers = (ToggleButton) rootView.findViewById(R.id.buttonUsers);
-        final ToggleButton buttonGroups = (ToggleButton) rootView.findViewById(R.id.buttonGroups);
+        //display results according to filters: users or groups
+        //note: buttons are mutually exclusive
+        final ToggleButton buttonUsers = (ToggleButton) view.findViewById(R.id.buttonUsers);
+        final ToggleButton buttonGroups = (ToggleButton) view.findViewById(R.id.buttonGroups);
 
-        final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_search_results);
+        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_search_results);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -67,12 +76,10 @@ public class SearchResultsFragment extends Fragment {
         buttonUsers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                CardViewUserAdapter userAdapter = null;
-
                 if (isChecked) {
                     // The toggle is enabled
                     buttonGroups.setChecked(false);     //only toggle one button at a time
-                    userAdapter = displayUsers(recyclerView);
+                    displayUsers(recyclerView);
                 }
                 else if (!buttonGroups.isChecked()) {
                     // The toggle is disabled
@@ -86,12 +93,10 @@ public class SearchResultsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                CardViewGroupAdapter groupAdapter = null;
-
                 if (isChecked) {
                     // The toggle is enabled
                     buttonUsers.setChecked(false);
-                    groupAdapter = displayGroups(recyclerView);
+                    displayGroups(recyclerView);
                 }
                 else if (!buttonUsers.isChecked()) {
                     // The toggle is disabled
@@ -100,50 +105,30 @@ public class SearchResultsFragment extends Fragment {
             }
         });
 
-        return rootView;
     }
 
     //sets adapter of RecyclerView to display users info
-    //returns the CardViewUserAdapter created so it can be cleared
+    //returns the CardViewUserAdapter created
     private CardViewUserAdapter displayUsers(RecyclerView recyclerView) {
         JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
-        ArrayList<String> users = new ArrayList<>();
 
-        //last 2 items are the programmers' names lol (excluded)
-        for (int i=0; i<15; i++) {
-            JsonObject object = usersJsonArray.get(i).getAsJsonObject();
-            users.add(object.get("name").toString().replaceAll("\"", ""));
-        }
+        ArrayList<User> users = User.parseUsers(usersJsonArray);
         CardViewUserAdapter userAdapter = new CardViewUserAdapter(users);
         recyclerView.setAdapter(userAdapter);
 
         return userAdapter;
     }
 
-    //given CardViewUserAdapter, clears the view
-    private void clearUsers(CardViewUserAdapter userAdapter) {
-        if (userAdapter != null) {
-            userAdapter.clearView();
-        }
-    }
-
     //sets adapter of RecyclerView to display groups info
-    //returns the CardViewGroupAdapter created so it can be cleared
+    //returns the CardViewGroupAdapter created
     private CardViewGroupAdapter displayGroups(RecyclerView recyclerView) {
         JsonArray groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
         ArrayList<GroupData> groupDatas = GroupData.parseGroups(groupsJsonArray);
 
-        CardViewGroupAdapter groupAdapter = new CardViewGroupAdapter(groupDatas, null, null);
+        CardViewGroupAdapter groupAdapter = new CardViewGroupAdapter(groupDatas, getFragmentManager());
         recyclerView.setAdapter(groupAdapter);
 
         return groupAdapter;
-    }
-
-    //given CardViewGroupAdapter, clears the view
-    private void clearGroups(CardViewGroupAdapter groupAdapter) {
-        if (groupAdapter != null) {
-            groupAdapter.clearView();
-        }
     }
 
 }

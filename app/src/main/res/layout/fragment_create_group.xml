@@ -95,7 +95,7 @@
                         android:id="@+id/inputGroupDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="date"
+                        android:inputType="number"
                         android:hint="@string/date" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -126,7 +126,7 @@
                         android:id="@+id/inputGroupTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"
+                        android:inputType="number"
                         android:hint="@string/time" />
 
                 </android.support.design.widget.TextInputLayout>

@@ -9,10 +9,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/valueModuleYear"
@@ -21,13 +20,13 @@
                 android:textColor="@color/colorAccent"/>
 
             <View
+                android:layout_toRightOf="@+id/valueModuleYear"
                 style="@style/dividerStyleAccent"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_centerVertical="true"/>
 
-        </LinearLayout>
-
-
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/valueModuleSem1"
@@ -49,7 +48,7 @@
             android:id="@+id/valueModulesTakenSem2"
             android:text="modules"
             style="@style/TextBody1"
-            android:paddingBottom="0dp"/>
+            android:paddingBottom="10dp"/>
 
     </LinearLayout>
 

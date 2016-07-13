@@ -6,9 +6,6 @@
         <item android:title="Dev Test">
             <menu>
                 <item
-                    android:id="@+id/nav_login"
-                    android:title="@string/login" />
-                <item
                     android:id="@+id/nav_view_group"
                     android:title="View Group Page"/>
                 <item
@@ -33,6 +30,10 @@
             android:id="@+id/nav_recommendations"
             android:icon="@drawable/ic_people_outline_black_24dp"
             android:title="@string/recommendations" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_directions_run_black_24dp"
+            android:title="@string/logout" />
     </group>
 
 </menu>
