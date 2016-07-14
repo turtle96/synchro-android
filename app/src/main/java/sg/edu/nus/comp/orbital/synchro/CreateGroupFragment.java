@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -41,6 +42,7 @@ public class CreateGroupFragment extends Fragment {
     //TOdo should extract all constants for key into external class
 
     private static final int DESC_MAX_LENGTH = 1000;
+    private static final int NAME_MAX_LENGTH = 50;
     private static final String[] GROUP_TYPES_LIST = {"Study", "Project", "Misc"};
     private static final String GET_GROUP_ID = "Group Id";
 
@@ -75,25 +77,48 @@ public class CreateGroupFragment extends Fragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // group type spinner
         final Spinner spinnerGroupType = (Spinner) view.findViewById(R.id.spinnerGroupType);
         ArrayAdapter<String> adapterGroupType = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, GROUP_TYPES_LIST);
         spinnerGroupType.setAdapter(adapterGroupType);
 
+        //name error handling, max 50 characters
+        final TextInputLayout layoutName = (TextInputLayout) view.findViewById(R.id.input_layout_group_name);
+        layoutName.setErrorEnabled(true);
+        final EditText editTextName = (EditText) view.findViewById(R.id.inputGroupName);
+
+        editTextName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > NAME_MAX_LENGTH) {
+                    layoutName.setError("Exceeded max character limit of " + NAME_MAX_LENGTH);
+                }
+                else {
+                    layoutName.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // description error handling, max 1000 chars
         final TextInputLayout layoutDesc = (TextInputLayout) view.findViewById(R.id.input_layout_group_description);
         layoutDesc.setErrorEnabled(true);
         final EditText editTextDesc = (EditText) view.findViewById(R.id.inputGroupDesc);
 
         editTextDesc.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > DESC_MAX_LENGTH) {
-                    layoutDesc.setError("Exceeded max character limit of 1000");
+                    layoutDesc.setError("Exceeded max character limit of " + DESC_MAX_LENGTH);
                 }
                 else {
                     layoutDesc.setError(null);
@@ -101,11 +126,10 @@ public class CreateGroupFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
+        // date and time selectors
         editTextDate = (EditText) view.findViewById(R.id.inputGroupDate);
         editTextTime = (EditText) view.findViewById(R.id.inputGroupTime);
 
@@ -125,56 +149,66 @@ public class CreateGroupFragment extends Fragment {
             }
         });
 
-        final EditText editTextName = (EditText) view.findViewById(R.id.inputGroupName);
         final EditText editTextVenue = (EditText) view.findViewById(R.id.inputGroupVenue);
+        final EditText editTextTags = (EditText) view.findViewById(R.id.inputGroupTags);
 
+        // create button handling
+        // field validation: basic only, checks all fields are filled
+        // post group + join group
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-            String groupName, groupType, groupDesc, groupDate, groupTime, groupVenue;
-            groupName = editTextName.getText().toString().trim();
-            groupType = spinnerGroupType.getSelectedItem().toString().trim();
-            groupDesc = editTextDesc.getText().toString().trim();
-            groupDate = editTextDate.getText().toString().trim();
-            groupTime = editTextTime.getText().toString().trim();
-            groupVenue = editTextVenue.getText().toString().trim();
+                String groupName, groupType, groupDesc, groupDate, groupTime, groupVenue, groupTags;
+                groupName = editTextName.getText().toString().trim();
+                groupType = spinnerGroupType.getSelectedItem().toString().trim();
+                groupDesc = editTextDesc.getText().toString().trim();
+                groupDate = editTextDate.getText().toString().trim();
+                groupTime = editTextTime.getText().toString().trim();
+                groupVenue = editTextVenue.getText().toString().trim();
+                groupTags = editTextTags.getText().toString().trim();
 
-            String[] fields = {groupName, groupType, groupDesc, groupDate, groupTime, groupVenue};
+                String[] fields = {groupName, groupType, groupDesc, groupDate, groupTime, groupVenue};
 
-            //todo: will probably need some validation for groupname to ensure no duplicate names
-            if (!checkFields(fields)) {
-                Snackbar checkFields = Snackbar.make(view, "Please make sure all fields are filled in :D",
-                        Snackbar.LENGTH_LONG);
-                checkFields.setAction("ok", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                checkFields.show();
-                return;
-            }
+                //todo: will probably need some validation for groupname to ensure no duplicate names
+                if (!checkFields(fields)) {
+                    Snackbar checkFields = Snackbar.make(view, "Please make sure all fields are filled in :D",
+                            Snackbar.LENGTH_LONG);
+                    checkFields.setAction("ok", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        }
+                    });
+                    checkFields.show();
+                    return;     //ensures code does not proceed to creating group
+                }
 
-            GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, dateYear,
-                    dateMonth, dateDay, timeHour, timeMinute, groupVenue);
+                GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, dateYear,
+                        dateMonth, dateDay, timeHour, timeMinute, groupVenue, groupTags, null);
 
-            String groupId = SynchroAPI.getInstance().postNewGroup(newGroupData);
-            newGroupData.setId(groupId);
-            SynchroAPI.getInstance().postJoinGroup(groupId);
+                String groupId = SynchroAPI.getInstance().postNewGroup(newGroupData);
 
-            FragmentManager manager = getFragmentManager();
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
-                    R.anim.fragment_fade_in, R.anim.fragment_fade_out);
+                if (groupId.equals("default id")) {
+                    System.out.println("you shall not pass");
+                    return;     //user needs to try again
+                }
 
-            ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
-            Bundle bundle = new Bundle();
-            bundle.putString(GET_GROUP_ID, groupId);
-            viewGroupFragment.setArguments(bundle);
+                newGroupData.setId(groupId);    //impt to set the group id after server returns
+                SynchroAPI.getInstance().postJoinGroup(groupId);
 
-            transaction.replace(R.id.content_fragment, viewGroupFragment);
-            transaction.commit();
+                // redirects to new group page
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
+                        R.anim.fragment_fade_in, R.anim.fragment_fade_out);
 
+                ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString(GET_GROUP_ID, groupId);
+                viewGroupFragment.setArguments(bundle);
+
+                transaction.replace(R.id.content_fragment, viewGroupFragment);
+                transaction.commit();
             }
         });
 
@@ -182,6 +216,7 @@ public class CreateGroupFragment extends Fragment {
 
     //checks all the given strings in array for empty fields, will reject space characters only strings
     //meaning if a field just has space without other characters will reject
+    //note this does not check Group Tags, user can leave tags blank
     private boolean checkFields(String[] fields) {
         for (String f: fields) {
             if (f.isEmpty()) {

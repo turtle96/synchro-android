@@ -56,10 +56,10 @@ public class SynchroDataLoader {
         moduleLists = ModuleList.parseModules(modulesJsonArray);
     }
 
-    //loads details of the groupDatas user has joined
+    //loads details of the groups user has joined
     //group details parsed to GroupData
-    public static void loadGroupsJoinedData(String id) {
-        groupsJsonArray = SynchroAPI.getInstance().getGroupsByUserId(id);
+    public static void loadGroupsJoinedData() {
+        groupsJsonArray = SynchroAPI.getInstance().getMeGroups();
         groupDatas = GroupData.parseGroups(groupsJsonArray);
     }
 

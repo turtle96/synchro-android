@@ -66,9 +66,9 @@ public class User {
     //given Json Array of users details, parses to ArrayList of User objects
     public static ArrayList<User> parseUsers(JsonArray usersJsonArray) {
         ArrayList<User> users = new ArrayList<>();
-
+        JsonObject object;
         for (int i=0; i<usersJsonArray.size(); i++) {
-            JsonObject object = usersJsonArray.get(i).getAsJsonObject();
+            object = usersJsonArray.get(i).getAsJsonObject();
             users.add(parseSingleUser(object));
         }
 

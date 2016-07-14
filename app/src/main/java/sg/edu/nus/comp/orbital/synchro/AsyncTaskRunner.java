@@ -36,8 +36,8 @@ public class AsyncTaskRunner {
 
 
     /*  resyncs and loads user's personal data on app launch
-        calls resync on API, gets profile data and groups joined list data
-        runs 3 separate AsyncTasks for faster execution
+        calls resync on API, gets profile data, modules and groups joined list data
+        runs 4 separate AsyncTasks for faster execution
 
         will handle showing progress differently for after Login and Splashscreen loading
         after login: loading will be done in DrawerActivity + progressDialog + redirect to GroupsJoined
@@ -53,6 +53,7 @@ public class AsyncTaskRunner {
 
         LoadResync loadResync = new LoadResync();
         LoadProfile loadProfile = new LoadProfile();
+        LoadGroupsJoined loadGroupsJoined = new LoadGroupsJoined();
         LoadModules loadModules = new LoadModules();
 
         //this should ensure first time users are cached on server (resynced) BEFORE calls to server are made
@@ -68,6 +69,7 @@ public class AsyncTaskRunner {
         }
 
         loadProfile.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        loadGroupsJoined.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         loadModules.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -76,10 +78,10 @@ public class AsyncTaskRunner {
     //if user already logged in, resync will load in background
     private static boolean getLoadInitialDataStatus() {
         if (drawerActivity != null) {
-            return (resyncFinished && profileFinished && modulesFinished && groupsFinished);
+            return (resyncFinished && profileFinished && groupsFinished && modulesFinished);
         }
         else if (splashActivity != null) {
-            return (profileFinished && modulesFinished && groupsFinished);
+            return (profileFinished && groupsFinished && modulesFinished);
         }
         else {
             return false;
@@ -89,7 +91,6 @@ public class AsyncTaskRunner {
     //checks which progress type to use and display accordingly
     private static void initializeProgress() {
         if (progressDialog != null) {
-            //System.out.println("progressing");
             progressDialog.setMessage("Syncing user data");
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -111,12 +112,12 @@ public class AsyncTaskRunner {
             }
 
             if (splashActivity != null) {
-                System.out.println("redirect splash");
+                //System.out.println("redirect splash");
                 splashActivity.redirectFromSplash();
                 splashActivity = null;                  //resets to null to prevent overlap if AsyncTask called again
             }
             else if (drawerActivity != null) {
-                System.out.println("redirect drawer");
+                //System.out.println("redirect drawer");
                 drawerActivity.redirectToGroupsJoined();
                 drawerActivity = null;                 //resets to null to prevent overlap if AsyncTask called again
             }
@@ -154,7 +155,6 @@ public class AsyncTaskRunner {
     }
 
     /////////// Loader for Calling Profile /////////////
-    /** NOTE: calls groups joined after profile is loaded **/
     private static class LoadProfile extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -170,11 +170,6 @@ public class AsyncTaskRunner {
         @Override
         protected void onPostExecute(Void param) {
             profileFinished = true;
-
-            //since groups joined call needs user id, can only be loaded AFTER user data loaded
-            LoadGroupsJoined loadGroupsJoined = new LoadGroupsJoined();
-            loadGroupsJoined.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
             dismissProgressDialog();
 
             //System.out.println("Profile done");
@@ -198,6 +193,8 @@ public class AsyncTaskRunner {
         protected void onPostExecute(Void param) {
             modulesFinished = true;
             dismissProgressDialog();
+
+            //System.out.println("Modules done");
         }
     }
 
@@ -207,7 +204,7 @@ public class AsyncTaskRunner {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                SynchroDataLoader.loadGroupsJoinedData(SynchroDataLoader.getUserProfile().getId());
+                SynchroDataLoader.loadGroupsJoinedData();
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -6,9 +6,6 @@
         <item android:title="Dev Test">
             <menu>
                 <item
-                    android:id="@+id/nav_view_group"
-                    android:title="View Group Page"/>
-                <item
                     android:id="@+id/nav_search"
                     android:title="View Search Results Page" />
             </menu>

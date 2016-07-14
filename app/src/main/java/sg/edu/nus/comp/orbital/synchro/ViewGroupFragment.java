@@ -63,12 +63,8 @@ public class ViewGroupFragment extends Fragment {
             JsonObject groupJson = SynchroAPI.getInstance().getGroupById(groupId);
             groupData = GroupData.parseSingleGroup(groupJson);
             membersJsonArray = SynchroAPI.getInstance().getUsersByGroupId(groupId);
+            members = User.parseUsers(membersJsonArray);
         }
-        else {
-            membersJsonArray = SynchroAPI.getInstance().getUsersByGroupId("20");
-        }
-
-        members = User.parseUsers(membersJsonArray);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,13 +75,7 @@ public class ViewGroupFragment extends Fragment {
         });
 
         TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
-
-        if (groupData != null) {
-            groupName.setText(groupData.getName());
-        }
-        else {
-            groupName.setText("Study Group CS1010");
-        }
+        groupName.setText(groupData.getName());
     }
 
     //setup tab layouts and child fragments: GroupDetails and GroupMembers

@@ -30,6 +30,15 @@
                 app:civ_border_width="3dp"
                 app:civ_border_color="@color/background_dark_grey" />
 
+            <ImageView
+                android:id="@+id/textDrawableView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="120dp"
+                android:elevation="3dp"
+                android:visibility="gone"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

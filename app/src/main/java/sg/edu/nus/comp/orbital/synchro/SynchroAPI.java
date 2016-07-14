@@ -45,7 +45,7 @@ public class SynchroAPI {
     private static final String apiMeResync = API_BASE_URL + "me/resync";
     private static final String apiMe = API_BASE_URL + "me";
     private static final String apiMeModules = API_BASE_URL + "me/modulesTaken";
-    private static final String apiMeGroups = API_BASE_URL + "me/groups/";
+    private static final String apiMeGroups = API_BASE_URL + "me/groups";
     private static final String apiUsers = API_BASE_URL + "users";
     private static final String apiGroups = API_BASE_URL + "groups";
 
@@ -170,6 +170,22 @@ public class SynchroAPI {
         return result;
     }
 
+    //Retrieve list of groups that current authenticated User has joined
+    //JsonArray
+    public JsonArray getMeGroups() {
+        JsonArray result = null;
+        try {
+            result = Ion.with(App.getContext())
+                    .load(apiMeGroups)
+                    .setHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
     //Retrieve list of Modules that current authenticated User has taken
     //JsonArray
     public JsonArray getMeModules() {
@@ -287,6 +303,21 @@ public class SynchroAPI {
         return result;
     }
 
+    public JsonArray getModulesByUserId(String userId) {
+        JsonArray result = null;
+        String url = apiUsers + "/" + userId + "/modulesTaken";
+        try {
+            result = Ion.with(App.getContext())
+                    .load(url)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
     //POST new group to server
     //returns group id in string
     public String postNewGroup(GroupData group) {
@@ -297,9 +328,13 @@ public class SynchroAPI {
         String id = "default id";
         JsonObject result = null;
 
+        //todo load async, then run a dialog in create group
+        //todo need to handle exceptions
         try {
             result = Ion.with(App.getContext())
                     .load(apiGroups)
+                    .setLogging("PostLogs", Log.VERBOSE)
+                    .setTimeout(5000)
                     .setHeader("Authorization", ivleAuthToken)
                     .setHeader("Content-Type", "application/json")
                     .setJsonObjectBody(groupJson)
@@ -315,7 +350,7 @@ public class SynchroAPI {
             Toast.makeText(App.getContext(), "Error creating group", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText(App.getContext(), "group created", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), "Group Created", Toast.LENGTH_SHORT).show();
             id = result.get("id").getAsString();
             //System.out.println("here group id: " + id);
         }
@@ -326,7 +361,7 @@ public class SynchroAPI {
     //given group id, sends post request to join group
     public void postJoinGroup(String groupId) {
 
-        String url = apiMeGroups + groupId + "/join";
+        String url = apiMeGroups + "/" + groupId + "/join";
 
         try {
             Ion.with(App.getContext())
@@ -338,6 +373,7 @@ public class SynchroAPI {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         Toast.makeText(App.getContext(), result.get("message").getAsString(), Toast.LENGTH_SHORT).show();
+                        SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
                     }
                 });
         }catch (Exception ex){

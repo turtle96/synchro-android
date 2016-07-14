@@ -52,6 +52,6 @@ public class TabGroupMembersFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        recyclerView.setAdapter(new CardViewUserAdapter(members));
+        recyclerView.setAdapter(new CardViewUserAdapter(members, viewGroupFragment.getFragmentManager()));
     }
 }

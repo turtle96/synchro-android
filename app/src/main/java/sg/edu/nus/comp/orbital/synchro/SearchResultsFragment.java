@@ -113,7 +113,7 @@ public class SearchResultsFragment extends Fragment {
         JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
 
         ArrayList<User> users = User.parseUsers(usersJsonArray);
-        CardViewUserAdapter userAdapter = new CardViewUserAdapter(users);
+        CardViewUserAdapter userAdapter = new CardViewUserAdapter(users, getFragmentManager());
         recyclerView.setAdapter(userAdapter);
 
         return userAdapter;

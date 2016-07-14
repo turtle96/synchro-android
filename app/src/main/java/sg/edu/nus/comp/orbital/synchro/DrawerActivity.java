@@ -148,12 +148,6 @@ public class DrawerActivity extends AppCompatActivity
                 // replace the content_fragment with appropriate view
                 switch(id){
 
-                    case R.id.nav_view_group: {
-                        //fragmentNavigation(manager, transaction, "ViewGroup", ViewGroupFragment.newInstance());
-                        transaction.replace(R.id.content_fragment, ViewGroupFragment.newInstance(), "ViewGroup");
-                        break;
-                    }
-
                     case R.id.nav_search:
                         //fragmentNavigation(manager, transaction, "SearchResults", SearchResultsFragment.newInstance());
                         transaction.replace(R.id.content_fragment, SearchResultsFragment.newInstance(), "SearchResults");

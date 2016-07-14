@@ -2,6 +2,7 @@ package sg.edu.nus.comp.orbital.synchro;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewModulesAdapter;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.ModuleList;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
@@ -62,44 +66,55 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        //this provides alternate layout since layer effect cannot be achieved pre-Lollipop
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            ImageView profileHeader = (ImageView) rootView.findViewById(R.id.header_cover_image);
-            profileHeader.setImageResource(R.drawable.profile);
-            TextView profileName = (TextView) rootView.findViewById(R.id.user_profile_name);
-            profileName.setPadding(5, 80, 5, 80);
+            displayAlternateLayout(rootView, R.drawable.profile, null);
         }
-
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        displayProfileInfo(view, profile);
+        displayModulesTaken(view, moduleLists);
+    }
 
-        displayProfileInfo(view);
-        displayModulesTaken(view);
+    //this provides alternate layout since layer effect cannot be achieved pre-Lollipop
+    //image can be set with either resourceID or text drawable
+    //todo once image upload is supported need to edit code
+    public static void displayAlternateLayout(View view, int imageResource, TextDrawable imageDrawable) {
+        ImageView profileHeader = (ImageView) view.findViewById(R.id.header_cover_image);
+        if (imageResource != 0) {
+            profileHeader.setImageResource(imageResource);
+        }
+        else if (imageDrawable != null) {
+            profileHeader.setImageDrawable(imageDrawable);
+        }
+
+        TextView profileName = (TextView) view.findViewById(R.id.user_profile_name);
+        profileName.setPadding(10, 80, 10, 80);
+        CircleImageView profileImage = (CircleImageView) view.findViewById(R.id.user_profile_photo);
+        profileImage.setVisibility(View.GONE);
     }
 
     /*
         modules' code + name strings sorted by semester, then sorted by year into ModuleList objects
         displayed using cardview (this can help with option for user to hide some module info)
     */
-    private void displayModulesTaken(View rootView) {
+    public static void displayModulesTaken(View rootView, ArrayList<ModuleList> moduleLists) {
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view_profile);
         recyclerView.setHasFixedSize(true);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(App.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         recyclerView.setAdapter(new CardViewModulesAdapter(moduleLists));
     }
 
-    //displays naem, faculty, major, matriculation year of user
-    private void displayProfileInfo(View rootView) {
+    //displays name, faculty, major, matriculation year of user
+    public static void displayProfileInfo(View rootView, User profile) {
 
         TextView name = (TextView) rootView.findViewById(R.id.user_profile_name);
         TextView faculty = (TextView) rootView.findViewById(R.id.valueFaculty);
@@ -108,8 +123,8 @@ public class ProfileFragment extends Fragment {
         TextView year = (TextView) rootView.findViewById(R.id.valueMatriculationYear);
 
         //use this code if you want to display your real name instead of placeholder
-        //name.setText(profile.getName());
-        name.setText("Hermione Granger");
+        name.setText(profile.getName());
+        //name.setText("Hermione Granger");
 
         faculty.setText(profile.getFaculty());
 

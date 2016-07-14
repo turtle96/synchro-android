@@ -3,6 +3,7 @@ package sg.edu.nus.comp.orbital.synchro.DataHolders;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -17,18 +18,21 @@ import sg.edu.nus.comp.orbital.synchro.R;
  * also creates a image with the first letter of each group's name + random colour using TextDrawable
  * descriptionShort contains first 50 characters of description for display on cardviews
  *
- * TODO: to consider, if name can be changed, hook each group object to a group id??? or isit already hooked to id
  */
 public class GroupData {
     private String id, name, type, description, descriptionShort, venue;
     private String dateYear, dateMonth, dateDay;    //this is for the date
     private int timeHour, timeMinute;
-    private TextDrawable image;
+    private String tagsStr;             //for create group (app --> server)
+    private ArrayList<String> tagsArr;  //for display group (server --> app)
+    private TextDrawable image;         //if group has no image
 
     //parameters: id, name, type, description, dateYear, dateMonth, dateDay, timeHr, timeMinute, venue
+    //tags can be sent in as string or array, put in null if not applicable
     //be careful not to mess up ORDER!
     public GroupData(String id, String name, String type, String desc, String dateYear, String dateMonth,
-                     String dateDay, int timeHour, int timeMinute, String venue) {
+                     String dateDay, int timeHour, int timeMinute, String venue,
+                     String tagsStr, ArrayList<String> tagsArr) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -47,6 +51,8 @@ public class GroupData {
         this.timeHour = timeHour;
         this.timeMinute = timeMinute;
         this.venue = venue;
+        this.tagsStr = tagsStr;
+        this.tagsArr = tagsArr;
 
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getRandomColor();
@@ -65,7 +71,14 @@ public class GroupData {
     public String getTime() {return formatTime(timeHour, timeMinute);}
     public String getTimeServerFormat() {return formatTimeServer(timeHour, timeMinute);}
     public String getVenue() {return venue;}
+    public ArrayList<String> getTagsArr() {return tagsArr;}
     public TextDrawable getImage() {return image;}
+
+    ////////// Setters /////////////
+    public void setId(String id) {
+        this.id = id;
+    }
+    public void setTagsArr(JsonArray tags) { tagsArr = parseTags(tags); }
 
     ///////// Formatters ///////////
 
@@ -113,16 +126,13 @@ public class GroupData {
         return hourOfDay + ":" + minute + ":00";
     }
 
-    ////////// Setters /////////////
-    public void setId(String id) {
-        this.id = id;
-    }
-
     //////////// Parse Methods////////////
 
     //converts JsonObject of group details to GroupData object and returns
     public static GroupData parseSingleGroup(JsonObject group) {
-        String type, description, dateYear, dateMonth, dateDay, time, time24Hour, venue;
+        String type, description, dateYear, dateMonth, dateDay, venue;
+        int hourOfDay, minute;
+        ArrayList<String> tagsArr = null;
 
         //dummy data for server data that are blank
         type = "default type";
@@ -150,14 +160,29 @@ public class GroupData {
         dateMonth = tokens[1];
         dateDay = tokens[2];
 
-        time24Hour = serverTime;
         tokens = serverTime.split(":");
-        int hourOfDay, minute;
         hourOfDay = Integer.valueOf(tokens[0]);
         minute = Integer.valueOf(tokens[1]);
 
+        if (group.has("tags")) {
+            tagsArr = parseTags(group.get("tags").getAsJsonArray());
+        }
+
         return new GroupData(group.get("id").getAsString(), group.get("name").getAsString(), type,
-                description, dateYear, dateMonth, dateDay, hourOfDay, minute, venue);
+                description, dateYear, dateMonth, dateDay, hourOfDay, minute, venue, null, tagsArr);
+    }
+
+    // static method
+    // takes in JsonArray of tags (should be from server) and parses to ArrayList of strings for display
+    public static ArrayList<String> parseTags(JsonArray tagsJsonArray) {
+        ArrayList<String> tagsArr = new ArrayList<>();
+        JsonElement element;
+        for (int i=0; i<tagsJsonArray.size(); i++) {
+            element = tagsJsonArray.get(i);
+            tagsArr.add(element.getAsString());
+        }
+
+        return tagsArr;
     }
 
     /*
@@ -168,9 +193,10 @@ public class GroupData {
     */
     public static ArrayList<GroupData> parseGroups(JsonArray groupsJsonArray) {
         ArrayList<GroupData> groupDatas = new ArrayList<>();
+        JsonObject object;
 
         for (int i=0; i<groupsJsonArray.size(); i++) {
-            JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
+            object = groupsJsonArray.get(i).getAsJsonObject();
             groupDatas.add(parseSingleGroup(object));
         }
 
@@ -187,9 +213,9 @@ public class GroupData {
     */
     public static ArrayList<GroupData> parseAndFilterGroups(JsonArray groupsJsonArray, String filterStr) {
         ArrayList<GroupData> groupDatas = new ArrayList<>();
-
+        JsonObject object;
         for (int i=0; i<groupsJsonArray.size(); i++) {
-            JsonObject object = groupsJsonArray.get(i).getAsJsonObject();
+            object = groupsJsonArray.get(i).getAsJsonObject();
             if (object.get("name").toString().contains(filterStr)) {
                 groupDatas.add(parseSingleGroup(object));
             }
@@ -207,7 +233,7 @@ public class GroupData {
         groupJson.addProperty("description", getDescription());
         groupJson.addProperty("date_happening", getDateServerFormat() + " " + getTimeServerFormat());
         groupJson.addProperty("venue", getVenue());
-        groupJson.addProperty("tags", getType());
+        groupJson.addProperty("tags", tagsStr);
 
         return groupJson;
     }

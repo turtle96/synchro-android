@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -46,13 +47,21 @@ public class GroupsJoinedFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (groupDatas.size() == 0) {
-            LinearLayout noGroupsMessage = (LinearLayout) view.findViewById(R.id.noGroupsMessageLayout);
-            noGroupsMessage.setVisibility(View.VISIBLE);
+        if (groupDatas != null) {
+            if (groupDatas.size() == 0) {
+                LinearLayout noGroupsMessage = (LinearLayout) view.findViewById(R.id.noGroupsMessageLayout);
+                noGroupsMessage.setVisibility(View.VISIBLE);
+            }
+            else {
+                displayGroupsJoined(view);
+            }
         }
         else {
-            displayGroupsJoined(view);
+            Toast.makeText(getContext(),
+                    "groups joined cannot be accessed", Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     /*  setups cardviews for display of group details

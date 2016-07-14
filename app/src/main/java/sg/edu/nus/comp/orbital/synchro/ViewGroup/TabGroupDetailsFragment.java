@@ -43,19 +43,10 @@ public class TabGroupDetailsFragment extends Fragment{
         TextView time = (TextView) view.findViewById(R.id.valueTime);
         TextView venue = (TextView) view.findViewById(R.id.valueVenue);
 
-        if (groupData != null) {
-            groupType.setText(groupData.getType());
-            groupDesc.setText(groupData.getDescription());
-            date.setText(groupData.getDate());
-            time.setText(groupData.getTime());
-            venue.setText(groupData.getVenue());
-        }
-        else {
-            groupType.setText("e.g. Study/Project/Games");
-            groupDesc.setText(getContext().getResources().getString(R.string.small_text));
-            date.setText("31st July 2078");
-            time.setText("3pm");
-            venue.setText("Room 666");
-        }
+        groupType.setText(groupData.getType());
+        groupDesc.setText(groupData.getDescription());
+        date.setText(groupData.getDate());
+        time.setText(groupData.getTime());
+        venue.setText(groupData.getVenue());
     }
 }
