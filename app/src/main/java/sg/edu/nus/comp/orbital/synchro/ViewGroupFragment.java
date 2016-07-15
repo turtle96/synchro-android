@@ -48,17 +48,9 @@ public class ViewGroupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_group, container, false);
-        setupTabs(rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        JsonArray membersJsonArray;
 
         if (getArguments() != null) {
+            JsonArray membersJsonArray;
             groupId = getArguments().getString(GET_GROUP_ID);
             JsonObject groupJson = SynchroAPI.getInstance().getGroupById(groupId);
             groupData = GroupData.parseSingleGroup(groupJson);
@@ -66,16 +58,34 @@ public class ViewGroupFragment extends Fragment {
             members = User.parseUsers(membersJsonArray);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "joined group (theoretically)", Toast.LENGTH_LONG).show();
-            }
-        });
+        if (groupData==null || members==null) {
+            rootView = inflater.inflate(R.layout.error_layout, container, false);
+        }
+        else {
+            setupTabs(rootView);
+        }
 
-        TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
-        groupName.setText(groupData.getName());
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (groupData!=null && members!=null) {
+
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "joined group (theoretically)", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
+            groupName.setText(groupData.getName());
+        }
+
     }
 
     //setup tab layouts and child fragments: GroupDetails and GroupMembers

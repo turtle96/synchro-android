@@ -40,7 +40,18 @@ public class GroupsJoinedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_groups_joined, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_groups_joined, container, false);
+
+        if (groupDatas != null) {
+            if (groupDatas.size() == 0) {
+                rootView = inflater.inflate(R.layout.fragment_no_groups_joined, container, false);
+            }
+        }
+        else {
+            rootView = inflater.inflate(R.layout.error_layout, container, false);
+        }
+
+        return rootView;
     }
 
     @Override
@@ -48,19 +59,10 @@ public class GroupsJoinedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (groupDatas != null) {
-            if (groupDatas.size() == 0) {
-                LinearLayout noGroupsMessage = (LinearLayout) view.findViewById(R.id.noGroupsMessageLayout);
-                noGroupsMessage.setVisibility(View.VISIBLE);
-            }
-            else {
+            if (groupDatas.size() != 0) {
                 displayGroupsJoined(view);
             }
         }
-        else {
-            Toast.makeText(getContext(),
-                    "groups joined cannot be accessed", Toast.LENGTH_SHORT).show();
-        }
-
 
     }
 

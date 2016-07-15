@@ -1,9 +1,11 @@
 package sg.edu.nus.comp.orbital.synchro;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import java.util.ArrayList;
 
@@ -66,33 +69,47 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-            displayAlternateLayout(rootView, R.drawable.profile, null);
+
+        if (profile!=null && moduleLists!=null) {
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+                displayAlternateLayout(rootView,
+                        ContextCompat.getDrawable(getContext(), R.drawable.profile), null);
+            }
         }
+        else {
+            rootView = inflater.inflate(R.layout.error_layout, container, false);
+        }
+
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        displayProfileInfo(view, profile);
-        displayModulesTaken(view, moduleLists);
+
+        if (profile!=null && moduleLists!=null) {
+            displayProfileInfo(view, profile);
+            displayModulesTaken(view, moduleLists);
+        }
     }
 
     //this provides alternate layout since layer effect cannot be achieved pre-Lollipop
     //image can be set with either resourceID or text drawable
     //todo once image upload is supported need to edit code
-    public static void displayAlternateLayout(View view, int imageResource, TextDrawable imageDrawable) {
+    public static void displayAlternateLayout(View view, Drawable imageDrawable, String name) {
         ImageView profileHeader = (ImageView) view.findViewById(R.id.header_cover_image);
-        if (imageResource != 0) {
-            profileHeader.setImageResource(imageResource);
-        }
-        else if (imageDrawable != null) {
-            profileHeader.setImageDrawable(imageDrawable);
+
+        if (imageDrawable==null && name!=null) {
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            int color = generator.getRandomColor();
+            imageDrawable = TextDrawable.builder()
+                    .buildRect(name.substring(0, 1), color);
         }
 
+        profileHeader.setImageDrawable(imageDrawable);
+
         TextView profileName = (TextView) view.findViewById(R.id.user_profile_name);
-        profileName.setPadding(10, 80, 10, 80);
+        profileName.setPadding(20, 150, 20, 150);
         CircleImageView profileImage = (CircleImageView) view.findViewById(R.id.user_profile_photo);
         profileImage.setVisibility(View.GONE);
     }

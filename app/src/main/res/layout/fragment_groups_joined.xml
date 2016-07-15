@@ -10,8 +10,7 @@
     <TextView
         android:id="@+id/header_groups_joined"
         android:text="@string/groups_joined"
-        style="@style/MainHeaderBoard"
-        android:elevation="3dp" />
+        style="@style/MainHeaderBoard" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,28 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/noGroupsMessageLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:layout_margin="16dp"
-                    android:text="@string/no_groups_joined_message" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/mochi"
-                    android:layout_gravity="center"/>
-
-            </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_groups_joined"

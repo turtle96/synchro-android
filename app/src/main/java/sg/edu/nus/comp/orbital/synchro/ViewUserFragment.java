@@ -6,12 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -46,12 +49,7 @@ public class ViewUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         if (getArguments() != null) {
             userId = getArguments().getString(GET_USER_ID);
@@ -59,19 +57,36 @@ public class ViewUserFragment extends Fragment {
             user = User.parseSingleUser(userJson);
             JsonArray modulesJsonArray = SynchroAPI.getInstance().getModulesByUserId(userId);
             moduleLists = ModuleList.parseModules(modulesJsonArray);
+        }
 
+        if (user==null || moduleLists==null) {
+            rootView = inflater.inflate(R.layout.error_layout, container, false);
+        }
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (user!=null && moduleLists!=null) {
             ProfileFragment.displayProfileInfo(view, user);
             ProfileFragment.displayModulesTaken(view, moduleLists);
 
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-                ProfileFragment.displayAlternateLayout(view, 0, user.getProfileImage());
+                ProfileFragment.displayAlternateLayout(view, null, user.getName());
             }
-            else if (user.getProfileImage() != null) {
+            else if (user.getProfileImage()!=null && user.getProfileImage() instanceof TextDrawable) {
+                //textdrawables cannot be displayed on CircleImageView directly
+                //so some layout formatting required
                 CircleImageView circleImageView = (CircleImageView) view.findViewById(R.id.user_profile_photo);
                 circleImageView.setVisibility(View.GONE);
+
                 ImageView profileImage = (ImageView) view.findViewById(R.id.textDrawableView);
                 profileImage.setImageDrawable(user.getProfileImage());
                 profileImage.setVisibility(View.VISIBLE);
+                view.findViewById(R.id.textDrawableBorder).setVisibility(View.VISIBLE);
             }
         }
     }

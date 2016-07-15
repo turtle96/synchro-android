@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light_grey">
+
+    <TextView
+        android:id="@+id/header_groups_joined"
+        android:text="@string/groups_joined"
+        style="@style/MainHeaderBoard" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_margin="16dp"
+        android:text="@string/no_groups_joined_message" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/mochi"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

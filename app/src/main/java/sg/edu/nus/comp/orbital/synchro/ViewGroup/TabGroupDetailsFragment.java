@@ -1,12 +1,22 @@
 package sg.edu.nus.comp.orbital.synchro.ViewGroup;
 
+import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
+
+import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 import sg.edu.nus.comp.orbital.synchro.R;
@@ -48,5 +58,14 @@ public class TabGroupDetailsFragment extends Fragment{
         date.setText(groupData.getDate());
         time.setText(groupData.getTime());
         venue.setText(groupData.getVenue());
+
+        if (groupData.getTagsArr() != null) {
+            ArrayList<String> tagsArr = groupData.getTagsArr();
+            TextView tagsTextView = (TextView) view.findViewById(R.id.valueTags);
+            for (String tag: tagsArr) {
+                tagsTextView.append(tag + " ");
+            }
+        }
     }
+
 }

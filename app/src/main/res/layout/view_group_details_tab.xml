@@ -66,6 +66,16 @@
                     android:id="@+id/valueVenue"
                     style="@style/TextBody1"/>
 
+                <TextView
+                    android:id="@+id/labelTags"
+                    android:text="@string/tags"
+                    style="@style/Header1"/>
+
+                <TextView
+                    android:id="@+id/valueTags"
+                    style="@style/TextBody1"/>
+
+
             </LinearLayout>
 
         </LinearLayout>

@@ -51,6 +51,8 @@ public class AsyncTaskRunner {
             drawerActivity = (DrawerActivity) activity;
         }
 
+        initializeProgress();
+
         LoadResync loadResync = new LoadResync();
         LoadProfile loadProfile = new LoadProfile();
         LoadGroupsJoined loadGroupsJoined = new LoadGroupsJoined();
@@ -59,7 +61,6 @@ public class AsyncTaskRunner {
         //this should ensure first time users are cached on server (resynced) BEFORE calls to server are made
         //to prevent NullPointerExceptions
         if (drawerActivity != null) {
-            initializeProgress();
             SynchroAPI.getInstance().getMeResync();
             resyncFinished = true;
             //System.out.println("Resync done");
@@ -128,11 +129,6 @@ public class AsyncTaskRunner {
     /////////// Loader for Resyncing User Data /////////////
     private static class LoadResync extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected void onPreExecute() {
-            initializeProgress();
-            super.onPreExecute();
-        }
         @Override
         protected Void doInBackground(Void... params) {
             try {
