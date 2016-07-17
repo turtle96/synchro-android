@@ -58,6 +58,11 @@ public class User {
 
     //given one user's details in JsonObject, parses to User and returns
     public static User parseSingleUser(JsonObject userJson) {
+        if (userJson == null) {
+            System.out.println("Null user json");
+            return null;
+        }
+
         return new User(userJson.get("id").getAsString(), userJson.get("name").getAsString(),
                 userJson.get("faculty").getAsString(), userJson.get("first_major").getAsString(),
                 userJson.get("second_major").getAsString(), userJson.get("matriculation_year").getAsString());

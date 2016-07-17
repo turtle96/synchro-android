@@ -1,5 +1,7 @@
 package sg.edu.nus.comp.orbital.synchro.DataHolders;
 
+import android.widget.Toast;
+
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.google.gson.JsonArray;
@@ -26,6 +28,7 @@ public class GroupData {
     private String tagsStr;             //for create group (app --> server)
     private ArrayList<String> tagsArr;  //for display group (server --> app)
     private TextDrawable image;         //if group has no image
+    private boolean isAdmin = false;
 
     //parameters: id, name, type, description, dateYear, dateMonth, dateDay, timeHr, timeMinute, venue
     //tags can be sent in as string or array, put in null if not applicable
@@ -45,9 +48,17 @@ public class GroupData {
             this.descriptionShort = description;
         }
 
-        this.dateYear = dateYear;
-        this.dateMonth = dateMonth;
-        this.dateDay = dateDay;
+        if (dateYear==null && dateMonth==null && dateDay==null) {
+            this.dateYear = "0000";
+            this.dateMonth = "00";
+            this.dateDay = "00";
+        }
+        else {
+            this.dateYear = dateYear;
+            this.dateMonth = dateMonth;
+            this.dateDay = dateDay;
+        }
+
         this.timeHour = timeHour;
         this.timeMinute = timeMinute;
         this.venue = venue;
@@ -73,12 +84,10 @@ public class GroupData {
     public String getVenue() {return venue;}
     public ArrayList<String> getTagsArr() {return tagsArr;}
     public TextDrawable getImage() {return image;}
+    public boolean isAdmin() {return isAdmin;}
 
     ////////// Setters /////////////
-    public void setId(String id) {
-        this.id = id;
-    }
-    public void setTagsArr(JsonArray tags) { tagsArr = parseTags(tags); }
+    public void setIsAdmin() {isAdmin = true;}
 
     ///////// Formatters ///////////
 
@@ -130,6 +139,11 @@ public class GroupData {
 
     //converts JsonObject of group details to GroupData object and returns
     public static GroupData parseSingleGroup(JsonObject group) {
+        if (group == null) {
+            System.out.println("Null group json");
+            return null;
+        }
+
         String type, description, dateYear, dateMonth, dateDay, venue;
         int hourOfDay, minute;
         ArrayList<String> tagsArr = null;
@@ -177,9 +191,18 @@ public class GroupData {
     public static ArrayList<String> parseTags(JsonArray tagsJsonArray) {
         ArrayList<String> tagsArr = new ArrayList<>();
         JsonElement element;
+        JsonObject object;
+
         for (int i=0; i<tagsJsonArray.size(); i++) {
-            element = tagsJsonArray.get(i);
-            tagsArr.add(element.getAsString());
+            if (tagsJsonArray.get(i).isJsonPrimitive()) {
+                element = tagsJsonArray.get(i);
+                tagsArr.add(element.getAsString());
+            }
+            else if (tagsJsonArray.get(i).isJsonObject()) {
+                object = tagsJsonArray.get(i).getAsJsonObject();
+                tagsArr.add(object.get("name").getAsString());
+            }
+
         }
 
         return tagsArr;
@@ -188,16 +211,23 @@ public class GroupData {
     /*
         static
         takes in JsonArray of group details called from server and parses to GroupData objects
-        automatically adds in default placeholder string for descriptions
         returns ArrayList
     */
     public static ArrayList<GroupData> parseGroups(JsonArray groupsJsonArray) {
+        if (groupsJsonArray == null) {
+            System.out.println("Null group json array");
+            return null;
+        }
+
         ArrayList<GroupData> groupDatas = new ArrayList<>();
         JsonObject object;
 
         for (int i=0; i<groupsJsonArray.size(); i++) {
             object = groupsJsonArray.get(i).getAsJsonObject();
             groupDatas.add(parseSingleGroup(object));
+            if (object.has("pivot") && object.get("pivot").getAsJsonObject().get("is_admin").getAsString().equals("1")) {
+                groupDatas.get(i).setIsAdmin();
+            }
         }
 
         return groupDatas;

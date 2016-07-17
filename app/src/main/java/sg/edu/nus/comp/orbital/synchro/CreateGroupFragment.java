@@ -3,6 +3,7 @@ package sg.edu.nus.comp.orbital.synchro;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
@@ -166,9 +169,18 @@ public class CreateGroupFragment extends Fragment {
                 groupDate = editTextDate.getText().toString().trim();
                 groupTime = editTextTime.getText().toString().trim();
                 groupVenue = editTextVenue.getText().toString().trim();
-                groupTags = editTextTags.getText().toString().trim();
+                groupTags = editTextTags.getText().toString().trim().replaceAll("\n", " ");
 
-                String[] fields = {groupName, groupType, groupDesc, groupDate, groupTime, groupVenue};
+                ArrayList<String> fields = new ArrayList<String>();
+                fields.add(groupName);
+                fields.add(groupType);
+                fields.add(groupDesc);
+
+                if (groupType.equals(GROUP_TYPES_LIST[0])) {
+                    fields.add(groupDate);
+                    fields.add(groupTime);
+                    fields.add(groupVenue);
+                }
 
                 //todo: will probably need some validation for groupname to ensure no duplicate names
                 if (!checkFields(fields)) {
@@ -186,38 +198,46 @@ public class CreateGroupFragment extends Fragment {
                 GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, dateYear,
                         dateMonth, dateDay, timeHour, timeMinute, groupVenue, groupTags, null);
 
-                String groupId = SynchroAPI.getInstance().postNewGroup(newGroupData);
-
-                if (groupId.equals("default id")) {
-                    System.out.println("you shall not pass");
-                    return;     //user needs to try again
-                }
-
-                newGroupData.setId(groupId);    //impt to set the group id after server returns
-                SynchroAPI.getInstance().postJoinGroup(groupId);
-
-                // redirects to new group page
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
-                        R.anim.fragment_fade_in, R.anim.fragment_fade_out);
-
-                ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString(GET_GROUP_ID, groupId);
-                viewGroupFragment.setArguments(bundle);
-
-                transaction.replace(R.id.content_fragment, viewGroupFragment);
-                transaction.commit();
+                AsyncTaskCreateGroup.loadCreateGroup(new ProgressDialog(getContext()), newGroupData,
+                        getFragmentManager());
             }
         });
 
     }
 
+    /*  to be called from async task sending POST group
+        will check that valid group id is returned, else will show error message
+        then redirects to view group page
+    *
+    */
+    public static void createGroupLoaded(String groupId, FragmentManager manager) {
+        if (groupId.equals("default id")) {
+            Toast.makeText(App.getContext(), "Error creating group. Please try again",
+                    Toast.LENGTH_SHORT).show();
+            return;     //user needs to try again
+        }
+        else {
+            Toast.makeText(App.getContext(), "Group Created", Toast.LENGTH_SHORT).show();
+        }
+
+        // redirects to new group page
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
+                R.anim.fragment_fade_in, R.anim.fragment_fade_out);
+
+        ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString(GET_GROUP_ID, groupId);
+        viewGroupFragment.setArguments(bundle);
+
+        transaction.replace(R.id.content_fragment, viewGroupFragment);
+        transaction.commit();
+    }
+
     //checks all the given strings in array for empty fields, will reject space characters only strings
     //meaning if a field just has space without other characters will reject
     //note this does not check Group Tags, user can leave tags blank
-    private boolean checkFields(String[] fields) {
+    private boolean checkFields(ArrayList<String> fields) {
         for (String f: fields) {
             if (f.isEmpty()) {
                 return false;

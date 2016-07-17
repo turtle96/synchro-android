@@ -60,6 +60,11 @@ public class ModuleList {
     //static method
     //parses JsonArray of module info into ArrayList of ModuleList objects for display
     public static ArrayList<ModuleList> parseModules(JsonArray modulesJsonArray) {
+        if (modulesJsonArray == null) {
+            System.out.println("Null modules json");
+            return null;
+        }
+
         ArrayList<ModuleList> moduleLists = new ArrayList<>();
 
         int yearCounter = 0;    //index counter for modulesByYear

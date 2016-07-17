@@ -26,8 +26,8 @@ public class SplashActivity extends AppCompatActivity {
 
                 if (status.equals(STATUS_SUCCESS)) {
                     ProgressBar progressBar = (ProgressBar) findViewById(R.id.splashProgressBar);
-                    AsyncTaskRunner.setProgressBar(progressBar);
-                    AsyncTaskRunner.loadInitialData(SplashActivity.this);
+                    AsyncTaskDataLoader.setProgressBar(progressBar);
+                    AsyncTaskDataLoader.loadInitialData(SplashActivity.this);
                 }
                 else if (status.equals(STATUS_ERROR)) {
                     Snackbar notifyInternet = Snackbar.make(getWindow().getDecorView().getRootView(),
@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    //allows AsyncTaskRunner to call redirect once loadInitialData is finished
+    //allows AsyncTaskDataLoader to call redirect once loadInitialData is finished
     public void redirectFromSplash() {
         Intent launchMainActivity = new Intent(SplashActivity.this, DrawerActivity.class);
         launchMainActivity.putExtra("caller", "SplashActivity");

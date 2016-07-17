@@ -23,6 +23,7 @@ import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
  *
  * adapter for card views of groupData details
  * data set in the form of GroupData objects
+ * onClick redirects to respective group pages
  */
 public class CardViewGroupAdapter extends RecyclerView.Adapter<CardViewGroupAdapter.CardViewHolder>{
 

@@ -115,10 +115,11 @@ public class SynchroAPI {
         try {
             result = Ion.with(App.getContext())
                     .load(ivleValidate)
+                    //.setLogging("MyLogs", Log.VERBOSE)
                     .asJsonObject()
                     .get();
         }catch (Exception ex){
-            ex.printStackTrace();
+            System.out.println("Error " + ex.toString());
         }
 
         if (result == null) {   //no object returned
@@ -328,12 +329,10 @@ public class SynchroAPI {
         String id = "default id";
         JsonObject result = null;
 
-        //todo load async, then run a dialog in create group
-        //todo need to handle exceptions
         try {
             result = Ion.with(App.getContext())
                     .load(apiGroups)
-                    .setLogging("PostLogs", Log.VERBOSE)
+                    //.setLogging("PostLogs", Log.VERBOSE)
                     .setTimeout(5000)
                     .setHeader("Authorization", ivleAuthToken)
                     .setHeader("Content-Type", "application/json")
@@ -342,17 +341,17 @@ public class SynchroAPI {
                     .get();
 
         }catch (Exception ex){
-            System.out.println("Error here" + ex.toString());
+            System.out.println("Error here " + ex.toString());
         }
 
 
-        if (result == null) {
-            Toast.makeText(App.getContext(), "Error creating group", Toast.LENGTH_SHORT).show();
+        if (result != null) {
+            id = result.get("id").getAsString();
+            SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
+            //System.out.println("here group: " + result.toString());
         }
         else {
-            Toast.makeText(App.getContext(), "Group Created", Toast.LENGTH_SHORT).show();
-            id = result.get("id").getAsString();
-            //System.out.println("here group id: " + id);
+            System.out.println("nope");
         }
 
         return id;
@@ -379,6 +378,21 @@ public class SynchroAPI {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
 
+    public JsonArray getSearchGroups(String query) {
+        String url = apiGroups + "/search?name=" + query + "&tags=" + query;
+        JsonArray result = null;
+        try {
+            result = Ion.with(App.getContext())
+                    .load(url)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            System.out.println("Error here" + ex.toString());
+        }
+
+        return result;
     }
 }

@@ -10,11 +10,18 @@ import android.widget.Toast;
 /**
  * Created by angja_000 on 18/6/2016.
  *
- * Runs AsyncTasks for app, displays progress indicators accordingly
+ * Runs AsyncTasks for app launch, displays progress indicators accordingly
  * NOTE: to check on sequence of task execution, or check on speeds, use the commented system.out.println statements
  *
+ * available via:   DrawerActivity (after login, first-time use only)
+ *                  SplashActivity (subsequent uses)
+ * loads:   Resync call
+ *          User profile
+ *          User Modules
+ *          User groups
+ *
  */
-public class AsyncTaskRunner {
+public class AsyncTaskDataLoader {
 
     private static SplashActivity splashActivity;
     private static DrawerActivity drawerActivity;

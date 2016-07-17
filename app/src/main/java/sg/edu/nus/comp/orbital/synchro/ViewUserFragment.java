@@ -50,17 +50,21 @@ public class ViewUserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+        JsonObject userJson = null;
+        JsonArray modulesJsonArray = null;
 
         if (getArguments() != null) {
             userId = getArguments().getString(GET_USER_ID);
-            JsonObject userJson = SynchroAPI.getInstance().getUserById(userId);
-            user = User.parseSingleUser(userJson);
-            JsonArray modulesJsonArray = SynchroAPI.getInstance().getModulesByUserId(userId);
-            moduleLists = ModuleList.parseModules(modulesJsonArray);
+            userJson = SynchroAPI.getInstance().getUserById(userId);
+            modulesJsonArray = SynchroAPI.getInstance().getModulesByUserId(userId);
         }
 
-        if (user==null || moduleLists==null) {
+        if (userJson==null || modulesJsonArray==null) {
             rootView = inflater.inflate(R.layout.error_layout, container, false);
+        }
+        else {
+            user = User.parseSingleUser(userJson);
+            moduleLists = ModuleList.parseModules(modulesJsonArray);
         }
 
         return rootView;
@@ -78,15 +82,7 @@ public class ViewUserFragment extends Fragment {
                 ProfileFragment.displayAlternateLayout(view, null, user.getName());
             }
             else if (user.getProfileImage()!=null && user.getProfileImage() instanceof TextDrawable) {
-                //textdrawables cannot be displayed on CircleImageView directly
-                //so some layout formatting required
-                CircleImageView circleImageView = (CircleImageView) view.findViewById(R.id.user_profile_photo);
-                circleImageView.setVisibility(View.GONE);
-
-                ImageView profileImage = (ImageView) view.findViewById(R.id.textDrawableView);
-                profileImage.setImageDrawable(user.getProfileImage());
-                profileImage.setVisibility(View.VISIBLE);
-                view.findViewById(R.id.textDrawableBorder).setVisibility(View.VISIBLE);
+                ProfileFragment.displayTextDrawable(view, user);
             }
         }
     }

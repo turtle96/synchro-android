@@ -25,10 +25,10 @@ import sg.edu.nus.comp.orbital.synchro.ViewUserFragment;
 /**
  * Created by angja_000 on 13/6/2016.
  *
- * adaptor for card views that display various users' names and profile image (TextDrawable for now)
- * onClick should redirect to respective user profiles (dummy onClick for now)
+ * adaptor for card views that display username and profile image (TextDrawable for now)
+ * data set as User objects
+ * onClick redirects to respective user profiles
  *
- * //todo reformat to user
  */
 public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapter.CardViewHolder> {
 

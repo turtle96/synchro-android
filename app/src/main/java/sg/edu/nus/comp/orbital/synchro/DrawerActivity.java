@@ -26,6 +26,8 @@ import android.widget.Toast;
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String GET_SEARCH_QUERY = "Search Query";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +45,8 @@ public class DrawerActivity extends AppCompatActivity
                 SynchroAPI.authenticate(AuthToken.getToken());
 
                 ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
-                AsyncTaskRunner.setProgressDialog(progressDialog);
-                AsyncTaskRunner.loadInitialData(DrawerActivity.this);
+                AsyncTaskDataLoader.setProgressDialog(progressDialog);
+                AsyncTaskDataLoader.loadInitialData(DrawerActivity.this);
             }
             //sets landing page to Groups Joined if redirected from SplashActivity
             else if (caller.equals("SplashActivity")) {
@@ -89,7 +91,7 @@ public class DrawerActivity extends AppCompatActivity
             String query = intent.getStringExtra(SearchManager.QUERY);
 
             Bundle bundle = new Bundle();
-            bundle.putString("searchQuery", query);
+            bundle.putString(GET_SEARCH_QUERY, query);
             SearchResultsFragment searchResultsFragment = SearchResultsFragment.newInstance();
             searchResultsFragment.setArguments(bundle);
 
@@ -147,14 +149,9 @@ public class DrawerActivity extends AppCompatActivity
 
                 // replace the content_fragment with appropriate view
                 switch(id){
-
-                    case R.id.nav_search:
-                        //fragmentNavigation(manager, transaction, "SearchResults", SearchResultsFragment.newInstance());
-                        transaction.replace(R.id.content_fragment, SearchResultsFragment.newInstance(), "SearchResults");
-                        break;
                     case R.id.nav_profile:
                         //fragmentNavigation(manager, transaction, "Profile", ProfileFragment.newInstance());
-                        transaction.replace(R.id.content_fragment, ProfileFragment.newInstance(), "Profile");
+                        transaction.replace(R.id.content_fragment, ProfileFragment.newInstance());
                         break;
                     case R.id.nav_groups_joined:
                         //fragmentNavigation(manager, transaction, "GroupsJoined", GroupsJoinedFragment.newInstance());
@@ -169,32 +166,7 @@ public class DrawerActivity extends AppCompatActivity
                         transaction.replace(R.id.content_fragment, RecommendationsFragment.newInstance());
                         break;
                     case R.id.nav_logout:
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DrawerActivity.this,
-                                R.style.AlertDialogStyle);
-                        alertDialog.setTitle("Logout");
-                        alertDialog.setMessage("Are you sure you want to logout?");
-                        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //logout
-                                AuthToken.setToken("logout");
-                                SynchroAPI.updateToken(AuthToken.getToken());
-
-                                // do not add loginactivity into backstack
-                                Intent loginActivity = new Intent(DrawerActivity.this, LoginActivity.class);
-                                loginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                loginActivity.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
-                                startActivity(loginActivity);
-                                finish();
-                            }
-                        });
-                        alertDialog.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                        alertDialog.show();
+                        logout();
                         break;
                 }
 
@@ -204,6 +176,35 @@ public class DrawerActivity extends AppCompatActivity
         }, 300);
 
         return true;
+    }
+
+    private void logout() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DrawerActivity.this,
+                R.style.AlertDialogStyle);
+        alertDialog.setTitle("Logout");
+        alertDialog.setMessage("Are you sure you want to logout?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //logout
+                AuthToken.setToken("logout");
+                SynchroAPI.updateToken(AuthToken.getToken());
+
+                // do not add loginactivity into backstack
+                Intent loginActivity = new Intent(DrawerActivity.this, LoginActivity.class);
+                loginActivity.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                loginActivity.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+                startActivity(loginActivity);
+                finish();
+            }
+        });
+        alertDialog.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
     }
 
     //todo need to fix

@@ -24,7 +24,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="120dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/profile"
+                android:src="@drawable/emma_watson"
                 android:cropToPadding="true"
                 android:elevation="3dp"
                 app:civ_border_width="3dp"

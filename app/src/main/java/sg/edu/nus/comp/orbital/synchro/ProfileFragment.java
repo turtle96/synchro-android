@@ -3,7 +3,6 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -73,7 +72,11 @@ public class ProfileFragment extends Fragment {
         if (profile!=null && moduleLists!=null) {
             if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
                 displayAlternateLayout(rootView,
-                        ContextCompat.getDrawable(getContext(), R.drawable.profile), null);
+                        //ContextCompat.getDrawable(getContext(), R.drawable.emma_watson), null);
+                        null, profile.getName());
+            }
+            else if (profile.getProfileImage()!=null && profile.getProfileImage() instanceof TextDrawable) {
+                displayTextDrawable(rootView, profile);
             }
         }
         else {
@@ -93,6 +96,18 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public static void displayTextDrawable(View view, User user) {
+        //textdrawables cannot be displayed on CircleImageView directly
+        //so some layout formatting required
+        CircleImageView circleImageView = (CircleImageView) view.findViewById(R.id.user_profile_photo);
+        circleImageView.setVisibility(View.GONE);
+
+        ImageView profileImage = (ImageView) view.findViewById(R.id.textDrawableView);
+        profileImage.setImageDrawable(user.getProfileImage());
+        profileImage.setVisibility(View.VISIBLE);
+        view.findViewById(R.id.textDrawableBorder).setVisibility(View.VISIBLE);
+    }
+
     //this provides alternate layout since layer effect cannot be achieved pre-Lollipop
     //image can be set with either resourceID or text drawable
     //todo once image upload is supported need to edit code
@@ -109,7 +124,7 @@ public class ProfileFragment extends Fragment {
         profileHeader.setImageDrawable(imageDrawable);
 
         TextView profileName = (TextView) view.findViewById(R.id.user_profile_name);
-        profileName.setPadding(20, 150, 20, 150);
+        profileName.setPadding(20, 100, 20, 100);
         CircleImageView profileImage = (CircleImageView) view.findViewById(R.id.user_profile_photo);
         profileImage.setVisibility(View.GONE);
     }

@@ -48,20 +48,21 @@ public class ViewGroupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_group, container, false);
+        JsonArray membersJsonArray = null;
+        JsonObject groupJson = null;
 
         if (getArguments() != null) {
-            JsonArray membersJsonArray;
             groupId = getArguments().getString(GET_GROUP_ID);
-            JsonObject groupJson = SynchroAPI.getInstance().getGroupById(groupId);
-            groupData = GroupData.parseSingleGroup(groupJson);
+            groupJson = SynchroAPI.getInstance().getGroupById(groupId);
             membersJsonArray = SynchroAPI.getInstance().getUsersByGroupId(groupId);
-            members = User.parseUsers(membersJsonArray);
         }
 
-        if (groupData==null || members==null) {
+        if (groupJson==null || membersJsonArray==null) {
             rootView = inflater.inflate(R.layout.error_layout, container, false);
         }
         else {
+            groupData = GroupData.parseSingleGroup(groupJson);
+            members = User.parseUsers(membersJsonArray);
             setupTabs(rootView);
         }
 
@@ -73,6 +74,8 @@ public class ViewGroupFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (groupData!=null && members!=null) {
+
+            System.out.println(groupData.getName() + " " + groupData.isAdmin());
 
             FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
             fab.setOnClickListener(new View.OnClickListener() {

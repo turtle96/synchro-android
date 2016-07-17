@@ -76,4 +76,5 @@
     <string name="tags">Tags</string>
     <string name="tags_field_message">Tags will help other users find your group more easily.
         Please note that each word (separated by spaces) is taken as a single tag.</string>
+    <string name="edit_profile">Edit Profile</string>
 </resources>
