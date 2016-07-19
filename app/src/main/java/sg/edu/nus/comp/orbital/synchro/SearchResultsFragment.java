@@ -8,6 +8,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -52,9 +54,14 @@ public class SearchResultsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         if (getArguments() != null) {
-            query = getArguments().getString(GET_SEARCH_QUERY);
+            //this ensures if there's multiple searches, back button shows correct result
+            if (query == null) {
+                query = getArguments().getString(GET_SEARCH_QUERY);
+            }
+
             return inflater.inflate(R.layout.fragment_search_results, container, false);
         }
         else {
@@ -79,8 +86,6 @@ public class SearchResultsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        search();
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String q) {
@@ -94,14 +99,22 @@ public class SearchResultsFragment extends Fragment {
                 return false;
             }
         });
+
+        search();
+    }
+
+    //clears searchview on bar
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
     }
 
     private void search() {
         //display results according to filters: users or groups
         //note: buttons are mutually exclusive
-
-        buttonUsers.setChecked(true);
-        displayUsers(recyclerView, query);
+        buttonGroups.setChecked(true);
+        displayGroups(recyclerView, query);
 
         //toggle search users only
         buttonUsers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -127,6 +140,8 @@ public class SearchResultsFragment extends Fragment {
                 if (isChecked) {
                     // The toggle is enabled
                     buttonUsers.setChecked(false);
+
+                    //todo fix search results views
                     displayGroups(recyclerView, query);
                 }
                 else if (!buttonUsers.isChecked()) {

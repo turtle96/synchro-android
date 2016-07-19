@@ -39,7 +39,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="MainHeader2">
+    <style name="MainHeaderGreen">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:background">@color/colorPrimary</item>

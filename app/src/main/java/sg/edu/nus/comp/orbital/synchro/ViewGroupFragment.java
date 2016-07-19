@@ -6,9 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -73,22 +78,82 @@ public class ViewGroupFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (groupData!=null && members!=null) {
-
-            System.out.println(groupData.getName() + " " + groupData.isAdmin());
-
-            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "joined group (theoretically)", Toast.LENGTH_LONG).show();
-                }
-            });
-
-            TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
-            groupName.setText(groupData.getName());
+        if (groupData==null || members==null) {
+            return;
         }
 
+        System.out.println(groupData.getName() + " " + groupData.isAdmin());
+
+        TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
+        groupName.setText(groupData.getName());
+
+        final FloatingActionButton fabJoinGroup = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
+        final FloatingActionButton fabGoToPosts = (FloatingActionButton) view.findViewById(R.id.fab_goto_posts);
+
+        fabGoToPosts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction().addToBackStack(null);
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                        android.R.anim.fade_in, android.R.anim.fade_out);
+                transaction.replace(R.id.content_fragment, PostsFragment.newInstance());
+                transaction.commit();
+            }
+        });
+
+        fabJoinGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean result = SynchroAPI.getInstance().postJoinGroup(groupId);
+
+                if (result) {
+                    fabJoinGroup.hide();
+                    fabGoToPosts.show();
+                    setHasOptionsMenu(true);
+                }
+            }
+        });
+
+        if (groupData.isAdmin()) {
+            fabGoToPosts.setVisibility(View.VISIBLE);
+            setHasOptionsMenu(true);
+        }
+        else {
+            fabJoinGroup.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_view_group, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_leave_group) {
+            boolean result = SynchroAPI.getInstance().postLeaveGroup(groupId);
+            if (result) {
+                Toast.makeText(getContext(), "Sayonara~", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                        android.R.anim.fade_in, android.R.anim.fade_out);
+                transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
+                transaction.commit();
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     //setup tab layouts and child fragments: GroupDetails and GroupMembers

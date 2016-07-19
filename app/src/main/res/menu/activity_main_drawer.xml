@@ -3,6 +3,14 @@
 
     <group android:checkableBehavior="single">
 
+        <item android:title="Dev Test">
+            <menu>
+                <item
+                    android:id="@+id/nav_posts"
+                    android:title="View Posts Page" />
+            </menu>
+        </item>
+
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_face_black_24dp"

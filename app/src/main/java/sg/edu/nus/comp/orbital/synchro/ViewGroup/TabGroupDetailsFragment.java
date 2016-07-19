@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -62,8 +63,14 @@ public class TabGroupDetailsFragment extends Fragment{
         if (groupData.getTagsArr() != null) {
             ArrayList<String> tagsArr = groupData.getTagsArr();
             TextView tagsTextView = (TextView) view.findViewById(R.id.valueTags);
+            String htmlStr, hexColor;
+            ColorGenerator generator = ColorGenerator.MATERIAL;
+            int color;
             for (String tag: tagsArr) {
-                tagsTextView.append(tag + " ");
+                color = generator.getRandomColor();
+                hexColor = "#" + Integer.toHexString(color).substring(2);
+                htmlStr = "<font color='" + hexColor + "'>" + tag + " " +"</font>";
+                tagsTextView.append(Html.fromHtml(htmlStr));
             }
         }
     }

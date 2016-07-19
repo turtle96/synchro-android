@@ -21,7 +21,8 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 public class RecommendationsFragment extends Fragment {
 
-    private static JsonArray groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
+    private static JsonArray groupsJsonArray = SynchroAPI.getInstance().getRecommendations();
+    private static ArrayList<GroupData> groupDatas = GroupData.parseGroupsByModuleCount(groupsJsonArray);
 
     public RecommendationsFragment() {
         // Required empty public constructor
@@ -36,6 +37,10 @@ public class RecommendationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if (groupsJsonArray==null || groupDatas==null) {
+            return inflater.inflate(R.layout.error_layout, container, false);
+        }
+
         return inflater.inflate(R.layout.fragment_recommendations, container, false);
     }
 
@@ -43,7 +48,9 @@ public class RecommendationsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ArrayList<GroupData> groupDatas = GroupData.parseAndFilterGroups(groupsJsonArray, "m");
+        if (groupDatas == null) {
+            return;
+        }
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_recommend_groups);
         recyclerView.setHasFixedSize(true);

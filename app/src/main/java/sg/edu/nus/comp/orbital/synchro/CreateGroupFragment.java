@@ -196,7 +196,7 @@ public class CreateGroupFragment extends Fragment {
                 }
 
                 GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, dateYear,
-                        dateMonth, dateDay, timeHour, timeMinute, groupVenue, groupTags, null);
+                        dateMonth, dateDay, timeHour, timeMinute, groupVenue, groupTags, null, true);
 
                 AsyncTaskCreateGroup.loadCreateGroup(new ProgressDialog(getContext()), newGroupData,
                         getFragmentManager());

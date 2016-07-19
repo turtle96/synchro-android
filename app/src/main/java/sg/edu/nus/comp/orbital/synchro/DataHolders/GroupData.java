@@ -28,14 +28,14 @@ public class GroupData {
     private String tagsStr;             //for create group (app --> server)
     private ArrayList<String> tagsArr;  //for display group (server --> app)
     private TextDrawable image;         //if group has no image
-    private boolean isAdmin = false;
+    private boolean isAdmin;
 
     //parameters: id, name, type, description, dateYear, dateMonth, dateDay, timeHr, timeMinute, venue
     //tags can be sent in as string or array, put in null if not applicable
     //be careful not to mess up ORDER!
     public GroupData(String id, String name, String type, String desc, String dateYear, String dateMonth,
                      String dateDay, int timeHour, int timeMinute, String venue,
-                     String tagsStr, ArrayList<String> tagsArr) {
+                     String tagsStr, ArrayList<String> tagsArr, boolean isAdmin) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -64,6 +64,7 @@ public class GroupData {
         this.venue = venue;
         this.tagsStr = tagsStr;
         this.tagsArr = tagsArr;
+        this.isAdmin = isAdmin;
 
         ColorGenerator generator = ColorGenerator.MATERIAL;
         int color = generator.getRandomColor();
@@ -87,7 +88,6 @@ public class GroupData {
     public boolean isAdmin() {return isAdmin;}
 
     ////////// Setters /////////////
-    public void setIsAdmin() {isAdmin = true;}
 
     ///////// Formatters ///////////
 
@@ -147,6 +147,7 @@ public class GroupData {
         String type, description, dateYear, dateMonth, dateDay, venue;
         int hourOfDay, minute;
         ArrayList<String> tagsArr = null;
+        boolean isAdmin = false;
 
         //dummy data for server data that are blank
         type = "default type";
@@ -181,9 +182,12 @@ public class GroupData {
         if (group.has("tags")) {
             tagsArr = parseTags(group.get("tags").getAsJsonArray());
         }
+        if (group.has("is_admin") && group.get("is_admin").getAsString().equals("1")) {
+            isAdmin = true;
+        }
 
         return new GroupData(group.get("id").getAsString(), group.get("name").getAsString(), type,
-                description, dateYear, dateMonth, dateDay, hourOfDay, minute, venue, null, tagsArr);
+                description, dateYear, dateMonth, dateDay, hourOfDay, minute, venue, null, tagsArr, isAdmin);
     }
 
     // static method
@@ -225,9 +229,6 @@ public class GroupData {
         for (int i=0; i<groupsJsonArray.size(); i++) {
             object = groupsJsonArray.get(i).getAsJsonObject();
             groupDatas.add(parseSingleGroup(object));
-            if (object.has("pivot") && object.get("pivot").getAsJsonObject().get("is_admin").getAsString().equals("1")) {
-                groupDatas.get(i).setIsAdmin();
-            }
         }
 
         return groupDatas;
@@ -235,18 +236,15 @@ public class GroupData {
 
     /*  todo remove when recommendations merged to backend
         temporary for recommendations preview only
-        filter version: only returns list of all group names containing given string
-        static
         takes in JsonArray of group details called from server and parses to GroupData objects
-        automatically adds in default placeholder string for descriptions
         returns ArrayList
     */
-    public static ArrayList<GroupData> parseAndFilterGroups(JsonArray groupsJsonArray, String filterStr) {
+    public static ArrayList<GroupData> parseGroupsByModuleCount(JsonArray groupsJsonArray) {
         ArrayList<GroupData> groupDatas = new ArrayList<>();
         JsonObject object;
         for (int i=0; i<groupsJsonArray.size(); i++) {
             object = groupsJsonArray.get(i).getAsJsonObject();
-            if (object.get("name").toString().contains(filterStr)) {
+            if (object.get("matching_modules_count").getAsInt() > 0) {
                 groupDatas.add(parseSingleGroup(object));
             }
         }

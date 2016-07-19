@@ -9,17 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import java.util.ArrayList;
 
-import sg.edu.nus.comp.orbital.synchro.App;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 import sg.edu.nus.comp.orbital.synchro.R;
-import sg.edu.nus.comp.orbital.synchro.ViewGroupFragment;
 import sg.edu.nus.comp.orbital.synchro.ViewUserFragment;
 
 /**
@@ -42,7 +36,7 @@ public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapte
 
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_members_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_member_layout, parent, false);
         CardViewHolder cardViewHolder = new CardViewHolder(view);
         return cardViewHolder;
     }
@@ -61,12 +55,6 @@ public class CardViewUserAdapter extends RecyclerView.Adapter<CardViewUserAdapte
     @Override
     public int getItemCount() {
         return list.size();
-    }
-
-    //clears the recyclerview by clearing list of info
-    public void clearView() {
-        list.clear();
-        notifyDataSetChanged();
     }
 
     protected class CardViewHolder extends RecyclerView.ViewHolder {

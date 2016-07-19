@@ -163,7 +163,8 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 app:backgroundTint="@color/colorAccent"
-                android:text="@string/create"/>
+                android:text="@string/create"
+                android:textColor="@color/plain_white"/>
 
         </LinearLayout>
 

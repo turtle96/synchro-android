@@ -25,7 +25,7 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 public class GroupsJoinedFragment extends Fragment {
 
-    private static ArrayList<GroupData> groupDatas = SynchroDataLoader.getGroupDatas();
+    private static ArrayList<GroupData> groupDatas;
 
     public GroupsJoinedFragment() {
         // Required empty public constructor
@@ -46,6 +46,8 @@ public class GroupsJoinedFragment extends Fragment {
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_groups_joined, container, false);
+
+        groupDatas = SynchroDataLoader.getGroupDatas();
 
         if (groupDatas != null) {
             if (groupDatas.size() == 0) {
@@ -72,7 +74,6 @@ public class GroupsJoinedFragment extends Fragment {
     }
 
     /*  setups cardviews for display of group details
-        NOTE: user called is not current user, endpoint not configured yet
     */
     private void displayGroupsJoined(View rootView) {
 
@@ -100,10 +101,10 @@ public class GroupsJoinedFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
             SynchroDataLoader.loadGroupsJoinedData();
-            FragmentManager manager = getActivity().getSupportFragmentManager();
+
+            FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.setCustomAnimations(R.anim.fragment_fade_in, R.anim.fragment_fade_out,
                     R.anim.fragment_fade_in, R.anim.fragment_fade_out);

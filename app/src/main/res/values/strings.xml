@@ -16,6 +16,9 @@
     <string name="create_new_group">Create New Group</string>
     <string name="recommendations">Recommendations</string>
 
+    <string name="very_small_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et lacus sit amet
+        lectus suscipit eleifend. Nam gravida turpis in turpis feugiat dignissim. Nulla facilisi.</string>
+
     <string name="small_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et lacus sit amet
         lectus suscipit eleifend. Nam gravida turpis in turpis feugiat dignissim. Nulla facilisi. Donec ultrices
         turpis arcu, id feugiat sem sagittis non. Mauris eu tristique risus. Fusce eleifend ex id
@@ -28,37 +31,6 @@
         ut efficitur libero viverra. Ut vel tellus imperdiet, luctus tellus ut, euismod urna. Quisque non commodo sem,
         eget molestie ligula. Donec enim augue, imperdiet a pellentesque quis, pulvinar sit amet massa.
         Nulla vel varius tellus. Phasellus blandit tristique feugiat.</string>
-
-    <string name="large_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Proin elit est, suscipit vel lectus nec, interdum egestas neque. Sed elementum quam diam.
-        Donec iaculis tristique tellus, fringilla mollis massa. Pellentesque laoreet, augue vel sagittis efficitur,
-        felis augue porta quam, luctus dictum nisl nisl at metus. Aliquam congue facilisis nisl.
-        Morbi dapibus ligula ut ligula convallis consectetur. Morbi posuere sem vitae ex suscipit mattis.
-        Nam feugiat ligula at nibh gravida, ultricies malesuada ante fermentum. Ut ultricies quis mauris ac
-        molestie. Aenean eget nunc euismod, bibendum sapien nec, tincidunt nibh. Curabitur est turpis,
-        faucibus quis congue eleifend, consequat non libero. Mauris ullamcorper nec purus ac tempor. Maecenas
-        interdum, massa vel mattis aliquet, ligula est suscipit lectus, sed laoreet nisl dolor a justo.
-        Curabitur eget ex ut mi consectetur fermentum eu vel quam. Vivamus faucibus justo ligula, in maximus libero
-        condimentum in. Mauris convallis odio vitae sem bibendum, vel mattis enim cursus.
-        Sed tincidunt commodo ipsum, vitae vehicula nibh. Nullam vitae quam bibendum, pretium erat et,
-        euismod sem. Ut dictum imperdiet arcu. Suspendisse cursus iaculis ligula, accumsan ultricies
-        nulla dignissim tincidunt. Nulla felis arcu, eleifend vitae accumsan sit amet, suscipit sed augue.
-        Quisque facilisis sodales turpis. Nullam eget tristique ipsum, mollis fermentum massa. Nulla ac risus
-        in nisi lacinia facilisis sit amet nec purus. Proin neque magna, suscipit vel ligula quis,
-        sagittis convallis neque. Morbi in maximus mi. Integer nec magna ac quam luctus pulvinar vitae eget mauris.
-        Nam convallis tortor vel velit auctor, id suscipit erat luctus. Morbi at ligula vel nunc vestibulum eleifend.
-        Cras eget faucibus mauris, eget dignissim orci. Sed volutpat tempor ante ut aliquam.
-        Proin pulvinar imperdiet diam quis bibendum. Suspendisse lacinia, leo in bibendum porttitor,
-        sem felis imperdiet mi, ut tincidunt elit eros nec arcu. Nullam sit amet augue at dui commodo scelerisque.
-        Etiam sed ante vel augue interdum aliquam. Vivamus libero urna, vulputate vitae nulla vitae,
-        rhoncus consequat turpis. Suspendisse a tellus ut diam placerat viverra. Mauris commodo,
-        massa sed auctor mattis, nisi quam auctor neque, at accumsan turpis sapien quis urna. Maecenas ligula metus,
-        aliquam vitae vehicula congue, congue in elit. Nulla lobortis aliquam mi ac lacinia. Sed eros tellus,
-        interdum sit amet feugiat vitae, dictum nec eros. Pellentesque habitant morbi tristique senectus et netus
-        et malesuada fames ac turpis egestas. Aliquam erat volutpat. Vivamus eget magna eget ipsum commodo fermentum.
-        Sed vulputate varius interdum. Nullam ultricies ex eu lacus egestas, vitae sagittis magna facilisis.
-        Etiam semper augue vel rutrum condimentum. Vivamus risus odio, fringilla sit amet velit ac, varius
-        ullamcorper nulla. Nullam sodales est sit amet tincidunt malesuada.</string>
 
     <string name="about_me">About Me</string>
     <string name="group_name">Group Name</string>
@@ -77,4 +49,5 @@
     <string name="tags_field_message">Tags will help other users find your group more easily.
         Please note that each word (separated by spaces) is taken as a single tag.</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="refresh">Refresh</string>
 </resources>

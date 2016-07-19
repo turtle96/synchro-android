@@ -149,6 +149,9 @@ public class DrawerActivity extends AppCompatActivity
 
                 // replace the content_fragment with appropriate view
                 switch(id){
+                    case R.id.nav_posts:
+                        transaction.replace(R.id.content_fragment, PostsFragment.newInstance());
+                        break;
                     case R.id.nav_profile:
                         //fragmentNavigation(manager, transaction, "Profile", ProfileFragment.newInstance());
                         transaction.replace(R.id.content_fragment, ProfileFragment.newInstance());

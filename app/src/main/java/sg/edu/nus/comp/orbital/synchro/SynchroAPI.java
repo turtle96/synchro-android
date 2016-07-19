@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.gson.GsonArrayParser;
@@ -115,7 +116,7 @@ public class SynchroAPI {
         try {
             result = Ion.with(App.getContext())
                     .load(ivleValidate)
-                    //.setLogging("MyLogs", Log.VERBOSE)
+                    .setLogging("MyLogs", Log.VERBOSE)
                     .asJsonObject()
                     .get();
         }catch (Exception ex){
@@ -358,30 +359,84 @@ public class SynchroAPI {
     }
 
     //given group id, sends post request to join group
-    public void postJoinGroup(String groupId) {
-
+    public boolean postJoinGroup(String groupId) {
+        boolean success;
         String url = apiMeGroups + "/" + groupId + "/join";
+        JsonObject result = null;
 
         try {
-            Ion.with(App.getContext())
-                .load(url)
-                .addHeader("Authorization", ivleAuthToken)
-                .setJsonObjectBody(new JsonObject())
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        Toast.makeText(App.getContext(), result.get("message").getAsString(), Toast.LENGTH_SHORT).show();
-                        SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
-                    }
-                });
+            result = Ion.with(App.getContext())
+                    .load(url)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .setJsonObjectBody(new JsonObject())
+                    .asJsonObject()
+                    .get();
         }catch (Exception ex){
-            ex.printStackTrace();
+            System.out.println("Error joining group " + ex.toString());
         }
+
+        if (result != null) {
+            Toast.makeText(App.getContext(), result.get("message").getAsString(),
+                    Toast.LENGTH_SHORT).show();
+            SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
+            success = true;
+        }
+        else {
+            Toast.makeText(App.getContext(), "error joining group",
+                    Toast.LENGTH_SHORT).show();
+            success = false;
+        }
+
+        return success;
+    }
+
+    public boolean postLeaveGroup(String groupId) {
+        boolean success;
+        String url = apiMeGroups + "/" + groupId + "/leave";
+        JsonObject result = null;
+
+        try {
+            result = Ion.with(App.getContext())
+                    .load(url)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .setJsonObjectBody(new JsonObject())
+                    .asJsonObject()
+                    .get();
+        }catch (Exception ex){
+            System.out.println("Error leaving group " + ex.toString());
+        }
+
+        if (result != null) {
+            //Toast.makeText(App.getContext(), result.get("message").getAsString(), Toast.LENGTH_SHORT).show();
+            SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
+            success = true;
+        }
+        else {
+            Toast.makeText(App.getContext(), "Error leaving group", Toast.LENGTH_SHORT).show();
+            success = false;
+        }
+
+        return success;
     }
 
     public JsonArray getSearchGroups(String query) {
         String url = apiGroups + "/search?name=" + query + "&tags=" + query;
+        JsonArray result = null;
+        try {
+            result = Ion.with(App.getContext())
+                    .load(url)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            System.out.println("Error here" + ex.toString());
+        }
+
+        return result;
+    }
+
+    public JsonArray getRecommendations() {
+        String url = apiUsers + "/" + SynchroDataLoader.getUserProfile().getId() + "/groups/recommends";
         JsonArray result = null;
         try {
             result = Ion.with(App.getContext())
