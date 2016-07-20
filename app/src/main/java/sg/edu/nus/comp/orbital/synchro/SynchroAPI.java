@@ -116,7 +116,7 @@ public class SynchroAPI {
         try {
             result = Ion.with(App.getContext())
                     .load(ivleValidate)
-                    .setLogging("MyLogs", Log.VERBOSE)
+                    //.setLogging("MyLogs", Log.VERBOSE)
                     .asJsonObject()
                     .get();
         }catch (Exception ex){
@@ -367,6 +367,7 @@ public class SynchroAPI {
         try {
             result = Ion.with(App.getContext())
                     .load(url)
+                    .setTimeout(5000)
                     .addHeader("Authorization", ivleAuthToken)
                     .setJsonObjectBody(new JsonObject())
                     .asJsonObject()
@@ -382,8 +383,6 @@ public class SynchroAPI {
             success = true;
         }
         else {
-            Toast.makeText(App.getContext(), "error joining group",
-                    Toast.LENGTH_SHORT).show();
             success = false;
         }
 
@@ -398,6 +397,8 @@ public class SynchroAPI {
         try {
             result = Ion.with(App.getContext())
                     .load(url)
+                    //.setLogging("MyLogs", Log.VERBOSE)
+                    .setTimeout(5000)
                     .addHeader("Authorization", ivleAuthToken)
                     .setJsonObjectBody(new JsonObject())
                     .asJsonObject()
@@ -407,12 +408,10 @@ public class SynchroAPI {
         }
 
         if (result != null) {
-            //Toast.makeText(App.getContext(), result.get("message").getAsString(), Toast.LENGTH_SHORT).show();
             SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
             success = true;
         }
         else {
-            Toast.makeText(App.getContext(), "Error leaving group", Toast.LENGTH_SHORT).show();
             success = false;
         }
 

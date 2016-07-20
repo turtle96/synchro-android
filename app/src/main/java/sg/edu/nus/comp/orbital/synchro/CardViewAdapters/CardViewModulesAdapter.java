@@ -35,11 +35,22 @@ public class CardViewModulesAdapter extends RecyclerView.Adapter<CardViewModules
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
         holder.moduleYearView.setText(list.get(position).getYear());
+
         holder.moduleSem1View.setText("Sem 1");
         holder.moduleListSem1.setText(list.get(position).getListSem1());
 
         holder.moduleSem2View.setText("Sem 2");
         holder.moduleListSem2.setText(list.get(position).getListSem2());
+
+        if (list.get(position).getListSem1().isEmpty()) {
+            holder.moduleSem1View.setVisibility(View.GONE);
+            holder.moduleListSem1.setVisibility(View.GONE);
+        }
+
+        if (list.get(position).getListSem2().isEmpty()) {
+            holder.moduleSem2View.setVisibility(View.GONE);
+            holder.moduleListSem2.setVisibility(View.GONE);
+        }
     }
 
     @Override

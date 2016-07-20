@@ -234,8 +234,7 @@ public class GroupData {
         return groupDatas;
     }
 
-    /*  todo remove when recommendations merged to backend
-        temporary for recommendations preview only
+    /*  temporary for recommendations preview only
         takes in JsonArray of group details called from server and parses to GroupData objects
         returns ArrayList
     */

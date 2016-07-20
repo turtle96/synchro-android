@@ -1,5 +1,8 @@
 package sg.edu.nus.comp.orbital.synchro;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,7 +86,7 @@ public class ViewGroupFragment extends Fragment {
             return;
         }
 
-        System.out.println(groupData.getName() + " " + groupData.isAdmin());
+        //System.out.println(groupData.getName() + " " + groupData.isAdmin());
 
         TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
         groupName.setText(groupData.getName());
@@ -112,6 +116,9 @@ public class ViewGroupFragment extends Fragment {
                     fabGoToPosts.show();
                     setHasOptionsMenu(true);
                 }
+                else {
+                    Toast.makeText(getContext(), "error joining group", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -140,20 +147,45 @@ public class ViewGroupFragment extends Fragment {
         int id = item.getItemId();
 
         if (id == R.id.action_leave_group) {
-            boolean result = SynchroAPI.getInstance().postLeaveGroup(groupId);
-            if (result) {
-                Toast.makeText(getContext(), "Sayonara~", Toast.LENGTH_SHORT).show();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
-                        android.R.anim.fade_in, android.R.anim.fade_out);
-                transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
-                transaction.commit();
-            }
+            leaveGroup();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void leaveGroup() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+        alertDialog.setTitle("Leave Group");
+        alertDialog.setMessage("Are you sure you want to leave?");
+
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AsyncTaskLeaveGroup.load(new ProgressDialog(getContext()), groupId, getFragmentManager());
+            }
+        });
+        alertDialog.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+    }
+
+    public static void redirectAfterLeaveGroup(boolean result, FragmentManager manager) {
+        if (result) {
+            Toast.makeText(App.getContext(), "Sayonara~", Toast.LENGTH_SHORT).show();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
+            transaction.commit();
+        }
+        else {
+            Toast.makeText(App.getContext(), "Error leaving group", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //setup tab layouts and child fragments: GroupDetails and GroupMembers

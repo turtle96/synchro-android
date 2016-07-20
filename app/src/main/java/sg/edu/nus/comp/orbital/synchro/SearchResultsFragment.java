@@ -140,8 +140,6 @@ public class SearchResultsFragment extends Fragment {
                 if (isChecked) {
                     // The toggle is enabled
                     buttonUsers.setChecked(false);
-
-                    //todo fix search results views
                     displayGroups(recyclerView, query);
                 }
                 else if (!buttonUsers.isChecked()) {
