@@ -53,9 +53,11 @@ public class AsyncTaskDataLoader {
     public static void loadInitialData(Activity activity) {
         if (activity instanceof SplashActivity) {
             splashActivity = (SplashActivity) activity;
+            drawerActivity = null;
         }
         else if (activity instanceof DrawerActivity) {
             drawerActivity = (DrawerActivity) activity;
+            splashActivity = null;
         }
 
         initializeProgress();
@@ -120,14 +122,10 @@ public class AsyncTaskDataLoader {
             }
 
             if (splashActivity != null) {
-                //System.out.println("redirect splash");
                 splashActivity.redirectFromSplash();
-                splashActivity = null;                  //resets to null to prevent overlap if AsyncTask called again
             }
             else if (drawerActivity != null) {
-                //System.out.println("redirect drawer");
                 drawerActivity.redirectToGroupsJoined();
-                drawerActivity = null;                 //resets to null to prevent overlap if AsyncTask called again
             }
         }
 
