@@ -89,10 +89,17 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (profile!=null && moduleLists!=null) {
+        if (profile==null && moduleLists==null) {
+            return;
+        }
+
+        if (profile != null) {
             displayProfileInfo(view, profile);
+        }
+        if (moduleLists != null) {
             displayModulesTaken(view, moduleLists);
         }
+
     }
 
     public static void displayTextDrawable(View view, User user) {

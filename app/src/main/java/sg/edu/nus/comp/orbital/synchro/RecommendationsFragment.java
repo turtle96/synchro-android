@@ -40,6 +40,9 @@ public class RecommendationsFragment extends Fragment {
         if (groupsJsonArray==null || groupDatas==null) {
             return inflater.inflate(R.layout.error_layout, container, false);
         }
+        if (groupDatas.size() == 0) {
+            return inflater.inflate(R.layout.fragment_no_recommend, container, false);
+        }
 
         return inflater.inflate(R.layout.fragment_recommendations, container, false);
     }
@@ -48,7 +51,7 @@ public class RecommendationsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (groupDatas == null) {
+        if (groupDatas == null || groupDatas.size() == 0) {
             return;
         }
 

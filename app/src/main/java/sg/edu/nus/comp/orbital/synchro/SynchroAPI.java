@@ -20,6 +20,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Post;
 
 /**
  * Created by kfwong on 6/2/16.
@@ -43,12 +44,13 @@ public class SynchroAPI {
 
     // Synchro API endpoints
     private static final String API_BASE_URL = "https://52.77.240.7/api/v1/";
-    private static final String apiMeResync = API_BASE_URL + "me/resync";
     private static final String apiMe = API_BASE_URL + "me";
-    private static final String apiMeModules = API_BASE_URL + "me/modulesTaken";
-    private static final String apiMeGroups = API_BASE_URL + "me/groups";
+    private static final String apiMeResync = apiMe + "/resync";
+    private static final String apiMeModules = apiMe + "/modulesTaken";
+    private static final String apiMeGroups = apiMe + "/groups";
     private static final String apiUsers = API_BASE_URL + "users";
     private static final String apiGroups = API_BASE_URL + "groups";
+    private static final String apiPosts = API_BASE_URL + "posts";
 
     private SynchroAPI(String ivleAuthToken) {
         // default private singleton
@@ -325,7 +327,7 @@ public class SynchroAPI {
     public String postNewGroup(GroupData group) {
 
         JsonObject groupJson = group.parseToPostGroupJson();
-        System.out.println("Json here " + groupJson.toString());
+        //System.out.println("Json here " + groupJson.toString());
 
         String id = "default id";
         JsonObject result = null;
@@ -377,8 +379,6 @@ public class SynchroAPI {
         }
 
         if (result != null) {
-            Toast.makeText(App.getContext(), result.get("message").getAsString(),
-                    Toast.LENGTH_SHORT).show();
             SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
             success = true;
         }
@@ -389,6 +389,7 @@ public class SynchroAPI {
         return success;
     }
 
+    //given group id, sends post request to leave group
     public boolean postLeaveGroup(String groupId) {
         boolean success;
         String url = apiMeGroups + "/" + groupId + "/leave";
@@ -418,6 +419,8 @@ public class SynchroAPI {
         return success;
     }
 
+    //sends search query call to server, returns JsonArray of groups with matching keywords
+    //searches both name and tags
     public JsonArray getSearchGroups(String query) {
         String url = apiGroups + "/search?name=" + query + "&tags=" + query;
         JsonArray result = null;
@@ -434,6 +437,7 @@ public class SynchroAPI {
         return result;
     }
 
+    //gets recommendations
     public JsonArray getRecommendations() {
         String url = apiUsers + "/" + SynchroDataLoader.getUserProfile().getId() + "/groups/recommends";
         JsonArray result = null;
@@ -448,5 +452,51 @@ public class SynchroAPI {
         }
 
         return result;
+    }
+
+    //retrieves posts by group id
+    public JsonArray getPostsByGroupId(String id) {
+        String url = apiGroups + "/" + id + "/posts";
+        JsonArray result = null;
+        try {
+            result = Ion.with(App.getContext())
+                    .load(url)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonArray()
+                    .get();
+        }catch (Exception ex){
+            System.out.println("Error here" + ex.toString());
+        }
+
+        return result;
+    }
+
+    public boolean postNewPost(Post post) {
+        JsonObject postJson = post.parseToPostJson();
+        JsonObject result = null;
+
+        try {
+            result = Ion.with(App.getContext())
+                    .load(apiPosts)
+                    //.setLogging("PostLogs", Log.VERBOSE)
+                    .setTimeout(5000)
+                    .setHeader("Authorization", ivleAuthToken)
+                    .setHeader("Content-Type", "application/json")
+                    .setJsonObjectBody(postJson)
+                    .asJsonObject()
+                    .get();
+
+        }catch (Exception ex){
+            System.out.println("Error here " + ex.toString());
+        }
+
+
+        if (result != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 }

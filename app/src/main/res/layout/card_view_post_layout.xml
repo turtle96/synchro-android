@@ -5,10 +5,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="3dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_margin="8dp">
 
         <TextView
@@ -18,8 +17,18 @@
 
         <TextView
             android:id="@+id/valueUserPost"
+            android:layout_below="@+id/valueUserName"
             style="@style/TextBody1"
             android:text="post message"/>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/valueDateAndTime"
+            android:text="Date and Time"
+            style="@style/TextBody1"
+            android:textSize="12sp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-8dp"/>
+
+    </RelativeLayout>
 </android.support.v7.widget.CardView>

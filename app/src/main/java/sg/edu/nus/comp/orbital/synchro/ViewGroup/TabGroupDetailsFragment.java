@@ -73,6 +73,15 @@ public class TabGroupDetailsFragment extends Fragment{
                 tagsTextView.append(Html.fromHtml(htmlStr));
             }
         }
+
+        if (groupData.getDateServerFormat().equals("0000-00-00")) {
+            view.findViewById(R.id.labelDate).setVisibility(View.GONE);
+            view.findViewById(R.id.valueDate).setVisibility(View.GONE);
+            view.findViewById(R.id.labelTime).setVisibility(View.GONE);
+            view.findViewById(R.id.valueTime).setVisibility(View.GONE);
+            view.findViewById(R.id.labelVenue).setVisibility(View.GONE);
+            view.findViewById(R.id.valueVenue).setVisibility(View.GONE);
+        }
     }
 
 }

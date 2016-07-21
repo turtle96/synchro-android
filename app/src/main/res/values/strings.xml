@@ -44,10 +44,16 @@
     <string name="second_major">Second Major</string>
     <string name="logout">Logout</string>
     <string name="no_groups_joined_message">You have not joined any groups for the moment.
-        Use the searchbar at the top of the screen to search for groups to join :)</string>
+        Use the searchbar at the top of the screen to search for groups to join :)
+        \nSearching \"%groups\" will let you see all the groups created so far.</string>
     <string name="tags">Tags</string>
     <string name="tags_field_message">Tags will help other users find your group more easily.
         Please note that each word (separated by spaces) is taken as a single tag.</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="refresh">Refresh</string>
+    <string name="group_posts">Group Posts</string>
+    <string name="type_here">Type here...</string>
+    <string name="no_recommend_message">There\'s no recommendations available for you at the moment.
+        Please use the searchbar at the top of the screen to search for groups to join :)
+        \nSearching \"%groups\" will let you see all the groups created so far.</string>
 </resources>

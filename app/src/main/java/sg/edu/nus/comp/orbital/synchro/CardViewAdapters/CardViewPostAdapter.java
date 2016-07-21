@@ -12,6 +12,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import java.util.ArrayList;
 
 import sg.edu.nus.comp.orbital.synchro.App;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Post;
 import sg.edu.nus.comp.orbital.synchro.R;
 
 /**
@@ -19,9 +20,9 @@ import sg.edu.nus.comp.orbital.synchro.R;
  */
 public class CardViewPostAdapter extends RecyclerView.Adapter<CardViewPostAdapter.CardViewHolder> {
 
-    private ArrayList<String> list;
+    private ArrayList<Post> list;
 
-    public CardViewPostAdapter(ArrayList<String> list) {
+    public CardViewPostAdapter(ArrayList<Post> list) {
         this.list = list;
     }
 
@@ -34,14 +35,19 @@ public class CardViewPostAdapter extends RecyclerView.Adapter<CardViewPostAdapte
 
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
+        Post post = list.get(position);
+
         ColorGenerator generator = ColorGenerator.MATERIAL;
         String htmlStr, hexColor;
         int color = generator.getRandomColor();
         hexColor = "#" + Integer.toHexString(color).substring(2);
-        htmlStr = "<font color='" + hexColor + "'>" + list.get(position) + " " +"</font>";
+        htmlStr = "<font color='" + hexColor + "'>" + post.getUserName() + " " +"</font>";
 
         holder.textName.setText(Html.fromHtml(htmlStr));
-        holder.textPost.setText(holder.message);
+        holder.textPost.setText(post.getMessage());
+
+        String dateAndTime = post.getDate() + " " + post.getTime();
+        holder.textDateAndTime.setText(dateAndTime);
     }
 
     @Override
@@ -50,14 +56,14 @@ public class CardViewPostAdapter extends RecyclerView.Adapter<CardViewPostAdapte
     }
 
     protected class CardViewHolder extends RecyclerView.ViewHolder {
-        private TextView textName, textPost;
-        private String message = App.getContext().getResources().getString(R.string.very_small_text);
+        private TextView textName, textPost, textDateAndTime;
 
         public CardViewHolder(View itemView) {
             super(itemView);
 
             textName = (TextView) itemView.findViewById(R.id.valueUserName);
             textPost = (TextView) itemView.findViewById(R.id.valueUserPost);
+            textDateAndTime = (TextView) itemView.findViewById(R.id.valueDateAndTime);
         }
     }
 }

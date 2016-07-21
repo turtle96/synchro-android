@@ -3,6 +3,7 @@
 
     <group android:checkableBehavior="single">
 
+        <!--
         <item android:title="Dev Test">
             <menu>
                 <item
@@ -10,6 +11,7 @@
                     android:title="View Posts Page" />
             </menu>
         </item>
+        -->
 
         <item
             android:id="@+id/nav_profile"

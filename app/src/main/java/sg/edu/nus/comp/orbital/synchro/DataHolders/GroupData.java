@@ -182,7 +182,7 @@ public class GroupData {
         if (group.has("tags")) {
             tagsArr = parseTags(group.get("tags").getAsJsonArray());
         }
-        if (group.has("is_admin") && group.get("is_admin").getAsString().equals("1")) {
+        if (group.has("is_member") && group.get("is_member").getAsBoolean()) {
             isAdmin = true;
         }
 

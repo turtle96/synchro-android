@@ -2,7 +2,6 @@ package sg.edu.nus.comp.orbital.synchro;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -88,7 +87,7 @@ public class ViewGroupFragment extends Fragment {
 
         //System.out.println(groupData.getName() + " " + groupData.isAdmin());
 
-        TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
+        final TextView groupName = (TextView) view.findViewById(R.id.labelGroupName);
         groupName.setText(groupData.getName());
 
         final FloatingActionButton fabJoinGroup = (FloatingActionButton) view.findViewById(R.id.fab_join_group);
@@ -101,7 +100,13 @@ public class ViewGroupFragment extends Fragment {
                 FragmentTransaction transaction = fragmentManager.beginTransaction().addToBackStack(null);
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
                         android.R.anim.fade_in, android.R.anim.fade_out);
-                transaction.replace(R.id.content_fragment, PostsFragment.newInstance());
+
+                ViewPostsFragment viewPostsFragment = ViewPostsFragment.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString(GET_GROUP_ID, groupId);
+                viewPostsFragment.setArguments(bundle);
+
+                transaction.replace(R.id.content_fragment, viewPostsFragment);
                 transaction.commit();
             }
         });
@@ -109,16 +114,7 @@ public class ViewGroupFragment extends Fragment {
         fabJoinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean result = SynchroAPI.getInstance().postJoinGroup(groupId);
-
-                if (result) {
-                    fabJoinGroup.hide();
-                    fabGoToPosts.show();
-                    setHasOptionsMenu(true);
-                }
-                else {
-                    Toast.makeText(getContext(), "error joining group", Toast.LENGTH_SHORT).show();
-                }
+                AsyncTaskJoinGroup.load(new ProgressDialog(getContext()), groupId, getFragmentManager());
             }
         });
 
@@ -174,6 +170,7 @@ public class ViewGroupFragment extends Fragment {
         alertDialog.show();
     }
 
+    //to be called after AsyncTask for leaving group loaded
     public static void redirectAfterLeaveGroup(boolean result, FragmentManager manager) {
         if (result) {
             Toast.makeText(App.getContext(), "Sayonara~", Toast.LENGTH_SHORT).show();
@@ -185,6 +182,27 @@ public class ViewGroupFragment extends Fragment {
         }
         else {
             Toast.makeText(App.getContext(), "Error leaving group", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //to be called after AsyncTask for joining group loaded
+    public static void redirectAfterJoinGroup(boolean result, String groupId, FragmentManager manager) {
+        if (result) {
+            Toast.makeText(App.getContext(), "Joined group", Toast.LENGTH_SHORT).show();
+
+            ViewGroupFragment viewGroupFragment = ViewGroupFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putString(GET_GROUP_ID, groupId);
+            viewGroupFragment.setArguments(bundle);
+
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            transaction.replace(R.id.content_fragment, viewGroupFragment);
+            transaction.commit();
+        }
+        else {
+            Toast.makeText(App.getContext(), "Error joining group", Toast.LENGTH_SHORT).show();
         }
     }
 

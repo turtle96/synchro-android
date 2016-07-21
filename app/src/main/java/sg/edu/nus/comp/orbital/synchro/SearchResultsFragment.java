@@ -77,6 +77,8 @@ public class SearchResultsFragment extends Fragment {
         SearchView searchView = (SearchView) view.findViewById(R.id.searchViewInFragment);
         searchView.setQuery(query, false);
 
+        //todo buttons not visible in app demo, go to fragment layout to set cardview visibility to get buttons back
+
         buttonUsers = (ToggleButton) view.findViewById(R.id.buttonUsers);
         buttonGroups = (ToggleButton) view.findViewById(R.id.buttonGroups);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_search_results);
