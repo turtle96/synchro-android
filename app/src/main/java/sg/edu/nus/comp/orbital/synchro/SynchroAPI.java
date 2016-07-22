@@ -236,7 +236,6 @@ public class SynchroAPI {
             ex.printStackTrace();
         }
         return result;
-
     }
 
     //Retrieve list of Groups a particular User belongs to, given user id
@@ -358,6 +357,41 @@ public class SynchroAPI {
         }
 
         return id;
+    }
+
+    //for updating group
+    public boolean putNewGroup(GroupData group) {
+        JsonObject groupJson = group.parseToPostGroupJson();
+
+        System.out.println("Json here " + groupJson.toString());
+
+        JsonObject result = null;
+        String url = apiGroups + "/" + group.getId();
+
+        try {
+            result = Ion.with(App.getContext())
+                    .load("PUT", url)
+                    //.setLogging("PostLogs", Log.VERBOSE)
+                    .setTimeout(5000)
+                    .setHeader("Authorization", ivleAuthToken)
+                    .setHeader("Content-Type", "application/json")
+                    .setJsonObjectBody(groupJson)
+                    .asJsonObject()
+                    .get();
+
+        }catch (Exception ex){
+            System.out.println("Error here " + ex.toString());
+        }
+
+
+        if (result != null) {
+            System.out.println("here group: " + result.toString());
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
     //given group id, sends post request to join group
@@ -498,5 +532,36 @@ public class SynchroAPI {
             return false;
         }
 
+    }
+
+    //updates user details
+    public boolean putMe(String desc) {
+        JsonObject json = new JsonObject();
+        json.addProperty("intro", desc);
+
+        JsonObject result = null;
+
+        try {
+            result = Ion.with(App.getContext())
+                    .load("PUT", apiMe)
+                    //.setLogging("PostLogs", Log.VERBOSE)
+                    .setTimeout(5000)
+                    .setHeader("Authorization", ivleAuthToken)
+                    .setHeader("Content-Type", "application/json")
+                    .setJsonObjectBody(json)
+                    .asJsonObject()
+                    .get();
+
+        }catch (Exception ex){
+            System.out.println("Error here " + ex.toString());
+        }
+
+
+        if (result != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

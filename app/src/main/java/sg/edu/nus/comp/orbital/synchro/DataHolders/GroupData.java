@@ -83,6 +83,7 @@ public class GroupData {
     public String getTime() {return formatTime(timeHour, timeMinute);}
     public String getTimeServerFormat() {return formatTimeServer(timeHour, timeMinute);}
     public String getVenue() {return venue;}
+    public String getTagsStr() {return tagsStr;}
     public ArrayList<String> getTagsArr() {return tagsArr;}
     public TextDrawable getImage() {return image;}
     public boolean isAdmin() {return isAdmin;}
@@ -147,6 +148,7 @@ public class GroupData {
         String type, description, dateYear, dateMonth, dateDay, venue;
         int hourOfDay, minute;
         ArrayList<String> tagsArr = null;
+        String tagsStr = null;
         boolean isAdmin = false;
 
         //dummy data for server data that are blank
@@ -181,13 +183,14 @@ public class GroupData {
 
         if (group.has("tags")) {
             tagsArr = parseTags(group.get("tags").getAsJsonArray());
+            tagsStr = parseTagsString(group.get("tags").getAsJsonArray());
         }
         if (group.has("is_member") && group.get("is_member").getAsBoolean()) {
             isAdmin = true;
         }
 
         return new GroupData(group.get("id").getAsString(), group.get("name").getAsString(), type,
-                description, dateYear, dateMonth, dateDay, hourOfDay, minute, venue, null, tagsArr, isAdmin);
+                description, dateYear, dateMonth, dateDay, hourOfDay, minute, venue, tagsStr, tagsArr, isAdmin);
     }
 
     // static method
@@ -210,6 +213,24 @@ public class GroupData {
         }
 
         return tagsArr;
+    }
+
+    public static String parseTagsString(JsonArray tagsJsonArray) {
+        String tags = "";
+        JsonElement element;
+        JsonObject object;
+
+        for (int i=0; i<tagsJsonArray.size(); i++) {
+            if (tagsJsonArray.get(i).isJsonPrimitive()) {
+                element = tagsJsonArray.get(i);
+                tags = tags + " " + element.getAsString();
+            }
+            else if (tagsJsonArray.get(i).isJsonObject()) {
+                object = tagsJsonArray.get(i).getAsJsonObject();
+                tags = tags + " " + object.get("name").getAsString();
+            }
+        }
+        return tags;
     }
 
     /*

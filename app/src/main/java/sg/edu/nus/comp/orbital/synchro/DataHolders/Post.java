@@ -50,6 +50,8 @@ public class Post {
         hourOfDay = Integer.valueOf(tokens[0]);
         minute = Integer.valueOf(tokens[1]);
 
+        //System.out.println(postJson.get("name").getAsString() + " " + serverTime);
+
         String date = GroupData.formatDate(dateYear, dateMonth, dateDay);
         String time = GroupData.formatTime(hourOfDay, minute);
 
@@ -59,7 +61,8 @@ public class Post {
             groupId = postJson.get("group_id").getAsString();
         }
 
-        return new Post(groupId, "username", postJson.get("content").getAsString(), date, time);
+        return new Post(groupId, postJson.get("name").getAsString(),
+                postJson.get("content").getAsString(), date, time);
     }
 
     //given JsonArray of posts, parses and returns ArrayList of Post objects

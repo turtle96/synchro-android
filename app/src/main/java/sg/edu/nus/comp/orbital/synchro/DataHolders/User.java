@@ -16,14 +16,15 @@ import java.util.ArrayList;
  */
 public class User {
 
-    private String id, name, faculty, firstMajor, secondMajor, matriculationYear;
+    private String id, name, desc, faculty, firstMajor, secondMajor, matriculationYear;
     private boolean flagFirstMajor = false, flagSecondMajor = false;    //will be true if major is present
     private TextDrawable profileImage;
 
-    public User(String id, String name, String faculty, String firstMajor, String secondMajor,
+    public User(String id, String name, String desc, String faculty, String firstMajor, String secondMajor,
                 String matriculationYear) {
         this.id = id;
         this.name = name;
+        this.desc = desc;
         this.faculty = faculty;
 
         if (!firstMajor.equals("")) {
@@ -47,6 +48,7 @@ public class User {
     ///////// Getters /////////
     public String getId() {return id;}
     public String getName() {return name;}
+    public String getDesc() {return desc;}
     public String getFaculty() {return faculty;}
     public String getFirstMajor() {return firstMajor;}
     public String getSecondMajor() {return secondMajor;}
@@ -64,8 +66,9 @@ public class User {
         }
 
         return new User(userJson.get("id").getAsString(), userJson.get("name").getAsString(),
-                userJson.get("faculty").getAsString(), userJson.get("first_major").getAsString(),
-                userJson.get("second_major").getAsString(), userJson.get("matriculation_year").getAsString());
+                userJson.get("intro").getAsString(), userJson.get("faculty").getAsString(),
+                userJson.get("first_major").getAsString(), userJson.get("second_major").getAsString(),
+                userJson.get("matriculation_year").getAsString());
     }
 
     //given Json Array of users details, parses to ArrayList of User objects

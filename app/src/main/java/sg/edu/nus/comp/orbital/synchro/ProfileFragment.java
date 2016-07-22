@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -28,7 +31,7 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 
 public class ProfileFragment extends Fragment {
 
-    private static User profile = SynchroDataLoader.getUserProfile();
+    private User profile = SynchroDataLoader.getUserProfile();
     private static ArrayList<ModuleList> moduleLists = SynchroDataLoader.getModuleLists();
 
     public ProfileFragment() {
@@ -155,6 +158,7 @@ public class ProfileFragment extends Fragment {
     public static void displayProfileInfo(View rootView, User profile) {
 
         TextView name = (TextView) rootView.findViewById(R.id.user_profile_name);
+        TextView desc = (TextView) rootView.findViewById(R.id.valueDescription);
         TextView faculty = (TextView) rootView.findViewById(R.id.valueFaculty);
         TextView firstMajor = (TextView) rootView.findViewById(R.id.valueFirstMajor);
         TextView secondMajor = (TextView) rootView.findViewById(R.id.valueSecondMajor);
@@ -164,6 +168,7 @@ public class ProfileFragment extends Fragment {
         name.setText(profile.getName());
         //name.setText("Hermione Granger");
 
+        desc.setText(profile.getDesc());
         faculty.setText(profile.getFaculty());
 
         if (profile.hasFirstMajor()) {
@@ -200,6 +205,12 @@ public class ProfileFragment extends Fragment {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit_profile) {
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            transaction.replace(R.id.content_fragment, EditProfileFragment.newInstance());
+            transaction.commit();
             return true;
         }
 

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskDataLoader;
+
 public class SplashActivity extends AppCompatActivity {
 
     private static final String STATUS_SUCCESS = "Successful";

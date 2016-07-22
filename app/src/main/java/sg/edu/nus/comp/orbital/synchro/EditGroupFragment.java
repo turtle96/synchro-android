@@ -1,6 +1,5 @@
 package sg.edu.nus.comp.orbital.synchro;
 
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -28,21 +27,22 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskCreateGroup;
+import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskEditGroup;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link CreateGroupFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by angja_000 on 22/7/2016.
  */
-public class CreateGroupFragment extends Fragment {
+public class EditGroupFragment extends Fragment {
 
-    //TOdo should extract all constants for key into external class
+    private String groupId;
+    private JsonObject groupJson;
+    private GroupData groupData;
 
     private static final int DESC_MAX_LENGTH = 1000;
     private static final int NAME_MAX_LENGTH = 50;
@@ -55,30 +55,38 @@ public class CreateGroupFragment extends Fragment {
     private static String dateYear, dateMonth, dateDay;
     private static int timeHour, timeMinute;
 
-    public CreateGroupFragment() {
-        // Required empty public constructor
-    }
+    public EditGroupFragment() {}
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     */
-    public static CreateGroupFragment newInstance() {
-        CreateGroupFragment fragment = new CreateGroupFragment();
-        return fragment;
+    public static EditGroupFragment newInstance() {
+        return new EditGroupFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_group, container, false);
+        if (getArguments() != null) {
+            groupId = getArguments().getString(GET_GROUP_ID);
+            groupJson = SynchroAPI.getInstance().getGroupById(groupId);
+        }
+
+        if (groupJson != null) {
+            groupData = GroupData.parseSingleGroup(groupJson);
+            return inflater.inflate(R.layout.fragment_edit_group, container, false);
+        }
+        else {
+            return inflater.inflate(R.layout.error_layout, container, false);
+        }
+
     }
+
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (groupData == null) {
+            return;
+        }
 
         // group type spinner
         final Spinner spinnerGroupType = (Spinner) view.findViewById(R.id.spinnerGroupType);
@@ -138,7 +146,7 @@ public class CreateGroupFragment extends Fragment {
 
         ImageButton buttonCalendar = (ImageButton) view.findViewById(R.id.calendar_button);
         ImageButton buttonTime = (ImageButton) view.findViewById(R.id.time_button);
-        Button buttonCreate = (Button) view.findViewById(R.id.create_group_button);
+        Button buttonSave = (Button) view.findViewById(R.id.save_button);
 
         buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,10 +163,32 @@ public class CreateGroupFragment extends Fragment {
         final EditText editTextVenue = (EditText) view.findViewById(R.id.inputGroupVenue);
         final EditText editTextTags = (EditText) view.findViewById(R.id.inputGroupTags);
 
+        editTextName.setText(groupData.getName());
+        editTextDesc.setText(groupData.getDescription());
+
+        if (!groupData.getDateServerFormat().equals("0000-00-00")) {
+            editTextDate.setText(groupData.getDate());
+            editTextTime.setText(groupData.getTime());
+            editTextVenue.setText(groupData.getVenue());
+        }
+
+        editTextTags.setText(groupData.getTagsStr());
+        int index;
+        if (groupData.getType().equals("Study")) {
+            index = 0;
+        }
+        else if (groupData.getType().equals("Project")) {
+            index = 1;
+        }
+        else {
+            index = 2;
+        }
+        spinnerGroupType.setSelection(index);
+
         // create button handling
         // field validation: basic only, checks all fields are filled
         // post group + join group
-        buttonCreate.setOnClickListener(new View.OnClickListener() {
+        buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -182,7 +212,6 @@ public class CreateGroupFragment extends Fragment {
                     fields.add(groupVenue);
                 }
 
-                //todo: will probably need some validation for groupname to ensure no duplicate names
                 if (!checkFields(fields)) {
                     Snackbar checkFields = Snackbar.make(view, "Please make sure all fields are filled in :D",
                             Snackbar.LENGTH_LONG);
@@ -192,32 +221,32 @@ public class CreateGroupFragment extends Fragment {
                         }
                     });
                     checkFields.show();
-                    return;     //ensures code does not proceed to creating group
+                    return;     //ensures code does not proceed
                 }
 
-                GroupData newGroupData = new GroupData(null, groupName, groupType, groupDesc, dateYear,
+                GroupData newGroupData = new GroupData(groupId, groupName, groupType, groupDesc, dateYear,
                         dateMonth, dateDay, timeHour, timeMinute, groupVenue, groupTags, null, true);
 
-                AsyncTaskCreateGroup.loadCreateGroup(new ProgressDialog(getContext()), newGroupData,
+                AsyncTaskEditGroup.load(new ProgressDialog(getContext()), groupId, newGroupData,
                         getFragmentManager());
             }
         });
 
     }
 
-    /*  to be called from async task sending POST group
-        will check that valid group id is returned, else will show error message
+    /*  to be called from async task sending PUT group
+        will check that true result is returned, else will show error message
         then redirects to view group page
     *
     */
-    public static void createGroupLoaded(String groupId, FragmentManager manager) {
-        if (groupId.equals("default id")) {
-            Toast.makeText(App.getContext(), "Error creating group. Please try again.",
+    public static void editGroupLoaded(boolean result, String groupId, FragmentManager manager) {
+        if (!result) {
+            Toast.makeText(App.getContext(), "Error updating group. Please try again.",
                     Toast.LENGTH_SHORT).show();
             return;     //user needs to try again
         }
         else {
-            Toast.makeText(App.getContext(), "Group Created", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), "Group Updated", Toast.LENGTH_SHORT).show();
         }
 
         // redirects to new group page
@@ -313,5 +342,4 @@ public class CreateGroupFragment extends Fragment {
             editTextTime.setText(GroupData.formatTime(hourOfDay, minute));
         }
     }
-
 }

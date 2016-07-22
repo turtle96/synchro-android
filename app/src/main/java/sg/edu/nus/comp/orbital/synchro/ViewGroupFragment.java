@@ -27,6 +27,8 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskJoinGroup;
+import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskLeaveGroup;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 import sg.edu.nus.comp.orbital.synchro.ViewGroup.ViewGroupTabAdapter;
@@ -144,6 +146,20 @@ public class ViewGroupFragment extends Fragment {
 
         if (id == R.id.action_leave_group) {
             leaveGroup();
+            return true;
+        }
+        else if (id == R.id.action_edit_group) {
+            EditGroupFragment editGroupFragment = EditGroupFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putString(GET_GROUP_ID, groupId);
+            editGroupFragment.setArguments(bundle);
+
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction().addToBackStack(null);
+            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            transaction.replace(R.id.content_fragment, editGroupFragment);
+            transaction.commit();
             return true;
         }
 

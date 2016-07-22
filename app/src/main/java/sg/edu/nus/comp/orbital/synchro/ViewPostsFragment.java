@@ -1,19 +1,14 @@
 package sg.edu.nus.comp.orbital.synchro;
 
 import android.app.ProgressDialog;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +23,7 @@ import com.google.gson.JsonArray;
 
 import java.util.ArrayList;
 
+import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskSendPost;
 import sg.edu.nus.comp.orbital.synchro.CardViewAdapters.CardViewPostAdapter;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.Post;
 
@@ -87,30 +83,11 @@ public class ViewPostsFragment extends Fragment {
         final EditText editTextPost = (EditText) view.findViewById(R.id.inputPost);
         final Button buttonPost = (Button) view.findViewById(R.id.buttonPost);
 
-        editTextPost.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().length() == 0) {
-                    buttonPost.setEnabled(false);
-                }
-                else {
-                    buttonPost.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
         buttonPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String inputStr = editTextPost.getText().toString();
-
-                if (inputStr.trim().length() == 0) {
+                String inputStr = editTextPost.getText().toString().trim();
+                if (inputStr.isEmpty()) {
                     Toast.makeText(getContext(), "Empty message", Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -150,7 +127,7 @@ public class ViewPostsFragment extends Fragment {
             refreshPage(manager);
         }
         else {
-            Toast.makeText(App.getContext(), "Error posting", Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getContext(), "Error posting. Please try again.", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -68,8 +68,7 @@
             android:minWidth="0dp"
             app:backgroundTint="@color/colorAccent"
             android:textColor="@color/plain_white"
-            android:text="post"
-            android:enabled="false"/>
+            android:text="post" />
 
         <EditText
             android:id="@+id/inputPost"

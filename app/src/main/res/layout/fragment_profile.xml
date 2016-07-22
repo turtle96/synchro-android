@@ -94,7 +94,6 @@
                 style="@style/dividerStyleGreen"/>
 
             <TextView
-                android:text="@string/small_text"
                 android:id="@+id/valueDescription"
                 style="@style/TextBody1"/>
 

@@ -31,8 +31,8 @@ public class SearchResultsFragment extends Fragment {
 
     private static JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
     private static ArrayList<User> users = User.parseUsers(usersJsonArray);
-    private static JsonArray groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
-    private static ArrayList<GroupData> groupDatas = GroupData.parseGroups(groupsJsonArray);
+    private static JsonArray groupsJsonArray;
+    private static ArrayList<GroupData> groupDatas;
 
     private static ToggleButton buttonUsers;
     private static ToggleButton buttonGroups;
@@ -179,6 +179,8 @@ public class SearchResultsFragment extends Fragment {
         ArrayList<GroupData> arrayToDisplay;
 
         if (query.equalsIgnoreCase("%groups")) {
+            groupsJsonArray = SynchroAPI.getInstance().getAllGroups();
+            groupDatas = GroupData.parseGroups(groupsJsonArray);
             arrayToDisplay = groupDatas;
         }
         else {

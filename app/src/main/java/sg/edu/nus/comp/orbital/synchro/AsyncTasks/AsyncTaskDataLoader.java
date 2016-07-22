@@ -1,4 +1,4 @@
-package sg.edu.nus.comp.orbital.synchro;
+package sg.edu.nus.comp.orbital.synchro.AsyncTasks;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -6,6 +6,12 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import sg.edu.nus.comp.orbital.synchro.App;
+import sg.edu.nus.comp.orbital.synchro.DrawerActivity;
+import sg.edu.nus.comp.orbital.synchro.SplashActivity;
+import sg.edu.nus.comp.orbital.synchro.SynchroAPI;
+import sg.edu.nus.comp.orbital.synchro.SynchroDataLoader;
 
 /**
  * Created by angja_000 on 18/6/2016.

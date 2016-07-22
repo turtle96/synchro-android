@@ -1,0 +1,173 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".CreateGroupFragment">
+
+    <TextView
+        android:text="Edit Group"
+        style="@style/MainHeaderBoard"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_group_name"
+                style="@style/TextInputLayoutStyle"
+                android:layout_marginBottom="0dp">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/inputGroupName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/group_name"
+                    android:inputType="textCapWords"
+                    android:maxLength="51"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_group_type"
+                style="@style/TextInputLayoutStyle"
+                android:layout_marginTop="0dp">
+                <TextView
+                    android:id="@+id/labelGroupType"
+                    style="@style/CreateGroupLabels"
+                    android:text="@string/group_type" />
+                <Spinner
+                    android:id="@+id/spinnerGroupType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    android:theme="@style/ThemeSpinner"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_group_description"
+                style="@style/TextInputLayoutStyle">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/inputGroupDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="1001" />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/calendar_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_event_white_18dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:padding="12dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentRight="true" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_group_date"
+                    style="@style/TextInputLayoutStyle"
+                    android:layout_toLeftOf="@+id/calendar_button">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/inputGroupDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        android:hint="@string/date" />
+
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/time_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_schedule_white_18dp"
+                    app:backgroundTint="@color/colorPrimary"
+                    android:padding="12dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentRight="true" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_group_time"
+                    style="@style/TextInputLayoutStyle"
+                    android:layout_toLeftOf="@+id/time_button">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/inputGroupTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        android:hint="@string/time" />
+
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_group_venue"
+                style="@style/TextInputLayoutStyle">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/inputGroupVenue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:hint="@string/venue" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/labelGroupTags"
+                    style="@style/CreateGroupLabels"
+                    android:text="@string/tags" />
+
+                <EditText
+                    android:id="@+id/inputGroupTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/tags_field_message"
+                    android:inputType="textMultiLine"
+                    android:gravity="top|start"
+                    android:textColorHint="#99808080"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                app:backgroundTint="@color/colorAccent"
+                android:text="Save"
+                android:textColor="@color/plain_white"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

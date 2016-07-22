@@ -1,35 +1,37 @@
-package sg.edu.nus.comp.orbital.synchro;
+package sg.edu.nus.comp.orbital.synchro.AsyncTasks;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.widget.Toast;
 
+import sg.edu.nus.comp.orbital.synchro.CreateGroupFragment;
+import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
+import sg.edu.nus.comp.orbital.synchro.SynchroAPI;
+
 /**
- * Created by angja_000 on 21/7/2016.
+ * Created by angja_000 on 17/7/2016.
  */
-public class AsyncTaskJoinGroup {
-
-    private static ProgressDialog progressDialog;
+public class AsyncTaskCreateGroup {
     private static FragmentManager fragmentManager;
+    private static ProgressDialog progressDialog;
+    private static GroupData newGroupData;
     private static String groupId;
-    private static boolean result;
 
-    public static void load(ProgressDialog pd, String id, FragmentManager manager) {
+    public static void loadCreateGroup(ProgressDialog pd, GroupData gd, FragmentManager manager) {
         progressDialog = pd;
+        newGroupData = gd;
         fragmentManager = manager;
-        groupId = id;
 
-        LoadJoinGroup loadJoinGroup = new LoadJoinGroup();
-        loadJoinGroup.execute();
+        LoadCreate loadCreate = new LoadCreate();
+        loadCreate.execute();
     }
 
-    private static class LoadJoinGroup extends AsyncTask<Void, Void, Void> {
+    private static class LoadCreate extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Joining group...");
+            progressDialog.setMessage("Creating...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -37,7 +39,7 @@ public class AsyncTaskJoinGroup {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                result = SynchroAPI.getInstance().postJoinGroup(groupId);
+                groupId = SynchroAPI.getInstance().postNewGroup(newGroupData);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -48,7 +50,7 @@ public class AsyncTaskJoinGroup {
             if (progressDialog!=null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            ViewGroupFragment.redirectAfterJoinGroup(result, groupId, fragmentManager);
+            CreateGroupFragment.createGroupLoaded(groupId, fragmentManager);
         }
     }
 }

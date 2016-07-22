@@ -1,33 +1,37 @@
-package sg.edu.nus.comp.orbital.synchro;
+package sg.edu.nus.comp.orbital.synchro.AsyncTasks;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 
+import sg.edu.nus.comp.orbital.synchro.DataHolders.Post;
+import sg.edu.nus.comp.orbital.synchro.SynchroAPI;
+import sg.edu.nus.comp.orbital.synchro.ViewPostsFragment;
+
 /**
- * Created by angja_000 on 20/7/2016.
+ * Created by angja_000 on 22/7/2016.
  */
-public class AsyncTaskLeaveGroup {
+public class AsyncTaskSendPost {
 
     private static ProgressDialog progressDialog;
     private static FragmentManager fragmentManager;
-    private static String groupId;
+    private static Post post;
     private static boolean result;
 
-    public static void load(ProgressDialog pd, String id, FragmentManager manager) {
+    public static void load(ProgressDialog pd, Post p, FragmentManager manager) {
         progressDialog = pd;
+        post = p;
         fragmentManager = manager;
-        groupId = id;
 
-        LoadLeaveGroup loadLeaveGroup = new LoadLeaveGroup();
-        loadLeaveGroup.execute();
+        LoadSendPost loadSendPost = new LoadSendPost();
+        loadSendPost.execute();
     }
 
-    private static class LoadLeaveGroup extends AsyncTask<Void, Void, Void> {
+    private static class LoadSendPost extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Leaving group...");
+            progressDialog.setMessage("Posting...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -35,7 +39,7 @@ public class AsyncTaskLeaveGroup {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                result = SynchroAPI.getInstance().postLeaveGroup(groupId);
+                result = SynchroAPI.getInstance().postNewPost(post);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -46,7 +50,7 @@ public class AsyncTaskLeaveGroup {
             if (progressDialog!=null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            ViewGroupFragment.redirectAfterLeaveGroup(result, fragmentManager);
+            ViewPostsFragment.redirectAfterPost(result, fragmentManager);
         }
     }
 }

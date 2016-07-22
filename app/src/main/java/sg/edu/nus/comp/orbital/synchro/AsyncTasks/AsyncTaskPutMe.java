@@ -1,35 +1,36 @@
-package sg.edu.nus.comp.orbital.synchro;
+package sg.edu.nus.comp.orbital.synchro.AsyncTasks;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
-import android.widget.Toast;
 
-import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
+import sg.edu.nus.comp.orbital.synchro.EditProfileFragment;
+import sg.edu.nus.comp.orbital.synchro.SynchroAPI;
 
 /**
- * Created by angja_000 on 17/7/2016.
+ * Created by angja_000 on 22/7/2016.
  */
-public class AsyncTaskCreateGroup {
-    private static FragmentManager fragmentManager;
-    private static ProgressDialog progressDialog;
-    private static GroupData newGroupData;
-    private static String groupId;
+public class AsyncTaskPutMe {
 
-    public static void loadCreateGroup(ProgressDialog pd, GroupData gd, FragmentManager manager) {
+    private static ProgressDialog progressDialog;
+    private static FragmentManager fragmentManager;
+    private static String description;
+    private static boolean result;
+
+    public static void load(ProgressDialog pd, String desc, FragmentManager manager) {
         progressDialog = pd;
-        newGroupData = gd;
+        description = desc;
         fragmentManager = manager;
 
-        LoadCreate loadCreate = new LoadCreate();
-        loadCreate.execute();
+        LoadPutMe loadPutMe = new LoadPutMe();
+        loadPutMe.execute();
     }
 
-    private static class LoadCreate extends AsyncTask<Void, Void, Void> {
+    private static class LoadPutMe extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
-            progressDialog.setMessage("Creating...");
+            progressDialog.setMessage("Updating...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -37,7 +38,7 @@ public class AsyncTaskCreateGroup {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                groupId = SynchroAPI.getInstance().postNewGroup(newGroupData);
+                result = SynchroAPI.getInstance().putMe(description);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -48,7 +49,7 @@ public class AsyncTaskCreateGroup {
             if (progressDialog!=null && progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            CreateGroupFragment.createGroupLoaded(groupId, fragmentManager);
+            EditProfileFragment.redirectAfterUpdate(result, fragmentManager);
         }
     }
 }
