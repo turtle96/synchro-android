@@ -42,11 +42,16 @@ public class ViewPostsFragment extends Fragment {
         return new ViewPostsFragment();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         JsonArray postsJsonArray = null;
 
         if (getArguments() != null) {
@@ -64,7 +69,7 @@ public class ViewPostsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         if (posts == null) {
@@ -80,6 +85,8 @@ public class ViewPostsFragment extends Fragment {
 
         recyclerView.setAdapter(new CardViewPostAdapter(posts));
 
+        recyclerView.scrollToPosition(posts.size()-1);
+
         final EditText editTextPost = (EditText) view.findViewById(R.id.inputPost);
         final Button buttonPost = (Button) view.findViewById(R.id.buttonPost);
 
@@ -87,6 +94,7 @@ public class ViewPostsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String inputStr = editTextPost.getText().toString().trim();
+
                 if (inputStr.isEmpty()) {
                     Toast.makeText(getContext(), "Empty message", Toast.LENGTH_SHORT).show();
                 }
@@ -100,8 +108,8 @@ public class ViewPostsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_posts, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_posts, menu);
     }
 
     @Override

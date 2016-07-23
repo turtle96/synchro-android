@@ -4,12 +4,15 @@ package sg.edu.nus.comp.orbital.synchro;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -28,6 +31,7 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 public class SearchResultsFragment extends Fragment {
     private static final String GET_SEARCH_QUERY = "Search Query";
     private static String query;
+    private static SearchView searchView;
 
     private static JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
     private static ArrayList<User> users = User.parseUsers(usersJsonArray);
@@ -49,6 +53,12 @@ public class SearchResultsFragment extends Fragment {
     public static SearchResultsFragment newInstance() {
         SearchResultsFragment fragment = new SearchResultsFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -74,8 +84,9 @@ public class SearchResultsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SearchView searchView = (SearchView) view.findViewById(R.id.searchViewInFragment);
+        searchView = (SearchView) view.findViewById(R.id.searchViewInFragment);
         searchView.setQuery(query, false);
+        searchView.clearFocus();
 
         //todo buttons not visible in app demo, go to fragment layout to set cardview visibility to get buttons back
 
@@ -110,6 +121,23 @@ public class SearchResultsFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
+        getActivity().getMenuInflater().inflate(R.menu.menu_search_results, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_view_all_groups) {
+            searchView.setQuery("%groups", true);
+            searchView.clearFocus();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void search() {

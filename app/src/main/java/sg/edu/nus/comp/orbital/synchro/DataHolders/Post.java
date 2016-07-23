@@ -47,10 +47,14 @@ public class Post {
         dateDay = tokens[2];
 
         tokens = serverTime.split(":");
-        hourOfDay = Integer.valueOf(tokens[0]);
+        hourOfDay = Integer.valueOf(tokens[0]) + 8;
         minute = Integer.valueOf(tokens[1]);
 
-        //System.out.println(postJson.get("name").getAsString() + " " + serverTime);
+        if (hourOfDay > 24) {
+            hourOfDay -= 24;
+        }
+
+        System.out.println(postJson.get("name").getAsString() + " " + serverTime);
 
         String date = GroupData.formatDate(dateYear, dateMonth, dateDay);
         String time = GroupData.formatTime(hourOfDay, minute);

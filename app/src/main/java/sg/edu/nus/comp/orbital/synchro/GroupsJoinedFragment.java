@@ -25,7 +25,7 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 public class GroupsJoinedFragment extends Fragment {
 
-    private static ArrayList<GroupData> groupDatas;
+    private ArrayList<GroupData> groupDatas = SynchroDataLoader.getGroupDatas();
 
     public GroupsJoinedFragment() {
         // Required empty public constructor
@@ -41,13 +41,16 @@ public class GroupsJoinedFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_groups_joined, container, false);
-
-        groupDatas = SynchroDataLoader.getGroupDatas();
 
         if (groupDatas != null) {
             if (groupDatas.size() == 0) {
@@ -89,9 +92,8 @@ public class GroupsJoinedFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Do something that differs the Activity's menu here
-        getActivity().getMenuInflater().inflate(R.menu.menu_groups_joined, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_groups_joined, menu);
     }
 
     @Override

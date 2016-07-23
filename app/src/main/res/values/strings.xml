@@ -56,4 +56,6 @@
     <string name="no_recommend_message">There\'s no recommendations available for you at the moment.
         Please use the searchbar at the top of the screen to search for groups to join :)
         \nSearching \"%groups\" will let you see all the groups created so far.</string>
+    <string name="view_all_groups">View All Groups</string>
+    <string name="post">post</string>
 </resources>

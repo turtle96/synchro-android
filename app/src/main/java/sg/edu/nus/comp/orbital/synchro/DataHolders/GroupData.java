@@ -118,7 +118,7 @@ public class GroupData {
         if (hourOfDay<12 && hourOfDay!=0) {
             time = hourOfDay + ":" + minuteStr + " am";
         }
-        else if (hourOfDay>12){
+        else if (hourOfDay>12 && hourOfDay!=24){
             time = (hourOfDay - 12) + ":" + minuteStr + " pm";
         }
         else if (hourOfDay == 12) {

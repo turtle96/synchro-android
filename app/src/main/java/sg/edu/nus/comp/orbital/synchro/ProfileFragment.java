@@ -32,7 +32,7 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 public class ProfileFragment extends Fragment {
 
     private User profile = SynchroDataLoader.getUserProfile();
-    private static ArrayList<ModuleList> moduleLists = SynchroDataLoader.getModuleLists();
+    private ArrayList<ModuleList> moduleLists = SynchroDataLoader.getModuleLists();
 
     public ProfileFragment() {
         // Required empty public constructor

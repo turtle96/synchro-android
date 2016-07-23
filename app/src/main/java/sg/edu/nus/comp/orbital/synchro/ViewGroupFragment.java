@@ -54,6 +54,12 @@ public class ViewGroupFragment extends Fragment {
     public ArrayList<User> getMembers() {return members;}
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -74,6 +80,10 @@ public class ViewGroupFragment extends Fragment {
             groupData = GroupData.parseSingleGroup(groupJson);
             members = User.parseUsers(membersJsonArray);
             setupTabs(rootView);
+
+            if (!groupData.isAdmin()) {
+                setHasOptionsMenu(false);
+            }
         }
 
         return rootView;
@@ -122,7 +132,6 @@ public class ViewGroupFragment extends Fragment {
 
         if (groupData.isAdmin()) {
             fabGoToPosts.setVisibility(View.VISIBLE);
-            setHasOptionsMenu(true);
         }
         else {
             fabJoinGroup.setVisibility(View.VISIBLE);
@@ -133,8 +142,8 @@ public class ViewGroupFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_view_group, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.menu_view_group, menu);
     }
 
     @Override

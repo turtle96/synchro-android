@@ -21,8 +21,8 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
 
 public class RecommendationsFragment extends Fragment {
 
-    private static JsonArray groupsJsonArray = SynchroAPI.getInstance().getRecommendations();
-    private static ArrayList<GroupData> groupDatas = GroupData.parseGroupsByModuleCount(groupsJsonArray);
+    private JsonArray groupsJsonArray = SynchroAPI.getInstance().getRecommendations();
+    private ArrayList<GroupData> groupDatas = GroupData.parseGroupsByModuleCount(groupsJsonArray);
 
     public RecommendationsFragment() {
         // Required empty public constructor
