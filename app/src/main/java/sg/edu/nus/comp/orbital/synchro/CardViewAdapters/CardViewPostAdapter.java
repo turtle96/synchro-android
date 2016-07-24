@@ -5,6 +5,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -64,6 +65,10 @@ public class CardViewPostAdapter extends RecyclerView.Adapter<CardViewPostAdapte
             textName = (TextView) itemView.findViewById(R.id.valueUserName);
             textPost = (TextView) itemView.findViewById(R.id.valueUserPost);
             textDateAndTime = (TextView) itemView.findViewById(R.id.valueDateAndTime);
+
+            if (android.os.Build.VERSION.SDK_INT < 18) {
+                textDateAndTime.setPadding(0, 0, 0, 0);
+            }
         }
     }
 }

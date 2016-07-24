@@ -453,6 +453,34 @@ public class SynchroAPI {
         return success;
     }
 
+    public boolean deleteGroup(String groupId) {
+        boolean success;
+        String url = apiGroups + "/" + groupId;
+        JsonObject result = null;
+
+        try {
+            result = Ion.with(App.getContext())
+                    .load("DELETE", url)
+                    //.setLogging("MyLogs", Log.VERBOSE)
+                    .setTimeout(5000)
+                    .addHeader("Authorization", ivleAuthToken)
+                    .asJsonObject()
+                    .get();
+        }catch (Exception ex){
+            System.out.println("Error delete group " + ex.toString());
+        }
+
+        if (result != null) {
+            SynchroDataLoader.loadGroupsJoinedData();   //ensures groups joined list is updated
+            success = true;
+        }
+        else {
+            success = false;
+        }
+
+        return success;
+    }
+
     //sends search query call to server, returns JsonArray of groups with matching keywords
     //searches both name and tags
     public JsonArray getSearchGroups(String query) {

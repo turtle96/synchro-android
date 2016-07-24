@@ -30,7 +30,7 @@ import sg.edu.nus.comp.orbital.synchro.DataHolders.User;
 
 public class SearchResultsFragment extends Fragment {
     private static final String GET_SEARCH_QUERY = "Search Query";
-    private static String query;
+    private String query;
     private static SearchView searchView;
 
     private static JsonArray usersJsonArray = SynchroAPI.getInstance().getAllUsers();
@@ -86,6 +86,7 @@ public class SearchResultsFragment extends Fragment {
 
         searchView = (SearchView) view.findViewById(R.id.searchViewInFragment);
         searchView.setQuery(query, false);
+        searchView.requestFocusFromTouch();
         searchView.clearFocus();
 
         //todo buttons not visible in app demo, go to fragment layout to set cardview visibility to get buttons back

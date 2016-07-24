@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
+import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskDeleteGroup;
 import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskJoinGroup;
 import sg.edu.nus.comp.orbital.synchro.AsyncTasks.AsyncTaskLeaveGroup;
 import sg.edu.nus.comp.orbital.synchro.DataHolders.GroupData;
@@ -171,6 +172,10 @@ public class ViewGroupFragment extends Fragment {
             transaction.commit();
             return true;
         }
+        else if (id == R.id.action_delete_group) {
+            deleteGroup();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -195,6 +200,26 @@ public class ViewGroupFragment extends Fragment {
         alertDialog.show();
     }
 
+    private void deleteGroup() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+        alertDialog.setTitle("Delete Group");
+        alertDialog.setMessage("Are you sure you want to delete this group?");
+
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                AsyncTaskDeleteGroup.load(new ProgressDialog(getContext()), groupId, getFragmentManager());
+            }
+        });
+        alertDialog.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+    }
+
     //to be called after AsyncTask for leaving group loaded
     public static void redirectAfterLeaveGroup(boolean result, FragmentManager manager) {
         if (result) {
@@ -207,6 +232,21 @@ public class ViewGroupFragment extends Fragment {
         }
         else {
             Toast.makeText(App.getContext(), "Error leaving group", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void redirectAfterDeleteGroup(boolean result, FragmentManager manager) {
+        if (result) {
+            Toast.makeText(App.getContext(), "Sayonara~", Toast.LENGTH_SHORT).show();
+
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            transaction.replace(R.id.content_fragment, GroupsJoinedFragment.newInstance());
+            transaction.commit();
+        }
+        else {
+            Toast.makeText(App.getContext(), "Error deleting group", Toast.LENGTH_SHORT).show();
         }
     }
 

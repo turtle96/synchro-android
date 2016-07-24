@@ -4,4 +4,6 @@
         android:title="Edit Details" />
     <item android:id="@+id/action_leave_group"
         android:title="Leave Group" />
+    <item android:id="@+id/action_delete_group"
+        android:title="Delete Group" />
 </menu>
