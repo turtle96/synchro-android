@@ -81,7 +81,7 @@ public class SearchResultsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         searchView = (SearchView) view.findViewById(R.id.searchViewInFragment);
@@ -104,7 +104,8 @@ public class SearchResultsFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String q) {
                 query = q;
-                search();
+                searchView.clearFocus();
+                search(view);
                 return true;
             }
 
@@ -114,7 +115,7 @@ public class SearchResultsFragment extends Fragment {
             }
         });
 
-        search();
+        search(view);
     }
 
     //clears searchview on bar
@@ -141,11 +142,11 @@ public class SearchResultsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void search() {
+    private void search(final View view) {
         //display results according to filters: users or groups
         //note: buttons are mutually exclusive
         buttonGroups.setChecked(true);
-        displayGroups(recyclerView, query);
+        displayGroups(view, recyclerView, query);
 
         //toggle search users only
         buttonUsers.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -171,7 +172,7 @@ public class SearchResultsFragment extends Fragment {
                 if (isChecked) {
                     // The toggle is enabled
                     buttonUsers.setChecked(false);
-                    displayGroups(recyclerView, query);
+                    displayGroups(view, recyclerView, query);
                 }
                 else if (!buttonUsers.isChecked()) {
                     // The toggle is disabled
@@ -183,7 +184,7 @@ public class SearchResultsFragment extends Fragment {
 
     //sets adapter of RecyclerView to display users info
     //returns the CardViewUserAdapter created
-    private CardViewUserAdapter displayUsers(RecyclerView recyclerView, String query) {
+    private void displayUsers(RecyclerView recyclerView, String query) {
         ArrayList<User> arrayToDisplay;
 
         query = "%users";   //todo remove when users search is up
@@ -198,13 +199,11 @@ public class SearchResultsFragment extends Fragment {
 
         CardViewUserAdapter userAdapter = new CardViewUserAdapter(arrayToDisplay, getFragmentManager());
         recyclerView.setAdapter(userAdapter);
-
-        return userAdapter;
     }
 
     //sets adapter of RecyclerView to display groups info
     //returns the CardViewGroupAdapter created
-    private CardViewGroupAdapter displayGroups(RecyclerView recyclerView, String query) {
+    private void displayGroups(View view, RecyclerView recyclerView, String query) {
         ArrayList<GroupData> arrayToDisplay;
 
         if (query.equalsIgnoreCase("%groups")) {
@@ -217,10 +216,16 @@ public class SearchResultsFragment extends Fragment {
             arrayToDisplay = GroupData.parseGroups(result);
         }
 
+        if (arrayToDisplay!=null && arrayToDisplay.size() == 0) {
+            view.findViewById(R.id.no_results_layout).setVisibility(View.VISIBLE);
+        }
+        else {
+            view.findViewById(R.id.no_results_layout).setVisibility(View.GONE);
+        }
+
         CardViewGroupAdapter groupAdapter = new CardViewGroupAdapter(arrayToDisplay, getFragmentManager());
         recyclerView.setAdapter(groupAdapter);
 
-        return groupAdapter;
     }
 
 }

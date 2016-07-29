@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                     String ivleToken = splitTokens[0];
 
                     AuthToken.setToken(ivleToken);
+                    SynchroAPI.authenticate(ivleToken);
 
                     //for debug
                     //Log.d("Synchro", ivleToken);

@@ -69,8 +69,9 @@ public class SynchroAPI {
     //configures app given authentication token
     //need to call every time app launches, so that getInstance() works
     public static void authenticate(String ivleAuthToken) {
+        updateToken(ivleAuthToken);
         self = new SynchroAPI(ivleAuthToken);
-        //System.out.println("token " + ivleAuthToken);
+        System.out.println("token " + ivleAuthToken);
         configureSelfSignedSSL();
         configureIon();
     }

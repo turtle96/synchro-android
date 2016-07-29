@@ -43,9 +43,6 @@ public class DrawerActivity extends AppCompatActivity
         String caller = getIntent().getStringExtra("caller");
         if (caller!=null) {
             if (caller.equals("LoginActivity")) {
-
-                SynchroAPI.authenticate(AuthToken.getToken());
-
                 ProgressDialog progressDialog = new ProgressDialog(DrawerActivity.this);
                 AsyncTaskDataLoader.setProgressDialog(progressDialog);
                 AsyncTaskDataLoader.loadInitialData(DrawerActivity.this);
@@ -94,6 +91,7 @@ public class DrawerActivity extends AppCompatActivity
 
             Bundle bundle = new Bundle();
             bundle.putString(GET_SEARCH_QUERY, query);
+            bundle.putString("caller", "Drawer Activity");
             SearchResultsFragment searchResultsFragment = SearchResultsFragment.newInstance();
             searchResultsFragment.setArguments(bundle);
 
