@@ -24,5 +24,6 @@ Note: Does not support live updates, need to manually refresh the page for updat
 https://github.com/kfwong/synchro-api
 
 ## Screenshots
+(taken from an older iteration, so certain details may not be accurate)
 <img src="https://trello-attachments.s3.amazonaws.com/576ec48eb576ce68351338b9/1533x790/8d8807b7064d40639db55369c330e54d/prototype02_screenshots_01.jpg">
 <img src="https://trello-attachments.s3.amazonaws.com/576ec48eb576ce68351338b9/1533x790/ce194fb8d9c96089a24cd78e13c9e6f3/prototype02_screenshots_02.jpg">
