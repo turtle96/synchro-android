@@ -8,20 +8,25 @@ Aims to provide a platform for NUS students to be able to easily group up with o
 
 ## Implemented Features
 ### Create Group (CRUD)
-Group page will be available for all other users to view after creation.
-Groups can be tagged with multiple tags to increase visibility when other users are searching.
+Group page will be available for all other users to view after creation.  
+Groups can be tagged with multiple tags to increase visibility when other users are searching.  
 ### Search Other Groups
 All groups are publicly listed. Groups can also be searched by tags.
 ### Profiles
-Able to view other users' profiles, other users will be able to view your profile as well.
-Personal self-intro can be edited.
+Able to view other users' profiles, other users will be able to view your profile as well.  
+Personal self-intro can be edited.  
 Note: Profile will collect the following from IVLE: name, faculty, major, and modules
 ### Group Forum/Chat
-Able to post messages in the group for other members to view.
+Able to post messages in the group for other members to view.  
 Note: Does not support live updates, need to manually refresh the page for updates
 
 ## Server API (the brother to this app)
 https://github.com/kfwong/synchro-api
+
+## Libraries Used
+Ion: https://github.com/koush/ion  
+CircleImageView: https://github.com/hdodenhof/CircleImageView  
+TextDrawable: https://github.com/amulyakhare/TextDrawable  
 
 ## Screenshots
 (taken from an older iteration, so certain details may not be accurate)
