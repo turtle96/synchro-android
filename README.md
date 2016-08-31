@@ -1,5 +1,5 @@
 # Synchro (Android)
-Made for Orbital 2016. Supports Android 4.0.3 (SDK 15) and up.
+Made for Orbital 2016. Supports Android 4.1 (SDK 16) and up.
 
 Only available for NUS students with valid NUSNET accounts so far, login is via IVLE authentication
 
@@ -31,4 +31,4 @@ TextDrawable: https://github.com/amulyakhare/TextDrawable
 ## Screenshots
 (taken from an older iteration, so certain details may not be accurate)
 <img src="https://trello-attachments.s3.amazonaws.com/576ec48eb576ce68351338b9/1533x790/8d8807b7064d40639db55369c330e54d/prototype02_screenshots_01.jpg">
-<img src="https://trello-attachments.s3.amazonaws.com/576ec48eb576ce68351338b9/1533x790/ce194fb8d9c96089a24cd78e13c9e6f3/prototype02_screenshots_02.jpg">
+<img src="https://trello-attachments.s3.amazonaws.com/57c6b75c41d5827c470f2ecb/2546x1261/790c0ab4fdd06e704a690fe11e4f90b8/screenshot.jpg">
