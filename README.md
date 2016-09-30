@@ -30,5 +30,5 @@ TextDrawable: https://github.com/amulyakhare/TextDrawable
 
 ## Screenshots
 
-<img src="docs/screenshots/prototype02_screenshots 01">
-<img src="docs/screenshots/prototype_03 screenshot">
+<img src="docs/screenshots/prototype02_screenshots 01.jpg">
+<img src="docs/screenshots/prototype_03 screenshot.jpg">
