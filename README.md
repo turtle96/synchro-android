@@ -30,5 +30,5 @@ TextDrawable: https://github.com/amulyakhare/TextDrawable
 
 ## Screenshots
 
-<img src="https://trello-attachments.s3.amazonaws.com/576ec48eb576ce68351338b9/1533x790/8d8807b7064d40639db55369c330e54d/prototype02_screenshots_01.jpg">
-<img src="https://trello-attachments.s3.amazonaws.com/57c6b75c41d5827c470f2ecb/2546x1261/790c0ab4fdd06e704a690fe11e4f90b8/screenshot.jpg">
+<img src="docs/screenshots/prototype02_screenshots 01">
+<img src="docs/screenshots/prototype_03 screenshot">
