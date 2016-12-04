@@ -4,6 +4,8 @@ Made for NUS Orbital 2016. Supports Android 4.1 (SDK 16) and up.
 Only available for NUS students with valid NUSNET accounts for now. Login is via IVLE authentication. <br>
 Note: Synchro will collect the following information from IVLE: name, faculty, major, and modules
 
+> Update: Due to unfortunate events regarding server hosting, the app cannot be used for now. Will have to wait till developer (me) is free to resolve the server hosting issue.
+
 ## Purpose
 Aims to provide a platform for NUS students to be able to easily group up with other students, whether for school projects, studying, or playing games. We identified a need for a more effective and flexible method of grouping up with people given that the user does not know many people in the university. This app can hopefully help more introverted people to find people with common interests and expand their networks. Also, the app would be a convenient way for people with many group projects to keep track of their progresses.
 
